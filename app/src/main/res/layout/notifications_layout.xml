@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/general_linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/notif_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:layout_collapseMode="pin"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="@android:color/white"
+        app:title="Notifications"/>
+
+    <LinearLayout
+        android:id="@+id/notif_global_linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <EditText
+            android:id="@+id/notif_sl_editText_search"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Search query term" />
+
+        <LinearLayout
+            android:id="@+id/notif_two_columns_linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:paddingTop="10dp"
+            android:paddingBottom="20dp">
+
+            <FrameLayout
+                android:id="@+id/notif_left_column_frameLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50">
+
+                <LinearLayout
+                    android:id="@+id/notif_left_column_linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <CheckBox
+                        android:id="@+id/notif_checkBox_arts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Arts"
+                        />
+
+                    <CheckBox
+                        android:id="@+id/notif_checkBox_business"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Business"
+                        />
+
+                    <CheckBox
+                        android:id="@+id/notif_checkBox_entrepeneurs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Entrepeneurs"/>
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/notif_right_column_frameLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50">
+
+                <LinearLayout
+                    android:id="@+id/notif_right_column_linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <CheckBox
+                        android:id="@+id/notif_checkBox_politics"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Politics"
+                        />
+
+                    <CheckBox
+                        android:id="@+id/notif_checkBox_sports"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sports"
+                        />
+
+                    <CheckBox
+                        android:id="@+id/notif_checkBox_travel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Travel"/>
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </LinearLayout> <!-- two columns -->
+
+        <Switch
+            android:id="@+id/notif_switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enable notifications (once per day)           "
+ />
+
+    </LinearLayout> <!-- global (after toolbar) -->
+
+</LinearLayout> <!-- general -->
+
+

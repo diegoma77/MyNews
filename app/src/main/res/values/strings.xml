@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MyNews</string>
+
+    <string-array name="toolbar_spinner_options">
+        <item>Notifications</item>
+        <item>Help</item>
+        <item>About</item>
+    </string-array>
+
+
+</resources>

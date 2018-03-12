@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/general_linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/search_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:layout_collapseMode="pin"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="@android:color/white"
+        app:title="Search News"/>
+
+    <LinearLayout
+        android:id="@+id/search_global_linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <EditText
+            android:id="@+id/search_sl_editText_search"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Search query term" />
+
+        <LinearLayout
+            android:id="@+id/search_two_columns_linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:paddingTop="10dp"
+            android:paddingBottom="20dp">
+
+            <FrameLayout
+                android:id="@+id/search_left_column_frameLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50">
+
+                <LinearLayout
+                    android:id="@+id/search_left_column_linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/search_button_beginDate"
+                        android:clickable="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingBottom="10dp">
+
+                        <TextView
+                            android:id="@+id/search_beginDate_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Begin date"/>
+
+                        <TextView
+                            android:id="@+id/search_beginDate_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="20/03/1988"/>
+
+                    </LinearLayout> <!-- Button -->
+
+                        <CheckBox
+                            android:id="@+id/search_checkBox_arts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Arts"
+                            />
+
+                        <CheckBox
+                            android:id="@+id/search_checkBox_business"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Business"
+                            />
+
+                        <CheckBox
+                            android:id="@+id/search_checkBox_entrepeneurs"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Entrepeneurs"/>
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/search_right_column_frameLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50">
+
+                <LinearLayout
+                    android:id="@+id/search_right_column_linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/search_button_endDate"
+                        android:clickable="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingBottom="10dp">
+
+                        <TextView
+                            android:id="@+id/search_endDate_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="End date"/>
+
+                        <TextView
+                            android:id="@+id/search_endDate_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="20/03/1988"/>
+
+                    </LinearLayout> <!-- Button -->
+
+                        <CheckBox
+                            android:id="@+id/search_checkBox_politics"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Politics"
+                            />
+
+                        <CheckBox
+                            android:id="@+id/search_checkBox_sports"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sports"
+                            />
+
+                        <CheckBox
+                            android:id="@+id/search_checkBox_travel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Travel"/>
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </LinearLayout> <!-- two columns -->
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:textStyle="bold"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white" />
+
+
+    </LinearLayout> <!-- global (after toolbar) -->
+
+</LinearLayout> <!-- general -->
