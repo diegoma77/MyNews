@@ -1,4 +1,4 @@
-package com.example.android.mynews;
+package com.example.android.mynews.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,9 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.mynews.Data.DatabaseContract;
-
-import java.util.ArrayList;
+import com.example.android.mynews.data.DatabaseContract;
+import com.example.android.mynews.R;
 
 /**
  * Created by Diego Fajardo on 25/02/2018.

@@ -1,4 +1,4 @@
-package com.example.android.mynews.Data;
+package com.example.android.mynews.data;
 
 import com.example.android.mynews.R;
 

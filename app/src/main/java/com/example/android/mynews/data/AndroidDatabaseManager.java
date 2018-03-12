@@ -1,4 +1,4 @@
-package com.example.android.mynews.Data;//add your package name here example: package com.example.dbm;
+package com.example.android.mynews.data;//add your package name here example: package com.example.dbm;
 
 //all required import files
 import java.util.ArrayList;

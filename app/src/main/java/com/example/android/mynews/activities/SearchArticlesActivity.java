@@ -1,4 +1,4 @@
-package com.example.android.mynews;
+package com.example.android.mynews.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,26 +6,26 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Toast;
+
+import com.example.android.mynews.R;
 
 /**
- * Created by Diego Fajardo on 26/02/2018.
+ * Created by Diego Fajardo on 25/02/2018.
  */
 
-public class NotificationsActivity extends AppCompatActivity {
+public class SearchArticlesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.notifications_layout);
+        setContentView(R.layout.search_articles_layout);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.notif_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.search_toolbar);
         setSupportActionBar(toolbar);
 
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
 
     }
 
@@ -33,12 +33,13 @@ public class NotificationsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(NotificationsActivity.this, MainActivity.class);
+                Intent intent = new Intent(SearchArticlesActivity.this, MainActivity.class);
                 startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
 
 
 }

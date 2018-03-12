@@ -1,4 +1,4 @@
-package com.example.android.mynews.Data;
+package com.example.android.mynews.data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,10 +7,7 @@ import android.database.MatrixCursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.ContactsContract;
 import android.util.Log;
-
-import com.example.android.mynews.Data.DatabaseContract;
 
 import java.util.ArrayList;
 

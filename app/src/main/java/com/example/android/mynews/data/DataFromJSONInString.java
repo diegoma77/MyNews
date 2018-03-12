@@ -1,4 +1,4 @@
-package com.example.android.mynews.Data;
+package com.example.android.mynews.data;
 
 /**
  * Created by Diego Fajardo on 02/03/2018.

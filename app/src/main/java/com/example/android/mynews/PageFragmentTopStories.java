@@ -5,29 +5,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.android.mynews.Data.DataFromJSONInString;
-import com.example.android.mynews.Data.DatabaseContract;
-import com.example.android.mynews.Data.DatabaseHelper;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
-import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
+import com.example.android.mynews.data.DatabaseContract;
+import com.example.android.mynews.data.DatabaseHelper;
+import com.example.android.mynews.adapters.RvAdapterTopStories;
 
 /**
  * Created by Diego Fajardo on 22/02/2018.

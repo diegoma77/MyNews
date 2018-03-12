@@ -1,4 +1,4 @@
-package com.example.android.mynews;
+package com.example.android.mynews.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,10 +12,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ActionMenuView;
-import android.widget.Spinner;
 
-import com.example.android.mynews.Data.AndroidDatabaseManager;
+import com.example.android.mynews.data.AndroidDatabaseManager;
+import com.example.android.mynews.adapters.FragmentPageAdapter;
+import com.example.android.mynews.PageFragmentTopStories;
+import com.example.android.mynews.R;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.android.mynews;
+package com.example.android.mynews.activities;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,9 +16,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.android.mynews.Data.DataFromJSONInString;
-import com.example.android.mynews.Data.DatabaseContract;
-import com.example.android.mynews.Data.DatabaseHelper;
+import com.example.android.mynews.R;
+import com.example.android.mynews.data.DataFromJSONInString;
+import com.example.android.mynews.data.DatabaseContract;
+import com.example.android.mynews.data.DatabaseHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;

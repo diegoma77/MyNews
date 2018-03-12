@@ -1,9 +1,6 @@
-package com.example.android.mynews.Data;
+package com.example.android.mynews.data;
 
 import android.provider.BaseColumns;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 /**
  * Created by Diego Fajardo on 02/03/2018.
