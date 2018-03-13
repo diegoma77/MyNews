@@ -1,4 +1,4 @@
-package com.example.android.mynews;
+package com.example.android.mynews.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,9 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.android.mynews.R;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.adapters.RvAdapterTopStories;
+
+import org.json.JSONObject;
 
 /**
  * Created by Diego Fajardo on 22/02/2018.
@@ -45,6 +48,9 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
+        // TODO: 13/03/2018 Inflate another fragment (with progress bar) while data is loading. 
+
+        // TODO: 13/03/2018 Inflate this fragment only when data is loaded 
         View view = inflater.inflate(R.layout.page_fragment_layout, container, false);
 
         dbH = new DatabaseHelper(getActivity());
@@ -59,9 +65,29 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
+        // TODO: 13/03/2018 Create an StringRequest method here (= sendJSONRequest) with method "parseJSONRequestW inside.
+
         return view;
+        
     }
 
+    // TODO: 13/03/2018 Add method getRequestURL that returns a URL for the constructor of StringRequest
+    // (use different parameters to get different URLS).
+
+    // TODO: 13/03/2018 Create method sendJSONRequest that creates a JSONRequest (= to StringRequest) (basically, loadData in ActivityLoader)
+
+    // TODO: 13/03/2018 Create method parseJSONResponse (basically, save data method in ActivityLoader)
+    // TODO: 13/03/2018 Check that the response is not null or that the response.length is not 0 (return nothing)
+
+    public void parseJSONResponse (JSONObject response) {
+
+        //if (response == null || response.length() == 0) return;
+
+        //response.getJSONArray()
+
+    }
+
+    
 }
 
 

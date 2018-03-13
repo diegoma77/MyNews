@@ -15,7 +15,7 @@ import android.view.MenuItem;
 
 import com.example.android.mynews.data.AndroidDatabaseManager;
 import com.example.android.mynews.adapters.FragmentPageAdapter;
-import com.example.android.mynews.PageFragmentTopStories;
+import com.example.android.mynews.fragments.PageFragmentTopStories;
 import com.example.android.mynews.R;
 
 public class MainActivity extends AppCompatActivity {
