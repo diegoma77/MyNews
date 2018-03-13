@@ -1,6 +1,5 @@
 package com.example.android.mynews.fragments;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,20 +8,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
-import com.example.android.mynews.data.DataFromJSONInString;
 import com.example.android.mynews.data.DatabaseContract;
-import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.adapters.RvAdapterTopStories;
 import com.example.android.mynews.extras.Keys;
-import com.example.android.mynews.pojo.TopStoriesResults;
+import com.example.android.mynews.extras.Url;
+import com.example.android.mynews.pojo.TopStoriesObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Diego Fajardo on 22/02/2018.
@@ -34,26 +42,19 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
     private String Log_info = "INFORMATION TOPSTORIES";
     private String Log_error = "ERROR TOPSTORIES";
 
-    //Array that will store the TopStoriesResults object to display in the RecyclerView
-    private ArrayList<TopStoriesResults> topStoryResults = new ArrayList<>();
+    //Array that will store the TopStoriesObject object to display in the RecyclerView
+    private ArrayList<TopStoriesObject> topStoriesObjectsArrayList;
 
     //Top Stories table name
     private String table_name_top_stories = DatabaseContract.Database.TOP_STORIES_TABLE_NAME;
 
-    //URL construction
-    private String BASE_URL = "http://api.nytimes.com/svc/topstories/v2/";
-    private String news_section = "world";
-    private String format = ".json";
-    private String QM_ApiKey = "?api-key=a27a66145d4542d28a719cecee6de859";
-    private String URL = BASE_URL + news_section + format + QM_ApiKey ;
+    private TextView mErrorMessageDisplay;
+
+    private ProgressBar mLoadingIndicator;
 
     //RecyclerView and RecyclerViewAdapter
-    RecyclerView recyclerView;
-    RvAdapterTopStories rvAdapterTopStories;
-
-    ///DATABASE Variables
-    Cursor mCursor;
-    DatabaseHelper dbH;
+    private RecyclerView recyclerView;
+    private RvAdapterTopStories rvAdapterTopStories;
 
     @Nullable
     @Override
@@ -62,22 +63,31 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
         // TODO: 13/03/2018 Inflate another fragment (with progress bar) while data is loading. 
 
         // TODO: 13/03/2018 Inflate this fragment only when data is loaded 
+
         View view = inflater.inflate(R.layout.page_fragment_layout, container, false);
 
-        dbH = new DatabaseHelper(getActivity());
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.TOP_STORIES_TABLE_NAME);
+        mErrorMessageDisplay = (TextView) view.findViewById(R.id.tv_error_message_display);
+
+        mLoadingIndicator = (ProgressBar) view.findViewById(R.id.progress_bar);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+
         recyclerView.setHasFixedSize(true);
 
-        // TODO: 13/03/2018 Call the adapter passing the ArrayList as a paramenter so the RecyclerView will have the ArrayList 
-        rvAdapterTopStories = new RvAdapterTopStories(getActivity(), mCursor);
-        recyclerView.setAdapter(rvAdapterTopStories);
+        topStoriesObjectsArrayList = new ArrayList<TopStoriesObject>();
+
+        // TODO: 13/03/2018 Call the adapter passing the ArrayList as a paramenter so the RecyclerView will have the ArrayList
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        // TODO: 13/03/2018 Create an StringRequest method here (= sendJSONRequest) with method "parseJSONRequestW inside.
+        rvAdapterTopStories = new RvAdapterTopStories(getActivity());
+
+        loadTopStoriesInfo();
+
+        Log.i("ArrayListSize.onCreate:", "" + topStoriesObjectsArrayList.size());
+
+        recyclerView.setAdapter(rvAdapterTopStories);
 
         return view;
         
@@ -91,16 +101,68 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
     // TODO: 13/03/2018 Create method parseJSONResponse (basically, save data method in ActivityLoader)
     // TODO: 13/03/2018 Check that the response is not null or that the response.length is not 0 (return nothing)
 
-    public void parseJSONResponse (JSONObject response) {
+    public void loadTopStoriesInfo () {
 
-        //if (response == null || response.length() == 0) return;
+        showTopStoriesView();
+        sendJSONRequest(new Url().getTopStoriesApiUrl());
+
+    }
+
+    public void showTopStoriesView () {
+        /* First, make sure the error is invisible */
+        mErrorMessageDisplay.setVisibility(View.INVISIBLE);
+        /* Then, make sure the weather data is visible */
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    public void showErrorMessage () {
+        /* First, hide the currently visible data */
+        recyclerView.setVisibility(View.INVISIBLE);
+        /* Then, show the error */
+        mErrorMessageDisplay.setVisibility(View.VISIBLE);
+    }
+
+    public void sendJSONRequest (String url){
+
+        Toast.makeText(getContext(), "Data is loading", Toast.LENGTH_LONG).show();
+
+        //String request
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        parseJSONResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getActivity(),
+                                error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        //Creating a request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+
+        //Adding the string request to request queue
+        requestQueue.add(stringRequest);
+
+    }
+
+    public void parseJSONResponse (String response) {
+
+        if (response == null || response.length() == 0) return;
 
         // TODO: 13/03/2018 Add if statements to check if the data was received or not and avoid crashes
         
         try {
 
             //We create the object that is going to store all the information
-            DataFromJSONInString dataFromJSONInString = new DataFromJSONInString();
+            TopStoriesObject topStoriesObject = new TopStoriesObject();
 
             //JSON object that gathers all the objects of the response from the API
             JSONObject jsonObject_response = new JSONObject(response);
@@ -122,30 +184,30 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
 
                     JSONObject multimedia_object = multimedia_array.getJSONObject(j);
 
-                    // TODO: 13/03/2018 Erase switch when decided which image to take
+                    // TODO: 13/03/2018 Erase "switch statement" when decided which image to take
                     switch (j) {
                         case 0:
-                            dataFromJSONInString.setImageThumbnail(
+                            topStoriesObject.setImageThumbnail(
                                     multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL));
                             break;
 
                         case 1:
-                            dataFromJSONInString.setImageThumblarge(multimedia_object.getString(
+                            topStoriesObject.setImageThumblarge(multimedia_object.getString(
                                     Keys.TopStoriesKeys.KEY_IMAGE_URL));
                             break;
 
                         case 2:
-                            dataFromJSONInString.setImageNormal(multimedia_object.getString(
+                            topStoriesObject.setImageNormal(multimedia_object.getString(
                                     Keys.TopStoriesKeys.KEY_IMAGE_URL));
                             break;
 
                         case 3:
-                            dataFromJSONInString.setImageMedium(multimedia_object.getString(
+                            topStoriesObject.setImageMedium(multimedia_object.getString(
                                     Keys.TopStoriesKeys.KEY_IMAGE_URL));
                             break;
 
                         case 4:
-                            dataFromJSONInString.setImageSuperjumbo(multimedia_object.getString(
+                            topStoriesObject.setImageSuperjumbo(multimedia_object.getString(
                                     Keys.TopStoriesKeys.KEY_IMAGE_URL));
                             break;
 
@@ -153,23 +215,40 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
 
                 }
 
-                //GETS the rest of the data from the dataObject
-                dataFromJSONInString.setSection(dataObject.getString(Keys.TopStoriesKeys.KEY_SECTION));
-                dataFromJSONInString.setTitle(dataObject.getString(Keys.TopStoriesKeys.KEY_TITLE));
-                dataFromJSONInString.setUpdatedDate(dataObject.getString(Keys.TopStoriesKeys.KEY_UPDATED_DATE));
-                dataFromJSONInString.setArticleUrl(dataObject.getString(Keys.TopStoriesKeys.KEY_ARTICLE_URL));
+                //GETS the rest of the data from the dataObject and puts
+                topStoriesObject.setSection(dataObject.getString(Keys.TopStoriesKeys.KEY_SECTION));
+                topStoriesObject.setTitle(dataObject.getString(Keys.TopStoriesKeys.KEY_TITLE));
+                topStoriesObject.setUpdatedDate(dataObject.getString(Keys.TopStoriesKeys.KEY_UPDATED_DATE));
+                topStoriesObject.setArticleUrl(dataObject.getString(Keys.TopStoriesKeys.KEY_ARTICLE_URL));
 
-                Log.i("SECTION", dataFromJSONInString.getSection());
-                Log.i("TITLE", dataFromJSONInString.getTitle());
-                Log.i("UPDATE_DATE", dataFromJSONInString.getUpdatedDate());
-                Log.i("IMAGE_URL_THUMBNAIL", dataFromJSONInString.getImageThumbnail());
-                Log.i("IMAGE_URL_THUMBLARGE", dataFromJSONInString.getImageThumblarge());
-                Log.i("IMAGE_URL_NORMAL", dataFromJSONInString.getImageNormal());
-                Log.i("IMAGE_URL_MEDIUM", dataFromJSONInString.getImageMedium());
-                Log.i("IMAGE_URL_SUPERJUMBO", dataFromJSONInString.getImageSuperjumbo());
-                Log.i("ARTICLE_URL", dataFromJSONInString.getArticleUrl());
+                Log.i("SECTION", topStoriesObject.getSection());
+                Log.i("TITLE", topStoriesObject.getTitle());
+                Log.i("UPDATE_DATE", topStoriesObject.getUpdatedDate());
+                Log.i("IMAGE_URL_THUMBNAIL", topStoriesObject.getImageThumbnail());
+                Log.i("IMAGE_URL_THUMBLARGE", topStoriesObject.getImageThumblarge());
+                Log.i("IMAGE_URL_NORMAL", topStoriesObject.getImageNormal());
+                Log.i("IMAGE_URL_MEDIUM", topStoriesObject.getImageMedium());
+                Log.i("IMAGE_URL_SUPERJUMBO", topStoriesObject.getImageSuperjumbo());
+                Log.i("ARTICLE_URL", topStoriesObject.getArticleUrl());
+
+                //We put the object with the results into the ArrayList topStoriesObjectArrayList;
+
+                    topStoriesObjectsArrayList.add(topStoriesObject);
 
             }
+
+            Log.i("ArrayList.size():", "" + topStoriesObjectsArrayList.size());
+
+            if (topStoriesObjectsArrayList != null) {
+                showTopStoriesView();
+                rvAdapterTopStories.setTopStoriesData(topStoriesObjectsArrayList);
+                Log.i("setTopStoriesData:", "Called(size = " + topStoriesObjectsArrayList.size() + ")");
+
+            }
+            else {
+                showErrorMessage();
+            }
+
         } catch(JSONException e) {
             e.printStackTrace();
         }

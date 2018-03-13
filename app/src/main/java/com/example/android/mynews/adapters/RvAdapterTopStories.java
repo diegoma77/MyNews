@@ -11,9 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.R;
-import com.example.android.mynews.pojo.TopStoriesResults;
+import com.example.android.mynews.pojo.TopStoriesObject;
 
 import java.util.ArrayList;
 
@@ -26,21 +25,22 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
     private static final String TAG = RvAdapterTopStories.class.getSimpleName();
 
-    //Array that will store TopStoriesResults after request
-    private ArrayList<TopStoriesResults> topStoriesResultsList = new ArrayList<>();
-
-    //Cursor that will store all the information
-    Cursor mCursor;
+    //Array that will store TopStoriesObject after request
+    private ArrayList<TopStoriesObject> topStoriesObjectArrayList = new ArrayList<TopStoriesObject>();
 
     private final TypedValue mTypedValue = new TypedValue();
 
     //Constructor of the RvAdapter
-    public RvAdapterTopStories(Context context, Cursor cursor) {
+    public RvAdapterTopStories(Context context) {
 
         //Context to work with Fragments
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
-        mCursor = cursor;
 
+    }
+
+    public void setTopStoriesData(ArrayList<TopStoriesObject> topStoriesObjectArrayList) {
+        this.topStoriesObjectArrayList = topStoriesObjectArrayList;
+        notifyDataSetChanged();
     }
 
     // TODO: 13/03/2018 Create method setTopStoriesResultsList with "this.xxx = xxx" and "notifyItemChanged(0, xxx.size())  
@@ -64,12 +64,12 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
     }
 
     @Override
-    public void onBindViewHolder(RvAdapterTopStories.ViewHolder holder, final int position) {
+    public void onBindViewHolder(RvAdapterTopStories.ViewHolder holder, int position) {
 
-        TopStoriesResults currentTopStoriesResult = topStoriesResultsList.get(position);
-        holder.title.setText(currentTopStoriesResult.getTitle());
-        holder.section.setText(currentTopStoriesResult.setSection(););
-        holder.update_date.setText(currentTopStoriesResult.getUpdatedDate());
+        TopStoriesObject currentTopStoriesObject = topStoriesObjectArrayList.get(position);
+        holder.title.setText(currentTopStoriesObject.getTitle());
+        holder.section.setText(currentTopStoriesObject.getSection());
+        holder.update_date.setText(currentTopStoriesObject.getUpdatedDate());
         holder.imageOnLeft.setImageResource(R.drawable.rajoy);
 
         Log.d(TAG, "#" + position);
@@ -79,7 +79,7 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
           //  return;
 
         //((ViewHolder)holder).bindViewHolder(position);
-
+/**
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,13 +90,13 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
 
             }
         });
-
+*/
     }
 
     @Override
     public int getItemCount() {
-
-        return mCursor.getCount();
+        if (topStoriesObjectArrayList == null) { return 0; };
+        return topStoriesObjectArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

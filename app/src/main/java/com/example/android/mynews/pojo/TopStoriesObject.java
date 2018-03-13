@@ -4,7 +4,7 @@ package com.example.android.mynews.pojo;
  * Created by Diego Fajardo on 12/03/2018.
  */
 
-public class TopStoriesResults {
+public class TopStoriesObject {
 
     String section;
     String title;
@@ -16,17 +16,17 @@ public class TopStoriesResults {
     String image_url_superjumbo;
     String article_url;
 
-    public TopStoriesResults() { }
+    public TopStoriesObject() { }
 
-    public TopStoriesResults(String section,
-                             String title,
-                             String updated_date,
-                             String image_url_thumbnail,
-                             String image_url_thumblarge,
-                             String image_url_normal,
-                             String image_url_medium,
-                             String image_url_superjumbo,
-                             String article_url) {
+    public TopStoriesObject(String section,
+                            String title,
+                            String updated_date,
+                            String image_url_thumbnail,
+                            String image_url_thumblarge,
+                            String image_url_normal,
+                            String image_url_medium,
+                            String image_url_superjumbo,
+                            String article_url) {
         this.section = section;
         this.title = title;
         this.updated_date = updated_date;

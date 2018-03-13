@@ -17,7 +17,6 @@ public class Url {
 
     // TODO: 12/03/2018 Add all the different APIs
 
-
     // TODO: 12/03/2018 Add to the method that it can call a different API (parameter)
     public String getTopStoriesApiUrl () {
         return TS_FINAL_URL;

@@ -9,6 +9,12 @@
         android:title="Search" />
 
     <item
+        android:id="@+id/menu_refresh_button"
+        android:title="Refresh"
+        app:showAsAction="never">
+    </item>
+
+    <item
         android:id="@+id/menu_notification_button"
         android:title="Notifications"
         app:showAsAction="never">
