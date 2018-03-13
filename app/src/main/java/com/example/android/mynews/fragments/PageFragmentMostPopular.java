@@ -19,11 +19,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
-import com.example.android.mynews.data.DatabaseContract;
-import com.example.android.mynews.rvadapters.RvAdapterTopStories;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
+import com.example.android.mynews.pojo.MostPopularObject;
 import com.example.android.mynews.pojo.TopStoriesObject;
+import com.example.android.mynews.rvadapters.RvAdapterMostPopular;
+import com.example.android.mynews.rvadapters.RvAdapterTopStories;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
  * Created by Diego Fajardo on 22/02/2018.
  */
 
-public class PageFragmentTopStories extends android.support.v4.app.Fragment {
+public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
 
     // TODO: 13/03/2018 Each time the ViewPager comes back to this Page, the information has to be deleted and requested again.
 
@@ -43,7 +44,7 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
     private static final String TAG = "PageFragmentTopStories";
 
     //Array that will store the TopStoriesObject object to display in the RecyclerView
-    private ArrayList<TopStoriesObject> topStoriesObjectsArrayList;
+    private ArrayList<MostPopularObject> mostPopularObjectsArrayList;
 
     private TextView mErrorMessageDisplay;
 
@@ -51,7 +52,7 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
 
     //RecyclerView and RecyclerViewAdapter
     private RecyclerView recyclerView;
-    private RvAdapterTopStories rvAdapterTopStories;
+    private RvAdapterMostPopular rvAdapterMostPopular;
 
     @Nullable
     @Override
@@ -67,29 +68,29 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
 
         recyclerView.setHasFixedSize(true);
 
-        topStoriesObjectsArrayList = new ArrayList<TopStoriesObject>();
+        mostPopularObjectsArrayList = new ArrayList<>();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        rvAdapterTopStories = new RvAdapterTopStories(getActivity());
+        rvAdapterMostPopular = new RvAdapterMostPopular(getActivity());
 
-        loadTopStoriesInfo();
+        loadMostPopularInfo();
 
-        recyclerView.setAdapter(rvAdapterTopStories);
+        recyclerView.setAdapter(rvAdapterMostPopular);
 
         return view;
         
     }
 
-    public void loadTopStoriesInfo () {
+    public void loadMostPopularInfo () {
 
-        showTopStoriesView();
-        sendJSONRequest(new Url().getTopStoriesApiUrl());
+        showMostPopularView();
+        sendJSONRequest(new Url().getMostPopularApiUrl());
 
     }
 
-    public void showTopStoriesView () {
+    public void showMostPopularView () {
         /* First, make sure the error is invisible */
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         /* Then, make sure the weather data is visible */
@@ -121,7 +122,7 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getActivity(),
-                                error.getMessage(), Toast.LENGTH_SHORT).show();
+                                "Error getting the info", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -143,89 +144,50 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
         try {
 
             //We create the object that is going to store all the information
-            TopStoriesObject topStoriesObject = new TopStoriesObject();
+            MostPopularObject mostPopularObject = new MostPopularObject();
+
 
             //JSON object that gathers all the objects of the response from the API
             JSONObject jsonObject_response = new JSONObject(response);
 
+
             //JSON array made of the objects inside the "result"
             JSONArray results_array =
-                    jsonObject_response.getJSONArray(Keys.TopStoriesKeys.KEY_RESULTS);
+                    jsonObject_response.getJSONArray(Keys.MostPopularKeys.KEY_RESULTS);
+
+
 
             //Iterating through "results_array"
             for (int i = 0; i < results_array.length(); i++) {
 
+                // TODO: 13/03/2018 We have yet to get the image url
+
                 //We get the "i results object"
                 JSONObject dataObject = results_array.getJSONObject(i);
 
-                //We get the multimedia array from the "i results object".
-                JSONArray multimedia_array = dataObject.getJSONArray(Keys.TopStoriesKeys.KEY_MULTIMEDIA);
-
-                for (int j = 0; j < multimedia_array.length(); j++) {
-
-                    JSONObject multimedia_object = multimedia_array.getJSONObject(j);
-
-                    // TODO: 13/03/2018 Erase "switch statement" when decided which image to take
-                    switch (j) {
-                        case 0:
-                            topStoriesObject.setImageThumbnail(
-                                    multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL));
-                            break;
-
-                        case 1:
-                            topStoriesObject.setImageThumblarge(multimedia_object.getString(
-                                    Keys.TopStoriesKeys.KEY_IMAGE_URL));
-                            break;
-
-                        case 2:
-                            topStoriesObject.setImageNormal(multimedia_object.getString(
-                                    Keys.TopStoriesKeys.KEY_IMAGE_URL));
-                            break;
-
-                        case 3:
-                            topStoriesObject.setImageMedium(multimedia_object.getString(
-                                    Keys.TopStoriesKeys.KEY_IMAGE_URL));
-                            break;
-
-                        case 4:
-                            topStoriesObject.setImageSuperjumbo(multimedia_object.getString(
-                                    Keys.TopStoriesKeys.KEY_IMAGE_URL));
-                            break;
-
-                    }
-
-                }
-
                 //GETS the rest of the data from the dataObject and puts
-                topStoriesObject.setSection(dataObject.getString(Keys.TopStoriesKeys.KEY_SECTION));
-                topStoriesObject.setTitle(dataObject.getString(Keys.TopStoriesKeys.KEY_TITLE));
-                topStoriesObject.setArticleUrl(dataObject.getString(Keys.TopStoriesKeys.KEY_ARTICLE_URL));
+                mostPopularObject.setSection(dataObject.getString(Keys.MostPopularKeys.KEY_SECTION));
+                mostPopularObject.setTitle(dataObject.getString(Keys.MostPopularKeys.KEY_TITLE));
+                mostPopularObject.setArticle_url(dataObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL));
+                mostPopularObject.setPublished_date(dataObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE));
 
-                String updated_date = dataObject.getString(Keys.TopStoriesKeys.KEY_UPDATED_DATE);
-                topStoriesObject.setUpdatedDate(updated_date.substring(0,10));
-
-                Log.i("SECTION", topStoriesObject.getSection());
-                Log.i("TITLE", topStoriesObject.getTitle());
-                Log.i("UPDATE_DATE", topStoriesObject.getUpdatedDate());
-                Log.i("IMAGE_URL_THUMBNAIL", topStoriesObject.getImageThumbnail());
-                Log.i("IMAGE_URL_THUMBLARGE", topStoriesObject.getImageThumblarge());
-                Log.i("IMAGE_URL_NORMAL", topStoriesObject.getImageNormal());
-                Log.i("IMAGE_URL_MEDIUM", topStoriesObject.getImageMedium());
-                Log.i("IMAGE_URL_SUPERJUMBO", topStoriesObject.getImageSuperjumbo());
-                Log.i("ARTICLE_URL", topStoriesObject.getArticleUrl());
+                Log.i("SECTION", mostPopularObject.getSection());
+                Log.i("TITLE", mostPopularObject.getTitle());
+                Log.i("ARTICLE_URL", mostPopularObject.getArticle_url());
+                Log.i("PUBLISHED DATE", mostPopularObject.getPublished_date());
 
                 //We put the object with the results into the ArrayList topStoriesObjectArrayList;
 
-                    topStoriesObjectsArrayList.add(topStoriesObject);
+                    mostPopularObjectsArrayList.add(mostPopularObject);
 
             }
 
-            Log.i("ArrayList.size():", "" + topStoriesObjectsArrayList.size());
+            Log.i("ArrayList.size():", "" + mostPopularObjectsArrayList.size());
 
-            if (topStoriesObjectsArrayList != null) {
-                showTopStoriesView();
-                rvAdapterTopStories.setTopStoriesData(topStoriesObjectsArrayList);
-                Log.i("setTopStoriesData:", "Called(size = " + topStoriesObjectsArrayList.size() + ")");
+            if (mostPopularObjectsArrayList != null) {
+                showMostPopularView();
+                rvAdapterMostPopular.setMostPopularData(mostPopularObjectsArrayList);
+                Log.i("setTopStoriesData:", "Called(size = " + mostPopularObjectsArrayList.size() + ")");
 
             }
             else {

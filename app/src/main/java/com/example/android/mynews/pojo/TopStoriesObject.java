@@ -6,15 +6,15 @@ package com.example.android.mynews.pojo;
 
 public class TopStoriesObject {
 
-    String section;
-    String title;
-    String updated_date;
-    String image_url_thumbnail;
-    String image_url_thumblarge;
-    String image_url_normal;
-    String image_url_medium;
-    String image_url_superjumbo;
-    String article_url;
+    private String section;
+    private String title;
+    private String updated_date;
+    private String image_url_thumbnail;
+    private String image_url_thumblarge;
+    private String image_url_normal;
+    private String image_url_medium;
+    private String image_url_superjumbo;
+    private String article_url;
 
     public TopStoriesObject() { }
 

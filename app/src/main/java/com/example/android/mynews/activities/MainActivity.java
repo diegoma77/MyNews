@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.android.mynews.data.AndroidDatabaseManager;
 import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
+import com.example.android.mynews.fragments.PageFragmentMostPopular;
 import com.example.android.mynews.fragments.PageFragmentTopStories;
 import com.example.android.mynews.R;
 
@@ -71,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent1 = new Intent(MainActivity.this, SearchArticlesActivity.class);
                 startActivity(intent1);
                 break;
+            case R.id.menu_refresh_button:
+                break;
             case R.id.menu_notifications_button:
                 Intent intent2 = new Intent(MainActivity.this, NotificationsActivity.class);
                 startActivity(intent2);
@@ -90,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         FragmentPageAdapter fragmentPageAdapter = new FragmentPageAdapter(getSupportFragmentManager());
         fragmentPageAdapter.addFragment(new PageFragmentTopStories(), "TOP STORIES");
-        //fragmentPageAdapter.addFragment(new PageFragmentMostPopular(), "MOST POPULAR");
+        fragmentPageAdapter.addFragment(new PageFragmentMostPopular(), "MOST POPULAR");
         //fragmentPageAdapter.addFragment(new PageFragmentBusiness(), "BUSINESS");
         //fragmentPageAdapter.addFragment(new PageFragmentSports(), "SPORTS");
         viewPager.setAdapter(fragmentPageAdapter);
