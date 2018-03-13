@@ -37,9 +37,10 @@ import java.util.ArrayList;
 
 public class PageFragmentTopStories extends android.support.v4.app.Fragment {
 
+    // TODO: 13/03/2018 Each time the ViewPager comes back to this Page, the information has to be deleted and requested again.
+
     //Logs
-    private String Log_info = "INFORMATION TOPSTORIES";
-    private String Log_error = "ERROR TOPSTORIES";
+    private static final String TAG = "PageFragmentTopStories";
 
     //Array that will store the TopStoriesObject object to display in the RecyclerView
     private ArrayList<TopStoriesObject> topStoriesObjectsArrayList;
@@ -77,8 +78,6 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
         rvAdapterTopStories = new RvAdapterTopStories(getActivity());
 
         loadTopStoriesInfo();
-
-        Log.i("ArrayListSize.onCreate:", "" + topStoriesObjectsArrayList.size());
 
         recyclerView.setAdapter(rvAdapterTopStories);
 
