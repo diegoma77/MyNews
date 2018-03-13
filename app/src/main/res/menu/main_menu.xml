@@ -15,7 +15,7 @@
     </item>
 
     <item
-        android:id="@+id/menu_notification_button"
+        android:id="@+id/menu_notifications_button"
         android:title="Notifications"
         app:showAsAction="never">
     </item>

@@ -1,4 +1,4 @@
-package com.example.android.mynews.adapters;
+package com.example.android.mynews.fragmentadapters;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;

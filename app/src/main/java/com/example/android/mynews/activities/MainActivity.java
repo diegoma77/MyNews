@@ -12,9 +12,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.android.mynews.data.AndroidDatabaseManager;
-import com.example.android.mynews.adapters.FragmentPageAdapter;
+import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
 import com.example.android.mynews.fragments.PageFragmentTopStories;
 import com.example.android.mynews.R;
 
@@ -70,17 +71,15 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent1 = new Intent(MainActivity.this, SearchArticlesActivity.class);
                 startActivity(intent1);
                 break;
-            case R.id.menu_notification_button:
+            case R.id.menu_notifications_button:
                 Intent intent2 = new Intent(MainActivity.this, NotificationsActivity.class);
                 startActivity(intent2);
                 break;
             case R.id.menu_help_button:
-                Intent intent3 = new Intent(MainActivity.this, NotificationsActivity.class);
-                startActivity(intent3);
+                Toast.makeText(this, "Help Button Clicked", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_about_button:
-                Intent intent4 = new Intent(MainActivity.this, ActivityDataLoader.class);
-                startActivity(intent4);
+                Toast.makeText(this, "About Button Clicked", Toast.LENGTH_SHORT).show();
                 break;
 
         }

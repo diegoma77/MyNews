@@ -1,7 +1,6 @@
-package com.example.android.mynews.adapters;
+package com.example.android.mynews.rvadapters;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -28,6 +27,7 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
     //Array that will store TopStoriesObject after request
     private ArrayList<TopStoriesObject> topStoriesObjectArrayList = new ArrayList<TopStoriesObject>();
 
+    //Necessary for the context of the constructor of the RvAdapter
     private final TypedValue mTypedValue = new TypedValue();
 
     //Constructor of the RvAdapter
@@ -43,8 +43,6 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
         notifyDataSetChanged();
     }
 
-    // TODO: 13/03/2018 Create method setTopStoriesResultsList with "this.xxx = xxx" and "notifyItemChanged(0, xxx.size())  
-    
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -64,7 +62,7 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
     }
 
     @Override
-    public void onBindViewHolder(RvAdapterTopStories.ViewHolder holder, int position) {
+    public void onBindViewHolder(RvAdapterTopStories.ViewHolder holder, final int position) {
 
         TopStoriesObject currentTopStoriesObject = topStoriesObjectArrayList.get(position);
         holder.title.setText(currentTopStoriesObject.getTitle());
@@ -74,12 +72,6 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
 
         Log.d(TAG, "#" + position);
 
-
-        //if (!mCursor.moveToPosition(position)) //check to see if its in the bounds
-          //  return;
-
-        //((ViewHolder)holder).bindViewHolder(position);
-/**
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +82,6 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
 
             }
         });
-*/
     }
 
     @Override

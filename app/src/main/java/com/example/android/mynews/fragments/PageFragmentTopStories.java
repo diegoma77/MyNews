@@ -20,7 +20,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
 import com.example.android.mynews.data.DatabaseContract;
-import com.example.android.mynews.adapters.RvAdapterTopStories;
+import com.example.android.mynews.rvadapters.RvAdapterTopStories;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 import com.example.android.mynews.pojo.TopStoriesObject;
@@ -30,7 +30,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * Created by Diego Fajardo on 22/02/2018.
@@ -60,10 +59,6 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        // TODO: 13/03/2018 Inflate another fragment (with progress bar) while data is loading. 
-
-        // TODO: 13/03/2018 Inflate this fragment only when data is loaded 
-
         View view = inflater.inflate(R.layout.page_fragment_layout, container, false);
 
         mErrorMessageDisplay = (TextView) view.findViewById(R.id.tv_error_message_display);
@@ -75,8 +70,6 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
         recyclerView.setHasFixedSize(true);
 
         topStoriesObjectsArrayList = new ArrayList<TopStoriesObject>();
-
-        // TODO: 13/03/2018 Call the adapter passing the ArrayList as a paramenter so the RecyclerView will have the ArrayList
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -92,14 +85,6 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
         return view;
         
     }
-
-    // TODO: 13/03/2018 Add method getRequestURL that returns a URL for the constructor of StringRequest
-    // (use different parameters to get different URLS).
-
-    // TODO: 13/03/2018 Create method sendJSONRequest that creates a JSONRequest (= to StringRequest) (basically, loadData in ActivityLoader)
-
-    // TODO: 13/03/2018 Create method parseJSONResponse (basically, save data method in ActivityLoader)
-    // TODO: 13/03/2018 Check that the response is not null or that the response.length is not 0 (return nothing)
 
     public void loadTopStoriesInfo () {
 
@@ -218,8 +203,10 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
                 //GETS the rest of the data from the dataObject and puts
                 topStoriesObject.setSection(dataObject.getString(Keys.TopStoriesKeys.KEY_SECTION));
                 topStoriesObject.setTitle(dataObject.getString(Keys.TopStoriesKeys.KEY_TITLE));
-                topStoriesObject.setUpdatedDate(dataObject.getString(Keys.TopStoriesKeys.KEY_UPDATED_DATE));
                 topStoriesObject.setArticleUrl(dataObject.getString(Keys.TopStoriesKeys.KEY_ARTICLE_URL));
+
+                String updated_date = dataObject.getString(Keys.TopStoriesKeys.KEY_UPDATED_DATE);
+                topStoriesObject.setUpdatedDate(updated_date.substring(0,10));
 
                 Log.i("SECTION", topStoriesObject.getSection());
                 Log.i("TITLE", topStoriesObject.getTitle());
