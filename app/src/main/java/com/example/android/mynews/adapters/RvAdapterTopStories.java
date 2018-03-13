@@ -13,6 +13,9 @@ import android.widget.TextView;
 
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.R;
+import com.example.android.mynews.pojo.TopStoriesResults;
+
+import java.util.ArrayList;
 
 /**
  * Created by Diego Fajardo on 25/02/2018.
@@ -22,6 +25,9 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
 
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
     private static final String TAG = RvAdapterTopStories.class.getSimpleName();
+
+    //Array that will store TopStoriesResults after request
+    private ArrayList<TopStoriesResults> topStoriesResultsList = new ArrayList<>();
 
     //Cursor that will store all the information
     Cursor mCursor;
@@ -36,6 +42,9 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
         mCursor = cursor;
 
     }
+
+    // TODO: 13/03/2018 Create method setTopStoriesResultsList with "this.xxx = xxx" and "notifyItemChanged(0, xxx.size())  
+    
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -57,12 +66,19 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
     @Override
     public void onBindViewHolder(RvAdapterTopStories.ViewHolder holder, final int position) {
 
+        TopStoriesResults currentTopStoriesResult = topStoriesResultsList.get(position);
+        holder.title.setText(currentTopStoriesResult.getTitle());
+        holder.section.setText(currentTopStoriesResult.setSection(););
+        holder.update_date.setText(currentTopStoriesResult.getUpdatedDate());
+        holder.imageOnLeft.setImageResource(R.drawable.rajoy);
+
         Log.d(TAG, "#" + position);
 
-        if (!mCursor.moveToPosition(position)) //check to see if its in the bounds
-            return;
 
-        ((ViewHolder)holder).bindViewHolder(position);
+        //if (!mCursor.moveToPosition(position)) //check to see if its in the bounds
+          //  return;
+
+        //((ViewHolder)holder).bindViewHolder(position);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,10 +120,10 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
 
         public void bindViewHolder (int position) {
 
-            section.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)));
-            title.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.TITLE)));
-            update_date.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.UPDATE_DATE)));
-            imageOnLeft.setImageResource(R.drawable.rajoy);
+            //section.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)));
+            //title.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.TITLE)));
+            //update_date.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.UPDATE_DATE)));
+            //imageOnLeft.setImageResource(R.drawable.rajoy);
 
         }
     }

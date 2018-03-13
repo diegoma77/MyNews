@@ -5,16 +5,24 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.data.DataFromJSONInString;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.adapters.RvAdapterTopStories;
+import com.example.android.mynews.extras.Keys;
+import com.example.android.mynews.pojo.TopStoriesResults;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by Diego Fajardo on 22/02/2018.
@@ -25,6 +33,9 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
     //Logs
     private String Log_info = "INFORMATION TOPSTORIES";
     private String Log_error = "ERROR TOPSTORIES";
+
+    //Array that will store the TopStoriesResults object to display in the RecyclerView
+    private ArrayList<TopStoriesResults> topStoryResults = new ArrayList<>();
 
     //Top Stories table name
     private String table_name_top_stories = DatabaseContract.Database.TOP_STORIES_TABLE_NAME;
@@ -59,6 +70,7 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
+        // TODO: 13/03/2018 Call the adapter passing the ArrayList as a paramenter so the RecyclerView will have the ArrayList 
         rvAdapterTopStories = new RvAdapterTopStories(getActivity(), mCursor);
         recyclerView.setAdapter(rvAdapterTopStories);
 
@@ -83,11 +95,86 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
 
         //if (response == null || response.length() == 0) return;
 
-        //response.getJSONArray()
+        // TODO: 13/03/2018 Add if statements to check if the data was received or not and avoid crashes
+        
+        try {
 
+            //We create the object that is going to store all the information
+            DataFromJSONInString dataFromJSONInString = new DataFromJSONInString();
+
+            //JSON object that gathers all the objects of the response from the API
+            JSONObject jsonObject_response = new JSONObject(response);
+
+            //JSON array made of the objects inside the "result"
+            JSONArray results_array =
+                    jsonObject_response.getJSONArray(Keys.TopStoriesKeys.KEY_RESULTS);
+
+            //Iterating through "results_array"
+            for (int i = 0; i < results_array.length(); i++) {
+
+                //We get the "i results object"
+                JSONObject dataObject = results_array.getJSONObject(i);
+
+                //We get the multimedia array from the "i results object".
+                JSONArray multimedia_array = dataObject.getJSONArray(Keys.TopStoriesKeys.KEY_MULTIMEDIA);
+
+                for (int j = 0; j < multimedia_array.length(); j++) {
+
+                    JSONObject multimedia_object = multimedia_array.getJSONObject(j);
+
+                    // TODO: 13/03/2018 Erase switch when decided which image to take
+                    switch (j) {
+                        case 0:
+                            dataFromJSONInString.setImageThumbnail(
+                                    multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                            break;
+
+                        case 1:
+                            dataFromJSONInString.setImageThumblarge(multimedia_object.getString(
+                                    Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                            break;
+
+                        case 2:
+                            dataFromJSONInString.setImageNormal(multimedia_object.getString(
+                                    Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                            break;
+
+                        case 3:
+                            dataFromJSONInString.setImageMedium(multimedia_object.getString(
+                                    Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                            break;
+
+                        case 4:
+                            dataFromJSONInString.setImageSuperjumbo(multimedia_object.getString(
+                                    Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                            break;
+
+                    }
+
+                }
+
+                //GETS the rest of the data from the dataObject
+                dataFromJSONInString.setSection(dataObject.getString(Keys.TopStoriesKeys.KEY_SECTION));
+                dataFromJSONInString.setTitle(dataObject.getString(Keys.TopStoriesKeys.KEY_TITLE));
+                dataFromJSONInString.setUpdatedDate(dataObject.getString(Keys.TopStoriesKeys.KEY_UPDATED_DATE));
+                dataFromJSONInString.setArticleUrl(dataObject.getString(Keys.TopStoriesKeys.KEY_ARTICLE_URL));
+
+                Log.i("SECTION", dataFromJSONInString.getSection());
+                Log.i("TITLE", dataFromJSONInString.getTitle());
+                Log.i("UPDATE_DATE", dataFromJSONInString.getUpdatedDate());
+                Log.i("IMAGE_URL_THUMBNAIL", dataFromJSONInString.getImageThumbnail());
+                Log.i("IMAGE_URL_THUMBLARGE", dataFromJSONInString.getImageThumblarge());
+                Log.i("IMAGE_URL_NORMAL", dataFromJSONInString.getImageNormal());
+                Log.i("IMAGE_URL_MEDIUM", dataFromJSONInString.getImageMedium());
+                Log.i("IMAGE_URL_SUPERJUMBO", dataFromJSONInString.getImageSuperjumbo());
+                Log.i("ARTICLE_URL", dataFromJSONInString.getArticleUrl());
+
+            }
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
     }
-
-    
 }
+
 
 
