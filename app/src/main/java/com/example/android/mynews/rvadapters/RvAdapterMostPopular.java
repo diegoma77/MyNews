@@ -67,7 +67,7 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
 
         MostPopularObject currentMostPopularObject = mostPopularObjectArrayList.get(position);
         holder.title.setText(currentMostPopularObject.getTitle());
-        holder.section.setText(currentMostPopularObject.getSection());
+        holder.section.setText("Most Popular < " + currentMostPopularObject.getSection());
         holder.published_date.setText(currentMostPopularObject.getPublished_date());
         holder.imageOnLeft.setImageResource(R.drawable.rajoy);
 

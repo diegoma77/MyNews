@@ -21,8 +21,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
-import com.example.android.mynews.pojo.TopStoriesObject;
-import com.example.android.mynews.rvadapters.RvAdapterTopStories;
+import com.example.android.mynews.pojo.SportsObject;
+import com.example.android.mynews.rvadapters.RvAdapterSports;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,7 +42,7 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
     private static final String TAG = "PageFragmentTopStories";
 
     //Array that will store the TopStoriesObject object to display in the RecyclerView
-    private ArrayList<TopStoriesObject> topStoriesObjectArrayList;
+    private ArrayList<SportsObject> sportsObjectArrayList;
 
     private TextView mErrorMessageDisplay;
 
@@ -50,7 +50,7 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
 
     //RecyclerView and RecyclerViewAdapter
     private RecyclerView recyclerView;
-    private RvAdapterTopStories rvAdapterTopStories;
+    private RvAdapterSports rvAdapterSports;
 
     @Nullable
     @Override
@@ -66,16 +66,16 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
 
         recyclerView.setHasFixedSize(true);
 
-        topStoriesObjectArrayList = new ArrayList<>();
+        sportsObjectArrayList = new ArrayList<>();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        rvAdapterTopStories = new RvAdapterTopStories(getActivity());
+        rvAdapterSports = new RvAdapterSports(getActivity());
 
         loadTopStoriesInfo();
 
-        recyclerView.setAdapter(rvAdapterTopStories);
+        recyclerView.setAdapter(rvAdapterSports);
 
         return view;
         
@@ -83,12 +83,12 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
 
     public void loadTopStoriesInfo () {
 
-        showTopStoriesView();
-        sendJSONRequest(new Url().getTopStoriesApiUrl());
+        showSportsView();
+        sendJSONRequest(new Url().getSportsApiUrl());
 
     }
 
-    public void showTopStoriesView () {
+    public void showSportsView () {
         /* First, make sure the error is invisible */
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         /* Then, make sure the weather data is visible */
@@ -146,19 +146,19 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
 
             //JSON array made of the objects inside the "result"
             JSONArray results_array =
-                    jsonObject_response.getJSONArray(Keys.TopStoriesKeys.KEY_RESULTS);
+                    jsonObject_response.getJSONArray(Keys.Sports.KEY_RESULTS);
 
             //Iterating through "results_array"
             for (int i = 0; i < results_array.length(); i++) {
 
                 //We create the object that is going to store all the information
-                TopStoriesObject topStoriesObject = new TopStoriesObject();
+                SportsObject sportsObject = new SportsObject();
 
                 //We get the "i results object"
                 JSONObject dataObject = results_array.getJSONObject(i);
 
                 //We get the multimedia array from the "i results object".
-                JSONArray multimedia_array = dataObject.getJSONArray(Keys.TopStoriesKeys.KEY_MULTIMEDIA);
+                JSONArray multimedia_array = dataObject.getJSONArray(Keys.Sports.KEY_MULTIMEDIA);
 
                 Log.i ("MULTIMEDIA_LENGTH", "" + multimedia_array.length());
 
@@ -169,43 +169,43 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
                     // TODO: 13/03/2018 Erase "switch statement" when decided which image to take
                     switch (j) {
                         case 0:
-                            if (multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL) != null) {
-                                topStoriesObject.setImageThumbnail(
-                                        multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL));
-                                Log.i("IMAGE_URL_THUMBNAIL", topStoriesObject.getImageThumbnail());
+                            if (multimedia_object.getString(Keys.Sports.KEY_IMAGE_URL) != null) {
+                                sportsObject.setImageThumbnail(
+                                        multimedia_object.getString(Keys.Sports.KEY_IMAGE_URL));
+                                Log.i("IMAGE_URL_THUMBNAIL", sportsObject.getImageThumbnail());
 
                             }
                             break;
 
                         case 1:
-                            if (multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL) != null) {
-                                topStoriesObject.setImageThumblarge(multimedia_object.getString(
+                            if (multimedia_object.getString(Keys.Sports.KEY_IMAGE_URL) != null) {
+                                sportsObject.setImageThumblarge(multimedia_object.getString(
                                         Keys.TopStoriesKeys.KEY_IMAGE_URL));
-                                Log.i("IMAGE_URL_THUMBLARGE", topStoriesObject.getImageThumblarge());
+                                Log.i("IMAGE_URL_THUMBLARGE", sportsObject.getImageThumblarge());
                             }
                             break;
 
                         case 2:
-                            if (multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL) != null) {
-                                topStoriesObject.setImageNormal(multimedia_object.getString(
+                            if (multimedia_object.getString(Keys.Sports.KEY_IMAGE_URL) != null) {
+                                sportsObject.setImageNormal(multimedia_object.getString(
                                         Keys.TopStoriesKeys.KEY_IMAGE_URL));
-                                Log.i("IMAGE_URL_NORMAL", topStoriesObject.getImageNormal());
+                                Log.i("IMAGE_URL_NORMAL", sportsObject.getImageNormal());
                             }
                             break;
 
                         case 3:
-                            if (multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL) != null) {
-                                topStoriesObject.setImageMedium(multimedia_object.getString(
+                            if (multimedia_object.getString(Keys.Sports.KEY_IMAGE_URL) != null) {
+                                sportsObject.setImageMedium(multimedia_object.getString(
                                         Keys.TopStoriesKeys.KEY_IMAGE_URL));
-                                Log.i("IMAGE_URL_MEDIUM", topStoriesObject.getImageMedium());
+                                Log.i("IMAGE_URL_MEDIUM", sportsObject.getImageMedium());
                             }
                             break;
 
                         case 4:
-                            if (multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL) != null) {
-                                topStoriesObject.setImageSuperjumbo(multimedia_object.getString(
+                            if (multimedia_object.getString(Keys.Sports.KEY_IMAGE_URL) != null) {
+                                sportsObject.setImageSuperjumbo(multimedia_object.getString(
                                         Keys.TopStoriesKeys.KEY_IMAGE_URL));
-                                Log.i("IMAGE_URL_SUPERJUMBO", topStoriesObject.getImageSuperjumbo());
+                                Log.i("IMAGE_URL_SUPERJUMBO", sportsObject.getImageSuperjumbo());
                             }
                             break;
                     }
@@ -213,42 +213,42 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
 
                 //CHECKS that the data from the JSON objects is not null
                 //If its not null, it sets the property of the object with the value
-                if (dataObject.getString(Keys.TopStoriesKeys.KEY_SECTION) != null) {
-                    topStoriesObject.setSection(dataObject.getString(Keys.TopStoriesKeys.KEY_SECTION));
-                    Log.i("SECTION", topStoriesObject.getSection());
+                if (dataObject.getString(Keys.Sports.KEY_SUBSECTION) != null) {
+                    sportsObject.setSubsection(dataObject.getString(Keys.TopStoriesKeys.KEY_SECTION));
+                    Log.i("SECTION", sportsObject.getSubsection());
                 }
 
-                if (dataObject.getString(Keys.TopStoriesKeys.KEY_TITLE) != null) {
-                    topStoriesObject.setTitle(dataObject.getString(Keys.TopStoriesKeys.KEY_TITLE));
-                    Log.i("TITLE", topStoriesObject.getTitle());
+                if (dataObject.getString(Keys.Sports.KEY_TITLE) != null) {
+                    sportsObject.setTitle(dataObject.getString(Keys.TopStoriesKeys.KEY_TITLE));
+                    Log.i("TITLE", sportsObject.getTitle());
                 }
 
-                if (dataObject.getString(Keys.TopStoriesKeys.KEY_ARTICLE_URL) != null) {
-                    topStoriesObject.setArticleUrl(dataObject.getString(Keys.TopStoriesKeys.KEY_ARTICLE_URL));
-                    Log.i("ARTICLE_URL", topStoriesObject.getArticleUrl());
+                if (dataObject.getString(Keys.Sports.KEY_ARTICLE_URL) != null) {
+                    sportsObject.setArticleUrl(dataObject.getString(Keys.TopStoriesKeys.KEY_ARTICLE_URL));
+                    Log.i("ARTICLE_URL", sportsObject.getArticleUrl());
                 }
 
-                String updated_date = dataObject.getString(Keys.TopStoriesKeys.KEY_UPDATED_DATE);
+                String updated_date = dataObject.getString(Keys.Sports.KEY_UPDATED_DATE);
                 if (updated_date != null) {
-                    topStoriesObject.setUpdatedDate(updated_date.substring(0, 10));
-                    Log.i("UPDATE_DATE", topStoriesObject.getUpdatedDate());
+                    sportsObject.setUpdatedDate(updated_date.substring(0, 10));
+                    Log.i("UPDATE_DATE", sportsObject.getUpdatedDate());
                 }
 
-                topStoriesObjectArrayList.add(topStoriesObject);
-                Log.i("TS_ARRAYLIST # ", "" + i + ", " + topStoriesObjectArrayList.get(i).getTitle());
+                sportsObjectArrayList.add(sportsObject);
+                Log.i("TS_ARRAYLIST # ", "" + i + ", " + sportsObjectArrayList.get(i).getTitle());
 
             }
 
             //Loop to see that all objects ib the ArrayList are different
-            for (int i = 0; i < topStoriesObjectArrayList.size() ; i++) {
-               Log.i("TS_ARRAY_SUMM_TITLES # ", "" + i + " :" + topStoriesObjectArrayList.get(i).getTitle());
+            for (int i = 0; i < sportsObjectArrayList.size() ; i++) {
+               Log.i("TS_ARRAY_SUMM_TITLES # ", "" + i + " :" + sportsObjectArrayList.get(i).getTitle());
             }
 
             //Sets the RVAdapter with the data from the JSON response
-            if (topStoriesObjectArrayList != null){
-               showTopStoriesView();
-               rvAdapterTopStories.setTopStoriesData(topStoriesObjectArrayList);
-               Log.i ("TS_ADAPTER SET WITH:", "" + topStoriesObjectArrayList.size() + " objects");
+            if (sportsObjectArrayList != null){
+               showSportsView();
+               rvAdapterSports.setSportsData(sportsObjectArrayList);
+               Log.i ("TS_ADAPTER SET WITH:", "" + sportsObjectArrayList.size() + " objects");
             }
 
         } catch(JSONException e) {

@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
-import com.example.android.mynews.pojo.TopStoriesObject;
+import com.example.android.mynews.pojo.SportsObject;
 
 import java.util.ArrayList;
 
@@ -25,21 +25,20 @@ public class RvAdapterSports extends RecyclerView.Adapter<RvAdapterSports.ViewHo
     private static final String TAG = RvAdapterSports.class.getSimpleName();
 
     //Array that will store TopStoriesObject after request
-    private ArrayList<TopStoriesObject> topStoriesObjectArrayList= new ArrayList<>();
+    private ArrayList<SportsObject> sportsObjectArrayList = new ArrayList<>();
 
     //Necessary for the context of the constructor of the RvAdapter
     private final TypedValue mTypedValue = new TypedValue();
 
     //Constructor of the RvAdapter
     public RvAdapterSports(Context context) {
-
         //Context to work with Fragments
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
 
     }
 
-    public void setTopStoriesData(ArrayList<TopStoriesObject> topStoriesObjectArrayList) {
-        this.topStoriesObjectArrayList = topStoriesObjectArrayList;
+    public void setSportsData(ArrayList<SportsObject> sportsObjectArrayList) {
+        this.sportsObjectArrayList = sportsObjectArrayList;
         notifyDataSetChanged();
     }
 
@@ -64,9 +63,9 @@ public class RvAdapterSports extends RecyclerView.Adapter<RvAdapterSports.ViewHo
     @Override
     public void onBindViewHolder(RvAdapterSports.ViewHolder holder, int position) {
 
-        holder.title.setText(topStoriesObjectArrayList.get(position).getTitle());
-        holder.section.setText(topStoriesObjectArrayList.get(position).getSection());
-        holder.update_date.setText(topStoriesObjectArrayList.get(position).getUpdatedDate());
+        holder.title.setText(sportsObjectArrayList.get(position).getTitle());
+        holder.section.setText("Sports < " + sportsObjectArrayList.get(position).getSubsection());
+        holder.update_date.setText(sportsObjectArrayList.get(position).getUpdatedDate());
         holder.imageOnLeft.setImageResource(R.drawable.rajoy);
 
         Log.d(TAG, "#" + position);
@@ -85,8 +84,8 @@ public class RvAdapterSports extends RecyclerView.Adapter<RvAdapterSports.ViewHo
 
     @Override
     public int getItemCount() {
-        if (topStoriesObjectArrayList == null) { return 0; };
-        return topStoriesObjectArrayList.size();
+        if (sportsObjectArrayList == null) { return 0; };
+        return sportsObjectArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

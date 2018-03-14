@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.android.mynews.data.AndroidDatabaseManager;
 import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
 import com.example.android.mynews.fragments.PageFragmentMostPopular;
+import com.example.android.mynews.fragments.PageFragmentSports;
 import com.example.android.mynews.fragments.PageFragmentTopStories;
 import com.example.android.mynews.R;
 
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentPageAdapter.addFragment(new PageFragmentTopStories(), "TOP STORIES");
         fragmentPageAdapter.addFragment(new PageFragmentMostPopular(), "MOST POPULAR");
         //fragmentPageAdapter.addFragment(new PageFragmentBusiness(), "BUSINESS");
-        //fragmentPageAdapter.addFragment(new PageFragmentSports(), "SPORTS");
+        fragmentPageAdapter.addFragment(new PageFragmentSports(), "SPORTS");
         viewPager.setAdapter(fragmentPageAdapter);
     }
 

@@ -65,7 +65,7 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
     public void onBindViewHolder(RvAdapterTopStories.ViewHolder holder, int position) {
 
         holder.title.setText(topStoriesObjectArrayList.get(position).getTitle());
-        holder.section.setText(topStoriesObjectArrayList.get(position).getSection());
+        holder.section.setText("Top Stories < " + topStoriesObjectArrayList.get(position).getSection());
         holder.update_date.setText(topStoriesObjectArrayList.get(position).getUpdatedDate());
         holder.imageOnLeft.setImageResource(R.drawable.rajoy);
 
