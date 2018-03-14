@@ -63,7 +63,7 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
     }
 
     @Override
-    public void onBindViewHolder(RvAdapterMostPopular.ViewHolder holder, final int position) {
+    public void onBindViewHolder(RvAdapterMostPopular.ViewHolder holder, int position) {
 
         MostPopularObject currentMostPopularObject = mostPopularObjectArrayList.get(position);
         holder.title.setText(currentMostPopularObject.getTitle());
@@ -76,7 +76,7 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("ONCLICK - POSITION","#" + position + " CLICKED");
+                Log.i("ONCLICK - POSITION","#" + " CLICKED");
                 Context context = v.getContext();
 
                 //Intent intent = new Intent(context, OtherActivity.class);

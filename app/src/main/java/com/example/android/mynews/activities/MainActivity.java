@@ -22,6 +22,8 @@ import com.example.android.mynews.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    // TODO: 14/03/2018 Change data structure in PageFragments dd/MM/yy
+
     //Toolbar variable
     private Toolbar toolbar;
 

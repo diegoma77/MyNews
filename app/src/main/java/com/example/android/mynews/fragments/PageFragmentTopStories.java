@@ -31,6 +31,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import javax.security.auth.login.LoginException;
+
 /**
  * Created by Diego Fajardo on 22/02/2018.
  */
@@ -43,7 +45,7 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
     private static final String TAG = "PageFragmentTopStories";
 
     //Array that will store the TopStoriesObject object to display in the RecyclerView
-    private ArrayList<TopStoriesObject> topStoriesObjectsArrayList;
+    private ArrayList<TopStoriesObject> topStoriesObjectArrayList;
 
     private TextView mErrorMessageDisplay;
 
@@ -67,7 +69,7 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
 
         recyclerView.setHasFixedSize(true);
 
-        topStoriesObjectsArrayList = new ArrayList<TopStoriesObject>();
+        topStoriesObjectArrayList = new ArrayList<>();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -142,9 +144,6 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
         
         try {
 
-            //We create the object that is going to store all the information
-            TopStoriesObject topStoriesObject = new TopStoriesObject();
-
             //JSON object that gathers all the objects of the response from the API
             JSONObject jsonObject_response = new JSONObject(response);
 
@@ -155,11 +154,16 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
             //Iterating through "results_array"
             for (int i = 0; i < results_array.length(); i++) {
 
+                //We create the object that is going to store all the information
+                TopStoriesObject topStoriesObject = new TopStoriesObject();
+
                 //We get the "i results object"
                 JSONObject dataObject = results_array.getJSONObject(i);
 
                 //We get the multimedia array from the "i results object".
                 JSONArray multimedia_array = dataObject.getJSONArray(Keys.TopStoriesKeys.KEY_MULTIMEDIA);
+
+                Log.i ("MULTIMEDIA_LENGTH", "" + multimedia_array.length());
 
                 for (int j = 0; j < multimedia_array.length(); j++) {
 
@@ -168,74 +172,93 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
                     // TODO: 13/03/2018 Erase "switch statement" when decided which image to take
                     switch (j) {
                         case 0:
-                            topStoriesObject.setImageThumbnail(
-                                    multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                            if (multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL) != null) {
+                                topStoriesObject.setImageThumbnail(
+                                        multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                                Log.i("IMAGE_URL_THUMBNAIL", topStoriesObject.getImageThumbnail());
+
+                            }
                             break;
 
                         case 1:
-                            topStoriesObject.setImageThumblarge(multimedia_object.getString(
-                                    Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                            if (multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL) != null) {
+                                topStoriesObject.setImageThumblarge(multimedia_object.getString(
+                                        Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                                Log.i("IMAGE_URL_THUMBLARGE", topStoriesObject.getImageThumblarge());
+                            }
                             break;
 
                         case 2:
-                            topStoriesObject.setImageNormal(multimedia_object.getString(
-                                    Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                            if (multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL) != null) {
+                                topStoriesObject.setImageNormal(multimedia_object.getString(
+                                        Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                                Log.i("IMAGE_URL_NORMAL", topStoriesObject.getImageNormal());
+                            }
                             break;
 
                         case 3:
-                            topStoriesObject.setImageMedium(multimedia_object.getString(
-                                    Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                            if (multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL) != null) {
+                                topStoriesObject.setImageMedium(multimedia_object.getString(
+                                        Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                                Log.i("IMAGE_URL_MEDIUM", topStoriesObject.getImageMedium());
+                            }
                             break;
 
                         case 4:
-                            topStoriesObject.setImageSuperjumbo(multimedia_object.getString(
-                                    Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                            if (multimedia_object.getString(Keys.TopStoriesKeys.KEY_IMAGE_URL) != null) {
+                                topStoriesObject.setImageSuperjumbo(multimedia_object.getString(
+                                        Keys.TopStoriesKeys.KEY_IMAGE_URL));
+                                Log.i("IMAGE_URL_SUPERJUMBO", topStoriesObject.getImageSuperjumbo());
+                            }
                             break;
-
                     }
-
                 }
 
-                //GETS the rest of the data from the dataObject and puts
-                topStoriesObject.setSection(dataObject.getString(Keys.TopStoriesKeys.KEY_SECTION));
-                topStoriesObject.setTitle(dataObject.getString(Keys.TopStoriesKeys.KEY_TITLE));
-                topStoriesObject.setArticleUrl(dataObject.getString(Keys.TopStoriesKeys.KEY_ARTICLE_URL));
+                //CHECKS that the data from the JSON objects is not null
+                //If its not null, it sets the property of the object with the value
+                if (dataObject.getString(Keys.TopStoriesKeys.KEY_SECTION) != null) {
+                    topStoriesObject.setSection(dataObject.getString(Keys.TopStoriesKeys.KEY_SECTION));
+                    Log.i("SECTION", topStoriesObject.getSection());
+                }
+
+                if (dataObject.getString(Keys.TopStoriesKeys.KEY_TITLE) != null) {
+                    topStoriesObject.setTitle(dataObject.getString(Keys.TopStoriesKeys.KEY_TITLE));
+                    Log.i("TITLE", topStoriesObject.getTitle());
+                }
+
+                if (dataObject.getString(Keys.TopStoriesKeys.KEY_ARTICLE_URL) != null) {
+                    topStoriesObject.setArticleUrl(dataObject.getString(Keys.TopStoriesKeys.KEY_ARTICLE_URL));
+                    Log.i("ARTICLE_URL", topStoriesObject.getArticleUrl());
+                }
 
                 String updated_date = dataObject.getString(Keys.TopStoriesKeys.KEY_UPDATED_DATE);
-                topStoriesObject.setUpdatedDate(updated_date.substring(0,10));
+                if (updated_date != null) {
+                    topStoriesObject.setUpdatedDate(updated_date.substring(0, 10));
+                    Log.i("UPDATE_DATE", topStoriesObject.getUpdatedDate());
+                }
 
-                Log.i("SECTION", topStoriesObject.getSection());
-                Log.i("TITLE", topStoriesObject.getTitle());
-                Log.i("UPDATE_DATE", topStoriesObject.getUpdatedDate());
-                Log.i("IMAGE_URL_THUMBNAIL", topStoriesObject.getImageThumbnail());
-                Log.i("IMAGE_URL_THUMBLARGE", topStoriesObject.getImageThumblarge());
-                Log.i("IMAGE_URL_NORMAL", topStoriesObject.getImageNormal());
-                Log.i("IMAGE_URL_MEDIUM", topStoriesObject.getImageMedium());
-                Log.i("IMAGE_URL_SUPERJUMBO", topStoriesObject.getImageSuperjumbo());
-                Log.i("ARTICLE_URL", topStoriesObject.getArticleUrl());
-
-                //We put the object with the results into the ArrayList topStoriesObjectArrayList;
-
-                    topStoriesObjectsArrayList.add(topStoriesObject);
+                topStoriesObjectArrayList.add(topStoriesObject);
+                Log.i("TS_ARRAYLIST # ", "" + i + ", " + topStoriesObjectArrayList.get(i).getTitle());
 
             }
 
-            Log.i("ArrayList.size():", "" + topStoriesObjectsArrayList.size());
-
-            if (topStoriesObjectsArrayList != null) {
-                showTopStoriesView();
-                rvAdapterTopStories.setTopStoriesData(topStoriesObjectsArrayList);
-                Log.i("setTopStoriesData:", "Called(size = " + topStoriesObjectsArrayList.size() + ")");
-
+            //Loop to see that all objects ib the ArrayList are different
+            for (int i = 0; i < topStoriesObjectArrayList.size() ; i++) {
+               Log.i("TS_ARRAY_SUMM_TITLES # ", "" + i + " :" + topStoriesObjectArrayList.get(i).getTitle());
             }
-            else {
-                showErrorMessage();
+
+            //Sets the RVAdapter with the data from the JSON response
+            if (topStoriesObjectArrayList != null){
+               showTopStoriesView();
+               rvAdapterTopStories.setTopStoriesData(topStoriesObjectArrayList);
+               Log.i ("TS_ADAPTER SET WITH:", "" + topStoriesObjectArrayList.size() + " objects");
             }
 
         } catch(JSONException e) {
             e.printStackTrace();
         }
     }
+
 }
 
 

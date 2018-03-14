@@ -25,7 +25,7 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
     private static final String TAG = RvAdapterTopStories.class.getSimpleName();
 
     //Array that will store TopStoriesObject after request
-    private ArrayList<TopStoriesObject> topStoriesObjectArrayList = new ArrayList<TopStoriesObject>();
+    private ArrayList<TopStoriesObject> topStoriesObjectArrayList= new ArrayList<>();
 
     //Necessary for the context of the constructor of the RvAdapter
     private final TypedValue mTypedValue = new TypedValue();
@@ -62,12 +62,11 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
     }
 
     @Override
-    public void onBindViewHolder(RvAdapterTopStories.ViewHolder holder, final int position) {
+    public void onBindViewHolder(RvAdapterTopStories.ViewHolder holder, int position) {
 
-        TopStoriesObject currentTopStoriesObject = topStoriesObjectArrayList.get(position);
-        holder.title.setText(currentTopStoriesObject.getTitle());
-        holder.section.setText(currentTopStoriesObject.getSection());
-        holder.update_date.setText(currentTopStoriesObject.getUpdatedDate());
+        holder.title.setText(topStoriesObjectArrayList.get(position).getTitle());
+        holder.section.setText(topStoriesObjectArrayList.get(position).getSection());
+        holder.update_date.setText(topStoriesObjectArrayList.get(position).getUpdatedDate());
         holder.imageOnLeft.setImageResource(R.drawable.rajoy);
 
         Log.d(TAG, "#" + position);
@@ -75,7 +74,7 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("ONCLICK - POSITION","#" + position + " CLICKED");
+                Log.i("ONCLICK - POSITION","#" + " CLICKED");
                 Context context = v.getContext();
 
                 //Intent intent = new Intent(context, OtherActivity.class);

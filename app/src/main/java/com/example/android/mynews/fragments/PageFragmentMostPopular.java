@@ -143,51 +143,64 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
         
         try {
 
-            //We create the object that is going to store all the information
-            MostPopularObject mostPopularObject = new MostPopularObject();
-
-
             //JSON object that gathers all the objects of the response from the API
             JSONObject jsonObject_response = new JSONObject(response);
-
 
             //JSON array made of the objects inside the "result"
             JSONArray results_array =
                     jsonObject_response.getJSONArray(Keys.MostPopularKeys.KEY_RESULTS);
 
-
-
             //Iterating through "results_array"
             for (int i = 0; i < results_array.length(); i++) {
+
+                //We create the object that is going to store all the information
+                MostPopularObject mostPopularObject = new MostPopularObject();
 
                 // TODO: 13/03/2018 We have yet to get the image url
 
                 //We get the "i results object"
                 JSONObject dataObject = results_array.getJSONObject(i);
 
-                //GETS the rest of the data from the dataObject and puts
-                mostPopularObject.setSection(dataObject.getString(Keys.MostPopularKeys.KEY_SECTION));
-                mostPopularObject.setTitle(dataObject.getString(Keys.MostPopularKeys.KEY_TITLE));
-                mostPopularObject.setArticle_url(dataObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL));
-                mostPopularObject.setPublished_date(dataObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE));
+                //GETS the rest of the data from the dataObject
+                if (dataObject.getString(Keys.MostPopularKeys.KEY_SECTION) != null) {
+                    mostPopularObject.setSection(dataObject.getString(Keys.MostPopularKeys.KEY_SECTION));
+                    Log.i("SECTION", mostPopularObject.getSection());
+                }
 
-                Log.i("SECTION", mostPopularObject.getSection());
-                Log.i("TITLE", mostPopularObject.getTitle());
-                Log.i("ARTICLE_URL", mostPopularObject.getArticle_url());
-                Log.i("PUBLISHED DATE", mostPopularObject.getPublished_date());
+                if (dataObject.getString(Keys.MostPopularKeys.KEY_TITLE) != null) {
+                    mostPopularObject.setTitle(dataObject.getString(Keys.MostPopularKeys.KEY_TITLE));
+                    Log.i("TITLE", mostPopularObject.getTitle());
+                }
+
+                if (dataObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL) != null) {
+                    mostPopularObject.setArticle_url(dataObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL));
+                    Log.i("ARTICLE_URL", mostPopularObject.getArticle_url());
+                }
+
+                if (dataObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE) != null) {
+                    mostPopularObject.setPublished_date(dataObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE));
+                    Log.i("PUBLISHED DATE", mostPopularObject.getPublished_date());
+                }
 
                 //We put the object with the results into the ArrayList topStoriesObjectArrayList;
+                mostPopularObjectsArrayList.add(mostPopularObject);
+                Log.i("MPposition # ", "" + i + " :" + mostPopularObjectsArrayList.get(i).getTitle());
 
-                    mostPopularObjectsArrayList.add(mostPopularObject);
+            }
+
+            for (int i = 0; i < mostPopularObjectsArrayList.size() ; i++) {
+
+                Log.i("MPposition # ", "" + i + " :" + mostPopularObjectsArrayList.get(i).getTitle());
 
             }
 
             Log.i("ArrayList.size():", "" + mostPopularObjectsArrayList.size());
 
             if (mostPopularObjectsArrayList != null) {
+
                 showMostPopularView();
                 rvAdapterMostPopular.setMostPopularData(mostPopularObjectsArrayList);
-                Log.i("setTopStoriesData:", "Called(size = " + mostPopularObjectsArrayList.size() + ")");
+                Log.i("setMOSTPOPULARData:", "Called(size = " + mostPopularObjectsArrayList.size() + ")");
 
             }
             else {
