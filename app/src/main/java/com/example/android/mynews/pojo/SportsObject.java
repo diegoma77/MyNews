@@ -6,7 +6,7 @@ package com.example.android.mynews.pojo;
 
 public class SportsObject {
 
-    private String section;
+    private String subsection;
     private String title;
     private String updated_date;
     private String image_url_thumbnail;
@@ -18,7 +18,7 @@ public class SportsObject {
 
     public SportsObject() { }
 
-    public SportsObject(String section,
+    public SportsObject(String subsection,
                         String title,
                         String updated_date,
                         String image_url_thumbnail,
@@ -27,7 +27,7 @@ public class SportsObject {
                         String image_url_medium,
                         String image_url_superjumbo,
                         String article_url) {
-        this.section = section;
+        this.subsection = subsection;
         this.title = title;
         this.updated_date = updated_date;
         this.image_url_thumbnail = image_url_thumbnail;
@@ -39,8 +39,8 @@ public class SportsObject {
     }
 
 
-    public void setSection(String section) {
-        this.section = section;
+    public void setSubsection(String subsection) {
+        this.subsection = subsection;
     }
 
     public void setTitle(String title) {
@@ -75,8 +75,8 @@ public class SportsObject {
         this.article_url = article_url;
     }
 
-    public String getSection() {
-        return this.section;
+    public String getSubsection() {
+        return this.subsection;
     }
 
     public String getTitle() {

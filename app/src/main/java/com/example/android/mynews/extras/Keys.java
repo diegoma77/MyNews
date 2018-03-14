@@ -31,4 +31,30 @@ public interface Keys {
 
     }
 
+    interface Business {
+
+        String KEY_RESULTS = "results";
+        String KEY_SUBSECTION = "subsection";
+        String KEY_TITLE = "title";
+        String KEY_ARTICLE_URL = "url";
+        String KEY_UPDATED_DATE = "updated_date";
+        String KEY_MULTIMEDIA = "multimedia";
+        String KEY_IMAGE_URL = "url";
+
+    }
+
+    interface Sports {
+
+        String KEY_RESULTS = "results";
+        String KEY_SUBSECTION = "subsection";
+        String KEY_TITLE = "title";
+        String KEY_ARTICLE_URL = "url";
+        String KEY_UPDATED_DATE = "updated_date";
+        String KEY_MULTIMEDIA = "multimedia";
+        String KEY_IMAGE_URL = "url";
+
+    }
+
+
+
 }
