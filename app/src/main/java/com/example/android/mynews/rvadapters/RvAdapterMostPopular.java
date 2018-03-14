@@ -1,6 +1,7 @@
 package com.example.android.mynews.rvadapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -11,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.activities.WebViewActivity;
+import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.pojo.MostPopularObject;
 import com.example.android.mynews.pojo.TopStoriesObject;
 
@@ -63,7 +66,7 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
     }
 
     @Override
-    public void onBindViewHolder(RvAdapterMostPopular.ViewHolder holder, int position) {
+    public void onBindViewHolder(RvAdapterMostPopular.ViewHolder holder, final int position) {
 
         MostPopularObject currentMostPopularObject = mostPopularObjectArrayList.get(position);
         holder.title.setText(currentMostPopularObject.getTitle());
@@ -79,7 +82,9 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
                 Log.i("ONCLICK - POSITION","#" + " CLICKED");
                 Context context = v.getContext();
 
-                //Intent intent = new Intent(context, OtherActivity.class);
+                Intent intent = new Intent(context, WebViewActivity.class);
+                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, mostPopularObjectArrayList.get(position).getArticle_url());
+                context.startActivity(intent);
 
             }
         });

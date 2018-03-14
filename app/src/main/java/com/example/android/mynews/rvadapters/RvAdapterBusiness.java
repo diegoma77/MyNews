@@ -1,6 +1,7 @@
 package com.example.android.mynews.rvadapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -11,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.activities.WebViewActivity;
+import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.pojo.BusinessObject;
 
 import java.util.ArrayList;
@@ -61,7 +64,7 @@ public class RvAdapterBusiness extends RecyclerView.Adapter<RvAdapterBusiness.Vi
     }
 
     @Override
-    public void onBindViewHolder(RvAdapterBusiness.ViewHolder holder, int position) {
+    public void onBindViewHolder(RvAdapterBusiness.ViewHolder holder, final int position) {
 
         holder.title.setText(businessObjectArrayList.get(position).getTitle());
         holder.section.setText("Business < " + businessObjectArrayList.get(position).getSubsection());
@@ -76,7 +79,9 @@ public class RvAdapterBusiness extends RecyclerView.Adapter<RvAdapterBusiness.Vi
                 Log.i("ONCLICK - POSITION","#" + " CLICKED");
                 Context context = v.getContext();
 
-                //Intent intent = new Intent(context, OtherActivity.class);
+                Intent intent = new Intent(context, WebViewActivity.class);
+                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, businessObjectArrayList.get(position).getArticleUrl());
+                context.startActivity(intent);
 
             }
         });

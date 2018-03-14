@@ -6,6 +6,13 @@ package com.example.android.mynews.extras;
 
 public interface Keys {
 
+    interface PutExtras {
+
+        String ARTICLE_URL_SENT = "article_url";
+    }
+
+
+
     interface TopStoriesKeys {
 
         String KEY_RESULTS = "results";
