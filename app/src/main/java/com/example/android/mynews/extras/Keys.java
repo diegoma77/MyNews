@@ -11,8 +11,6 @@ public interface Keys {
         String ARTICLE_URL_SENT = "article_url";
     }
 
-
-
     interface TopStoriesKeys {
 
         String KEY_RESULTS = "results";

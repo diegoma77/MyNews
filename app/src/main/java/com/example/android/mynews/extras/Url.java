@@ -37,6 +37,10 @@ public class Url {
     private String S_QM_ApiKey = "?api-key=a27a66145d4542d28a719cecee6de859";
     private String S_FINAL_URL = S_BASE_URL + S_news_section + S_format + S_QM_ApiKey;
 
+    //ARTICLE SEARCH URL construction
+
+
+
     // TODO: 12/03/2018 Add all the different APIs
 
 
