@@ -39,8 +39,6 @@ import javax.security.auth.login.LoginException;
 
 public class PageFragmentTopStories extends android.support.v4.app.Fragment {
 
-    // TODO: 13/03/2018 Each time the ViewPager comes back to this Page, the information has to be deleted and requested again.
-
     //Logs
     private static final String TAG = "PageFragmentTopStories";
 
