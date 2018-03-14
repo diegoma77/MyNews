@@ -77,6 +77,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Arts"
+                            android:onClick="onCheckboxClicked"
                             />
 
                         <CheckBox
@@ -84,13 +85,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Business"
+                            android:onClick="onCheckboxClicked"
                             />
 
                         <CheckBox
                             android:id="@+id/search_checkBox_entrepeneurs"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Entrepeneurs"/>
+                            android:text="Entrepeneurs"
+                            android:onClick="onCheckboxClicked"
+                            />
 
                 </LinearLayout>
 
@@ -135,6 +139,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Politics"
+                            android:onClick="onCheckboxClicked"
                             />
 
                         <CheckBox
@@ -142,13 +147,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Sports"
+                            android:onClick="onCheckboxClicked"
                             />
 
                         <CheckBox
                             android:id="@+id/search_checkBox_travel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Travel"/>
+                            android:text="Travel"
+                            android:onClick="onCheckboxClicked"
+                            />
 
                 </LinearLayout>
 
