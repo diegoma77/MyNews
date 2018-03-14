@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 
 import com.example.android.mynews.R;
 
@@ -14,6 +15,15 @@ import com.example.android.mynews.R;
  */
 
 public class SearchArticlesActivity extends AppCompatActivity {
+
+    //Checkboxes
+    private CheckBox check_arts;
+    private CheckBox check_business;
+    private CheckBox check_entrepeneurs;
+    private CheckBox check_politics;
+    private CheckBox check_sports;
+    private CheckBox check_travel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +49,10 @@ public class SearchArticlesActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
 
 
 
