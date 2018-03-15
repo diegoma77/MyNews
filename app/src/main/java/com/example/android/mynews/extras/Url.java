@@ -11,6 +11,7 @@ public interface Url {
         String EQUAL = "=";
         String AMPERSAND = "&";
         String QM = "?";
+        String PLUS = "+";
 
     }
 
@@ -59,11 +60,15 @@ public interface Url {
 
         String BASE_URL = "http://api.nytimes.com/svc/search/v2/articlesearch.json?";
         String Q = "q";
-        String FQ = "fq";
-        String BEGIN_DATE = "begin_date=";
-        String END_DATE = "end_date=";
-        String QM_API_KEY = "api-key=a27a66145d4542d28a719cecee6de859";
+        String BEGIN_DATE = "begin_date";
+        String END_DATE = "end_date";
+        String SORT_NEWEST = "sort=newest";
+        String SORT_OLDEST = "sort=oldest";
         String PAGE = "page";
+        String PAGE_ONE = "1";
+        String PAGE_TWO = "2";
+        String PAGE_THREE = "3";
+        String API_KEY = "api-key=a27a66145d4542d28a719cecee6de859";
 
     }
 

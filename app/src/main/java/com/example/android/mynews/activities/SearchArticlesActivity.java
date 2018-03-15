@@ -22,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
 import com.example.android.mynews.extras.Keys;
+import com.example.android.mynews.extras.Url;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,9 +104,6 @@ public class SearchArticlesActivity extends AppCompatActivity {
         tv_sports = (TextView) findViewById(R.id.tv_sports);
         tv_travel = (TextView) findViewById(R.id.tv_travel);
 
-        /**
-
-         */
 
         button_search = (Button) findViewById(R.id.search_button);
         button_search.setOnClickListener(new View.OnClickListener() {
@@ -164,10 +162,11 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
                 Log.i(TAG, String.valueOf(listOfStrings.contains(mTextInputEditText.getText().toString())));
 
-                Toast.makeText(SearchArticlesActivity.this, getSearchQueryAndAdaptForUrl(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(SearchArticlesActivity.this, getSearchQueryAndAdaptForUrl(), Toast.LENGTH_SHORT).show();
 
+                Log.i(TAG, getSearchArticlesUrl(getSearchQueryAndAdaptForUrl()));
 
-                //loadInfo();
+                sendJSONRequest(getSearchArticlesUrl(getSearchQueryAndAdaptForUrl()));
 
                 // TODO: 15/03/2018 Add Search Query
 
@@ -249,47 +248,57 @@ public class SearchArticlesActivity extends AppCompatActivity {
     }
 
     /**
+     * This method builds the Url used to send the JSON request
+     * using the strings created (modified) by other methods
+     * */
+    public String getSearchArticlesUrl (String searchQuery) {
+
+        // q + begin_date + end_date + sort + page integer + api-key
+
+        String searchArticleUrl = Url.ArticleSearchUrl.BASE_URL
+                + Url.ArticleSearchUrl.Q + Url.GeneralTokens.EQUAL + searchQuery + Url.GeneralTokens.AMPERSAND
+                + Url.ArticleSearchUrl.BEGIN_DATE + Url.GeneralTokens.EQUAL + "20120101" + Url.GeneralTokens.AMPERSAND
+                + Url.ArticleSearchUrl.END_DATE + Url.GeneralTokens.EQUAL + "20120101" + Url.GeneralTokens.AMPERSAND
+                + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
+                + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + Url.ArticleSearchUrl.PAGE_TWO + Url.GeneralTokens.AMPERSAND
+                + Url.ArticleSearchUrl.API_KEY;
+
+        return searchArticleUrl;
+
+    }
+
+    /**
      * This method is used when the SEARCH BUTTON is clicked.
      * It starts the process of searching for the articles according to the information
      * needed from the user.
      * */
-    private void addToSearch (List<String> listOfStrings) {
-            //Execute queries, etc.
-    }
-
     private String getSearchQueryAndAdaptForUrl () {
 
         return mTextInputEditText.getText().toString().toLowerCase().replace(" ", "+");
 
     }
 
-    public void loadInfo () {
+    // TODO: 15/03/2018 Add news_desk values
+    private String getNewDeskValuesAndAdaptForUrl() {
 
-        sendJSONRequest(
+        return "";
+    }
 
+    // TODO: 15/03/2018 Add begin_date
+    private String getBeginDate() {
 
+        return "";
+    }
 
-                "http://api.nytimes.com/svc/search/v2/articlesearch.json" +
-                "?q=new+york+times&page=2&sort=oldest&api-key=a27a66145d4542d28a719cecee6de859");
+    // TODO: 15/03/2018 Add end_date
+    private String getEndDate() {
 
+        return "";
     }
 
     /**
-     * //ARTICLE SEARCH URL construction
-     private String AS_BASE_URL = "http://api.nytimes.com/svc/search/v2/articlesearch.json?";
-     private String AS_Q = "q";
-     private String AS_FQ = "fq";
-     private String AS_EQUAL = "=";
-     private String AS_AMPERSAND = "&";
-     private String AS_BEGIN_DATE = "begin_date=";
-     private String AS_END_DATE = "end_date=";
-     private String AS_QM_API_KEY = "api-key=a27a66145d4542d28a719cecee6de859";
-     private String AS_PAGE = "page";
-     */
-
-
-
-
+     * This method sends the JSON request using Volley
+     * */
     public void sendJSONRequest (String url){
 
         Log.i(TAG,"SENDING JSON REQUEST");
