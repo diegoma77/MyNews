@@ -22,9 +22,7 @@ import com.example.android.mynews.R;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 import com.example.android.mynews.pojo.MostPopularObject;
-import com.example.android.mynews.pojo.TopStoriesObject;
 import com.example.android.mynews.rvadapters.RvAdapterMostPopular;
-import com.example.android.mynews.rvadapters.RvAdapterTopStories;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,7 +82,7 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
     public void loadMostPopularInfo () {
 
         showMostPopularView();
-        sendJSONRequest(new Url().getMostPopularApiUrl());
+        sendJSONRequest(Url.MostPopularUrl.MP_FINAL_URL);
 
     }
 

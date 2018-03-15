@@ -1,68 +1,70 @@
 package com.example.android.mynews.extras;
 
 /**
- * Created by Diego Fajardo on 12/03/2018.
+ * Created by Diego Fajardo on 15/03/2018.
  */
 
-public class Url {
+public interface Url {
 
-    // TODO: 12/03/2018 Add all the different possibilities when requesting info from the "same" API
+    interface GeneralTokens {
 
-    //TOP STORIES URL construction
-    private String TS_BASE_URL = "http://api.nytimes.com/svc/topstories/v2/";
-    private String TS_news_section = "world";
-    private String TS_format = ".json";
-    private String TS_QM_ApiKey = "?api-key=a27a66145d4542d28a719cecee6de859";
-    private String TS_FINAL_URL = TS_BASE_URL + TS_news_section + TS_format + TS_QM_ApiKey;
+        String EQUAL = "=";
+        String AMPERSAND = "&";
+        String QM = "?";
 
-    //MOST POPULAR URL construction
-    private String MP_BASE_URL = "https://api.nytimes.com/svc/mostpopular/v2/mostviewed/";
-    private String MP_news_section = "all-sections/";
-    private String MP_time_period = "7";
-    private String MP_format = ".json";
-    private String MP_QM_ApiKey = "?api-key=a27a66145d4542d28a719cecee6de859";
-    private String MP_FINAL_URL = MP_BASE_URL + MP_news_section + MP_time_period + MP_format + MP_QM_ApiKey;
-
-    //BUSINESS URL construction
-    private String B_BASE_URL = "http://api.nytimes.com/svc/topstories/v2/";
-    private String B_news_section = "business";
-    private String B_format = ".json";
-    private String B_QM_ApiKey = "?api-key=a27a66145d4542d28a719cecee6de859";
-    private String B_FINAL_URL = B_BASE_URL + B_news_section + B_format + B_QM_ApiKey;
-
-    //SPORTS URL construction
-    private String S_BASE_URL = "http://api.nytimes.com/svc/topstories/v2/";
-    private String S_news_section = "sports";
-    private String S_format = ".json";
-    private String S_QM_ApiKey = "?api-key=a27a66145d4542d28a719cecee6de859";
-    private String S_FINAL_URL = S_BASE_URL + S_news_section + S_format + S_QM_ApiKey;
-
-    //ARTICLE SEARCH URL construction
-    private String AS_BASE_URL = "http://api.nytimes.com/svc/search/v2/articlesearch.json?";
-    private String AS_Q = "q";
-    private String AS_FQ = "fq";
-    private String AS_EQUAL = "=";
-    private String AS_AMPERSAND = "&";
-    private String AS_BEGIN_DATE = "begin_date=";
-    private String AS_END_DATE = "end_date=";
-    private String AS_QM_API_KEY = "api-key=a27a66145d4542d28a719cecee6de859";
-    private String AS_PAGE = "page";
-
-    // TODO: 12/03/2018 Add all the different APIs
-
-
-
-
-    // TODO: 12/03/2018 Add to the method that it can call a different API (parameter)
-    public String getTopStoriesApiUrl () {
-        return TS_FINAL_URL;
     }
 
-    public String getMostPopularApiUrl () { return MP_FINAL_URL; }
+    interface TopStoriesUrl {
 
-    public String getBusinessApiUrl () { return B_FINAL_URL; }
+        String TS_BASE_URL = "http://api.nytimes.com/svc/topstories/v2/";
+        String TS_news_section = "world";
+        String TS_format = ".json";
+        String TS_QM_ApiKey = "?api-key=a27a66145d4542d28a719cecee6de859";
+        String TS_FINAL_URL = TS_BASE_URL + TS_news_section + TS_format + TS_QM_ApiKey;
 
-    public String getSportsApiUrl () { return S_FINAL_URL; }
+    }
 
+    interface MostPopularUrl {
+
+        String MP_BASE_URL = "https://api.nytimes.com/svc/mostpopular/v2/mostviewed/";
+        String MP_news_section = "all-sections/";
+        String MP_time_period = "7";
+        String MP_format = ".json";
+        String MP_QM_ApiKey = "?api-key=a27a66145d4542d28a719cecee6de859";
+        String MP_FINAL_URL = MP_BASE_URL + MP_news_section + MP_time_period + MP_format + MP_QM_ApiKey;
+
+    }
+
+    interface BusinessUrl {
+
+        String B_BASE_URL = "http://api.nytimes.com/svc/topstories/v2/";
+        String B_news_section = "business";
+        String B_format = ".json";
+        String B_QM_ApiKey = "?api-key=a27a66145d4542d28a719cecee6de859";
+        String B_FINAL_URL = B_BASE_URL + B_news_section + B_format + B_QM_ApiKey;
+
+    }
+
+    interface SportsUrl {
+
+        String S_BASE_URL = "http://api.nytimes.com/svc/topstories/v2/";
+        String S_news_section = "sports";
+        String S_format = ".json";
+        String S_QM_ApiKey = "?api-key=a27a66145d4542d28a719cecee6de859";
+        String S_FINAL_URL = S_BASE_URL + S_news_section + S_format + S_QM_ApiKey;
+
+    }
+
+    interface ArticleSearchUrl {
+
+        String BASE_URL = "http://api.nytimes.com/svc/search/v2/articlesearch.json?";
+        String Q = "q";
+        String FQ = "fq";
+        String BEGIN_DATE = "begin_date=";
+        String END_DATE = "end_date=";
+        String QM_API_KEY = "api-key=a27a66145d4542d28a719cecee6de859";
+        String PAGE = "page";
+
+    }
 
 }

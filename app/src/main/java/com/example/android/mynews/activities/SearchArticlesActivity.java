@@ -22,7 +22,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
 import com.example.android.mynews.extras.Keys;
-import com.example.android.mynews.extras.Url;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -264,12 +263,13 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
     }
 
-
-
-
     public void loadInfo () {
 
-        sendJSONRequest("http://api.nytimes.com/svc/search/v2/articlesearch.json" +
+        sendJSONRequest(
+
+
+
+                "http://api.nytimes.com/svc/search/v2/articlesearch.json" +
                 "?q=new+york+times&page=2&sort=oldest&api-key=a27a66145d4542d28a719cecee6de859");
 
     }

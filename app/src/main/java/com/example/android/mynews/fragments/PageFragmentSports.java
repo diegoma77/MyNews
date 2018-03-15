@@ -71,7 +71,7 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
 
         rvAdapterSports = new RvAdapterSports(getActivity());
 
-        loadTopStoriesInfo();
+        loadSportsInfo();
 
         recyclerView.setAdapter(rvAdapterSports);
 
@@ -79,10 +79,10 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
         
     }
 
-    public void loadTopStoriesInfo () {
+    public void loadSportsInfo() {
 
         showSportsView();
-        sendJSONRequest(new Url().getSportsApiUrl());
+        sendJSONRequest(Url.SportsUrl.S_FINAL_URL);
 
     }
 

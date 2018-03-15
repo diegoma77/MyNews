@@ -19,10 +19,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
-import com.example.android.mynews.data.DatabaseContract;
+import com.example.android.mynews.extras.Url;
 import com.example.android.mynews.rvadapters.RvAdapterTopStories;
 import com.example.android.mynews.extras.Keys;
-import com.example.android.mynews.extras.Url;
 import com.example.android.mynews.pojo.TopStoriesObject;
 
 import org.json.JSONArray;
@@ -30,8 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import javax.security.auth.login.LoginException;
 
 /**
  * Created by Diego Fajardo on 22/02/2018.
@@ -85,7 +82,7 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
     public void loadTopStoriesInfo () {
 
         showTopStoriesView();
-        sendJSONRequest(new Url().getTopStoriesApiUrl());
+        sendJSONRequest(Url.TopStoriesUrl.TS_FINAL_URL);
 
     }
 

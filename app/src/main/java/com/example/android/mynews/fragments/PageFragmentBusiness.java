@@ -22,9 +22,7 @@ import com.example.android.mynews.R;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 import com.example.android.mynews.pojo.BusinessObject;
-import com.example.android.mynews.pojo.SportsObject;
 import com.example.android.mynews.rvadapters.RvAdapterBusiness;
-import com.example.android.mynews.rvadapters.RvAdapterSports;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,7 +68,7 @@ public class PageFragmentBusiness extends android.support.v4.app.Fragment {
 
         rvAdapterBusiness = new RvAdapterBusiness(getActivity());
 
-        loadTopStoriesInfo();
+        loadBusinessInfo();
 
         recyclerView.setAdapter(rvAdapterBusiness);
 
@@ -78,10 +76,10 @@ public class PageFragmentBusiness extends android.support.v4.app.Fragment {
         
     }
 
-    public void loadTopStoriesInfo () {
+    public void loadBusinessInfo() {
 
         showBusinessView();
-        sendJSONRequest(new Url().getBusinessApiUrl());
+        sendJSONRequest(Url.BusinessUrl.B_FINAL_URL);
 
     }
 
