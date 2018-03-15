@@ -346,8 +346,6 @@ public class SearchArticlesActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
-
-
-
+    
 }
 
