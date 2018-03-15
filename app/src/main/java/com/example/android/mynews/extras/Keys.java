@@ -64,10 +64,10 @@ public interface Keys {
 
         String CB_ARTS = "arts";
         String CB_BUSINESS = "business";
-        String CB_ENTREPENEURS = "entrepeneurs";
+        String CB_ENTREPRENEURS = "entrepreneurs";
         String CB_POLITICS = "politics";
         String CB_SPORTS = "sports";
-        String CB_TRAVEL_= "travel";
+        String CB_TRAVEL = "travel";
 
     }
 

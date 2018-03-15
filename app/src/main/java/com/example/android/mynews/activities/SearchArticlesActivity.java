@@ -10,12 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.mynews.R;
 import com.example.android.mynews.extras.Keys;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +32,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
     //Checkboxes
     private CheckBox cb_arts;
     private CheckBox cb_business;
-    private CheckBox cb_entrepeneurs;
+    private CheckBox cb_entrepreneurs;
     private CheckBox cb_politics;
     private CheckBox cb_sports;
     private CheckBox cb_travel;
@@ -42,18 +40,10 @@ public class SearchArticlesActivity extends AppCompatActivity {
     //Textviews to check if the value of the variables is the correct one according to checkboxes
     private TextView tv_arts;
     private TextView tv_business;
-    private TextView tv_entrepeneurs;
+    private TextView tv_entrepreneurs;
     private TextView tv_politics;
     private TextView tv_sports;
     private TextView tv_travel;
-
-    //Variables for storing changes (related to Checkboxes)
-    private boolean arts_checked = false;
-    private boolean business_checked = false;
-    private boolean entrepeneurs_checked = false;
-    private boolean politics_checked = false;
-    private boolean sports_checked = false;
-    private boolean travel_checked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +62,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
         //Checkboxes
         cb_arts = (CheckBox) findViewById(R.id.search_checkBox_arts);
         cb_business = (CheckBox) findViewById(R.id.search_checkBox_business);
-        cb_entrepeneurs = (CheckBox) findViewById(R.id.search_checkBox_entrepeneurs);
+        cb_entrepreneurs = (CheckBox) findViewById(R.id.search_checkBox_entrepeneurs);
         cb_politics = (CheckBox) findViewById(R.id.search_checkBox_politics);
         cb_sports = (CheckBox) findViewById(R.id.search_checkBox_sports);
         cb_travel = (CheckBox) findViewById(R.id.search_checkBox_travel);
@@ -80,7 +70,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
         //TextViews
         tv_arts = (TextView) findViewById(R.id.tv_arts);
         tv_business = (TextView) findViewById(R.id.tv_business);
-        tv_entrepeneurs = (TextView) findViewById(R.id.tv_entrepeneurs);
+        tv_entrepreneurs = (TextView) findViewById(R.id.tv_entrepeneurs);
         tv_politics = (TextView) findViewById(R.id.tv_politics);
         tv_sports = (TextView) findViewById(R.id.tv_sports);
         tv_travel = (TextView) findViewById(R.id.tv_travel);
@@ -94,7 +84,9 @@ public class SearchArticlesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //if the checkbox is checked, check that there is an elements (String) with that name in the list
-                //if there is, set that name to the text view
+                //if there is any, set that name to the text view
+
+                //ARTS
                 if (cb_arts.isChecked()){
                     if (listOfStrings.contains(Keys.CheckboxFields.CB_ARTS)) {
                         tv_arts.setText(listOfStrings.get((listOfStrings.indexOf(Keys.CheckboxFields.CB_ARTS))));
@@ -102,19 +94,44 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 }
                 else tv_arts.setText("false");
 
-                if (business_checked) tv_business.setText("true");
+                //BUSINESS
+                if (cb_business.isChecked()){
+                    if (listOfStrings.contains(Keys.CheckboxFields.CB_BUSINESS)) {
+                        tv_business.setText(listOfStrings.get((listOfStrings.indexOf(Keys.CheckboxFields.CB_BUSINESS))));
+                    }
+                }
                 else tv_business.setText("false");
 
-                if (entrepeneurs_checked) tv_entrepeneurs.setText("true");
-                else tv_entrepeneurs.setText("false");
+                //CB_ENTREPRENEURS
+                if (cb_entrepreneurs.isChecked()){
+                    if (listOfStrings.contains(Keys.CheckboxFields.CB_ENTREPRENEURS)) {
+                        tv_entrepreneurs.setText(listOfStrings.get((listOfStrings.indexOf(Keys.CheckboxFields.CB_ENTREPRENEURS))));
+                    }
+                }
+                else tv_entrepreneurs.setText("false");
 
-                if (politics_checked) tv_politics.setText("true");
+                //POLITICS
+                if (cb_politics.isChecked()){
+                    if (listOfStrings.contains(Keys.CheckboxFields.CB_POLITICS)) {
+                        tv_politics.setText(listOfStrings.get((listOfStrings.indexOf(Keys.CheckboxFields.CB_POLITICS))));
+                    }
+                }
                 else tv_politics.setText("false");
 
-                if (sports_checked) tv_sports.setText("true");
+                //SPORTS
+                if (cb_sports.isChecked()){
+                    if (listOfStrings.contains(Keys.CheckboxFields.CB_SPORTS)) {
+                        tv_sports.setText(listOfStrings.get((listOfStrings.indexOf(Keys.CheckboxFields.CB_SPORTS))));
+                    }
+                }
                 else tv_sports.setText("false");
 
-                if (travel_checked) tv_travel.setText("true");
+                //TRAVEL
+                if (cb_travel.isChecked()){
+                    if (listOfStrings.contains(Keys.CheckboxFields.CB_TRAVEL)) {
+                        tv_travel.setText(listOfStrings.get((listOfStrings.indexOf(Keys.CheckboxFields.CB_TRAVEL))));
+                    }
+                }
                 else tv_travel.setText("false");
             }
         });
@@ -148,29 +165,54 @@ public class SearchArticlesActivity extends AppCompatActivity {
                         listOfStrings.remove(listOfStrings.indexOf(Keys.CheckboxFields.CB_ARTS));
                 }
                 break;
+
             case R.id.search_checkBox_business:
-                if (checked) { business_checked = true; }
-                else { business_checked = false; }
+                if (checked) { listOfStrings.add(Keys.CheckboxFields.CB_BUSINESS); }
+                else {
+                    if (listOfStrings.contains(Keys.CheckboxFields.CB_BUSINESS))
+                        listOfStrings.remove(listOfStrings.indexOf(Keys.CheckboxFields.CB_BUSINESS));
+                }
                 break;
+
             case R.id.search_checkBox_entrepeneurs:
-                if (checked) { entrepeneurs_checked = true; }
-                else { entrepeneurs_checked =  false; }
+                if (checked) { listOfStrings.add(Keys.CheckboxFields.CB_ENTREPRENEURS); }
+                else {
+                    if (listOfStrings.contains(Keys.CheckboxFields.CB_ENTREPRENEURS))
+                        listOfStrings.remove(listOfStrings.indexOf(Keys.CheckboxFields.CB_ENTREPRENEURS));
+                }
                 break;
+
             case R.id.search_checkBox_politics:
-                if (checked) { politics_checked = true; }
-                else { politics_checked = false; }
+                if (checked) { listOfStrings.add(Keys.CheckboxFields.CB_POLITICS); }
+                else {
+                    if (listOfStrings.contains(Keys.CheckboxFields.CB_POLITICS))
+                        listOfStrings.remove(listOfStrings.indexOf(Keys.CheckboxFields.CB_POLITICS));
+                }
                 break;
+
             case R.id.search_checkBox_sports:
-                if (checked) { sports_checked = true; }
-                else { sports_checked = false; }
+                if (checked) { listOfStrings.add(Keys.CheckboxFields.CB_SPORTS); }
+                else {
+                    if (listOfStrings.contains(Keys.CheckboxFields.CB_SPORTS))
+                        listOfStrings.remove(listOfStrings.indexOf(Keys.CheckboxFields.CB_SPORTS));
+                }
                 break;
+
             case R.id.search_checkBox_travel:
-                if (checked) { travel_checked = true; }
-                else { travel_checked = false; }
+                if (checked) { listOfStrings.add(Keys.CheckboxFields.CB_TRAVEL); }
+                else {
+                    if (listOfStrings.contains(Keys.CheckboxFields.CB_TRAVEL))
+                        listOfStrings.remove(listOfStrings.indexOf(Keys.CheckboxFields.CB_TRAVEL));
+                }
                 break;
         }
     }
 
+    /**
+     * This method is used when the SEARCH BUTTON is clicked.
+     * It starts the process of searching for the articles according to the information
+     * needed from the user.
+     * */
     private void addToSearch (List<String> listOfStrings) {
 
             //Execute queries, etc.
