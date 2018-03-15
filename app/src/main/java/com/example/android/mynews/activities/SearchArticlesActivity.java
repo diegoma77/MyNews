@@ -12,9 +12,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
 import com.example.android.mynews.extras.Keys;
+import com.example.android.mynews.extras.Url;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,6 +165,10 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
                 Log.i(TAG, String.valueOf(listOfStrings.contains(mTextInputEditText.getText().toString())));
 
+                Toast.makeText(SearchArticlesActivity.this, getSearchQueryAndAdaptForUrl(), Toast.LENGTH_SHORT).show();
+
+
+                //loadInfo();
 
                 // TODO: 15/03/2018 Add Search Query
 
@@ -243,8 +255,72 @@ public class SearchArticlesActivity extends AppCompatActivity {
      * needed from the user.
      * */
     private void addToSearch (List<String> listOfStrings) {
-
             //Execute queries, etc.
-        }
+    }
+
+    private String getSearchQueryAndAdaptForUrl () {
+
+        return mTextInputEditText.getText().toString().toLowerCase().replace(" ", "+");
+
+    }
+
+
+
+
+    public void loadInfo () {
+
+        sendJSONRequest("http://api.nytimes.com/svc/search/v2/articlesearch.json" +
+                "?q=new+york+times&page=2&sort=oldest&api-key=a27a66145d4542d28a719cecee6de859");
+
+    }
+
+    /**
+     * //ARTICLE SEARCH URL construction
+     private String AS_BASE_URL = "http://api.nytimes.com/svc/search/v2/articlesearch.json?";
+     private String AS_Q = "q";
+     private String AS_FQ = "fq";
+     private String AS_EQUAL = "=";
+     private String AS_AMPERSAND = "&";
+     private String AS_BEGIN_DATE = "begin_date=";
+     private String AS_END_DATE = "end_date=";
+     private String AS_QM_API_KEY = "api-key=a27a66145d4542d28a719cecee6de859";
+     private String AS_PAGE = "page";
+     */
+
+
+
+
+    public void sendJSONRequest (String url){
+
+        Log.i(TAG,"SENDING JSON REQUEST");
+
+        //String request
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(SearchArticlesActivity.this, "Response OK", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(SearchArticlesActivity.this, "Response ERROR", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        //Creating a request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(SearchArticlesActivity.this);
+
+        //Adding the string request to request queue
+        requestQueue.add(stringRequest);
+
+    }
+
+
+
 }
 
