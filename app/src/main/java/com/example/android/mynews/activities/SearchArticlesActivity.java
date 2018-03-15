@@ -279,11 +279,14 @@ public class SearchArticlesActivity extends AppCompatActivity {
      * needed from the user.
      * */
     private String getSearchQueryAndAdaptForUrl () {
-
         return mTextInputEditText.getText().toString().toLowerCase().replace(" ", "+");
-
     }
 
+    /**
+     * This method us used to build the news_desk part of the Url.
+     * The news_desk part is related to the checkboxes and allows to filter the
+     * searches according to the category
+     * */
     private String getNewDeskValuesAndAdaptForUrl(List<String> listOfStrings) {
 
         String temporary_query;
@@ -295,9 +298,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
             else { temporary_query = "+" + listOfStrings.get(i); }
 
             news_desk_query += temporary_query;
-
         }
-
         return news_desk_query;
     }
 
