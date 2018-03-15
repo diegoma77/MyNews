@@ -39,12 +39,12 @@ public class SearchArticlesActivity extends AppCompatActivity {
     private TextView tv_travel;
 
     //Variables for storing changes (related to Chechboxes)
-    private boolean arts_checked;
-    private boolean business_checked;
-    private boolean entrepeneurs_checked;
-    private boolean politics_checked;
-    private boolean sports_checked;
-    private boolean travel_checked;
+    private boolean arts_checked = false;
+    private boolean business_checked = false;
+    private boolean entrepeneurs_checked = false;
+    private boolean politics_checked = false;
+    private boolean sports_checked = false;
+    private boolean travel_checked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,23 +74,34 @@ public class SearchArticlesActivity extends AppCompatActivity {
         tv_sports = (TextView) findViewById(R.id.tv_sports);
         tv_travel = (TextView) findViewById(R.id.tv_travel);
 
-        if (arts_checked) tv_arts.setText("true");
-        else tv_arts.setText("false");
+        /**
 
-        if (business_checked) tv_business.setText("true");
-        else tv_business.setText("false");
 
-        if (entrepeneurs_checked) tv_entrepeneurs.setText("true");
-        else tv_entrepeneurs.setText("false");
+         */
 
-        if (politics_checked) tv_politics.setText("true");
-        else tv_politics.setText("false");
+        button_search = (Button) findViewById(R.id.search_button);
+        button_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cb_arts.isChecked()) tv_arts.setText("true");
+                else tv_arts.setText("false");
 
-        if (sports_checked) tv_sports.setText("true");
-        else tv_sports.setText("false");
+                if (business_checked) tv_business.setText("true");
+                else tv_business.setText("false");
 
-        if (travel_checked) tv_travel.setText("true");
-        else tv_travel.setText("false");
+                if (entrepeneurs_checked) tv_entrepeneurs.setText("true");
+                else tv_entrepeneurs.setText("false");
+
+                if (politics_checked) tv_politics.setText("true");
+                else tv_politics.setText("false");
+
+                if (sports_checked) tv_sports.setText("true");
+                else tv_sports.setText("false");
+
+                if (travel_checked) tv_travel.setText("true");
+                else tv_travel.setText("false");
+            }
+        });
 
     }
 
