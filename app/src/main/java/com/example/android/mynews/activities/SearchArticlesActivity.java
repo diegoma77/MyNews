@@ -14,12 +14,20 @@ import android.widget.Toast;
 
 import com.example.android.mynews.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Diego Fajardo on 25/02/2018.
  */
 
 public class SearchArticlesActivity extends AppCompatActivity {
 
+    //List to trial
+    private List<String> listOfStrings;
+    private String counter = "one";
+
+    //Button Search
     private Button button_search;
 
     //Checkboxes
@@ -38,7 +46,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
     private TextView tv_sports;
     private TextView tv_travel;
 
-    //Variables for storing changes (related to Chechboxes)
+    //Variables for storing changes (related to Checkboxes)
     private boolean arts_checked = false;
     private boolean business_checked = false;
     private boolean entrepeneurs_checked = false;
@@ -58,6 +66,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        listOfStrings = new ArrayList<>();
+
         //Checkboxes
         cb_arts = (CheckBox) findViewById(R.id.search_checkBox_arts);
         cb_business = (CheckBox) findViewById(R.id.search_checkBox_business);
@@ -76,14 +86,13 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
         /**
 
-
          */
 
         button_search = (Button) findViewById(R.id.search_button);
         button_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cb_arts.isChecked()) tv_arts.setText("true");
+                if (cb_arts.isChecked()) tv_arts.setText(String.valueOf(listOfStrings.size()));
                 else tv_arts.setText("false");
 
                 if (business_checked) tv_business.setText("true");
@@ -102,7 +111,6 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 else tv_travel.setText("false");
             }
         });
-
     }
 
     @Override
@@ -124,8 +132,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
         // Check which checkbox was clicked
         switch(view.getId()) {
             case R.id.search_checkBox_arts:
-                if (checked) { arts_checked = true; }
-                else { arts_checked = false; }
+                if (checked) { listOfStrings.add("arts"); }
+                else { listOfStrings.remove(listOfStrings.size()-1); }
                 break;
             case R.id.search_checkBox_business:
                 if (checked) { business_checked = true; }
@@ -147,8 +155,6 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 if (checked) { travel_checked = true; }
                 else { travel_checked = false; }
                 break;
-            // TODO: Veggie sandwich
         }
     }
-
 }

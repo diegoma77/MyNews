@@ -60,6 +60,17 @@ public interface Keys {
 
     }
 
+    interface CheckboxFields {
+
+        String CB_ARTS = "arts";
+        String CB_BUSINESS = "business";
+        String CB_ENTREPENEURS = "entrepeneurs";
+        String CB_POLITICS = "politics";
+        String CB_SPORTS = "sports";
+        String CB_TRAVEL_= "travel";
+
+    }
+
 
 
 }
