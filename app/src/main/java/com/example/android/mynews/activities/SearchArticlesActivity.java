@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.android.mynews.R;
 import com.example.android.mynews.extras.Keys;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,6 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
     //List to trial
     private List<String> listOfStrings;
-    private String counter = "one";
 
     //Button Search
     private Button button_search;
@@ -93,6 +93,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
         button_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //if the checkbox is checked, check that there is an elements (String) with that name in the list
+                //if there is, set that name to the text view
                 if (cb_arts.isChecked()){
                     if (listOfStrings.contains(Keys.CheckboxFields.CB_ARTS)) {
                         tv_arts.setText(listOfStrings.get((listOfStrings.indexOf(Keys.CheckboxFields.CB_ARTS))));
@@ -137,11 +139,13 @@ public class SearchArticlesActivity extends AppCompatActivity {
         // Check which checkbox was clicked
         switch(view.getId()) {
             case R.id.search_checkBox_arts:
-                // TODO: 15/03/2018 Define a search algorithym
+                ///When checked, add a String with the name of the checkbox to the list
                 if (checked) { listOfStrings.add(Keys.CheckboxFields.CB_ARTS); }
+                //When unchecked, check if there is an element with the name of the Checkbox in the array
+                //if there is one, remove it from the list
                 else {
                     if (listOfStrings.contains(Keys.CheckboxFields.CB_ARTS))
-                        listOfStrings.remove(listOfStrings.indexOf("arts"));
+                        listOfStrings.remove(listOfStrings.indexOf(Keys.CheckboxFields.CB_ARTS));
                 }
                 break;
             case R.id.search_checkBox_business:
