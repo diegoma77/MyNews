@@ -54,13 +54,13 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.page_fragment_layout, container, false);
+        View view = inflater.inflate(R.layout.rv_fragments_layout, container, false);
 
         mErrorMessageDisplay = (TextView) view.findViewById(R.id.tv_error_message_display);
 
         mLoadingIndicator = (ProgressBar) view.findViewById(R.id.progress_bar);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         recyclerView.setHasFixedSize(true);
 

@@ -15,9 +15,9 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_search_articles);
+        setContentView(R.layout.rv_fragments_layout);
 
-        recyclerView = (RecyclerView) findViewById(R.id.);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
