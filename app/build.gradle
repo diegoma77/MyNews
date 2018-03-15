@@ -37,11 +37,13 @@ dependencies {
 
     //Used for CALLS for REST APIs and for downloading data from the internet
     compile 'com.android.volley:volley:1.1.0'
-    compile 'com.google.code.gson:gson:2.8.0' //used for convert Java objects into their JSON representation.
+    compile 'com.google.code.gson:gson:2.8.0'
+    //used for convert Java objects into their JSON representation.
 
     //RETROFIT: for
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0' //a converter which uses Gson for serialization to and from JSON
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    //a converter which uses Gson for serialization to and from JSON
 
     //For loading images through URLs
     implementation 'com.squareup.picasso:picasso:2.5.2'

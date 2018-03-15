@@ -15,7 +15,6 @@ import com.example.android.mynews.R;
 import com.example.android.mynews.activities.WebViewActivity;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.pojo.MostPopularObject;
-import com.example.android.mynews.pojo.TopStoriesObject;
 
 import java.util.ArrayList;
 
@@ -52,7 +51,7 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
         Context context = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.list_item_fragment_top_stories;
+        int layoutIdForListItem = R.layout.list_item_fragment;
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 

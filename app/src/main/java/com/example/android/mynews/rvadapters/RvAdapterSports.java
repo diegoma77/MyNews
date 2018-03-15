@@ -50,7 +50,7 @@ public class RvAdapterSports extends RecyclerView.Adapter<RvAdapterSports.ViewHo
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
         Context context = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.list_item_fragment_top_stories;
+        int layoutIdForListItem = R.layout.list_item_fragment;
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 
