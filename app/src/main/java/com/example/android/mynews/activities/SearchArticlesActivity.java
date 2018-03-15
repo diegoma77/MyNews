@@ -52,7 +52,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
     private CheckBox cb_sports;
     private CheckBox cb_travel;
 
-    // TODO: 15/03/2018 Delete these variables
+    // TODO: 15/03/2018 Delete these variables when they are not used anymore
     //Textviews to check if the value of the variables is the correct one according to checkboxes
     private TextView tv_arts;
     private TextView tv_business;
@@ -164,11 +164,16 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
                 //Toast.makeText(SearchArticlesActivity.this, getSearchQueryAndAdaptForUrl(), Toast.LENGTH_SHORT).show();
 
-                Log.i(TAG, getSearchArticlesUrl(getSearchQueryAndAdaptForUrl()));
+                Log.i(TAG, getSearchArticlesUrl(
+                        getSearchQueryAndAdaptForUrl(),
+                        getNewDeskValuesAndAdaptForUrl(listOfStrings)));
 
-                sendJSONRequest(getSearchArticlesUrl(getSearchQueryAndAdaptForUrl()));
+                //sendJSONRequest(getSearchArticlesUrl(
+                //        getSearchQueryAndAdaptForUrl(),
+                //        getNewDeskValuesAndAdaptForUrl(listOfStrings)));
 
-                // TODO: 15/03/2018 Add Search Query
+                if (listOfStrings.isEmpty()) { Log.i(TAG, "listOfStrings is EMPTY"); }
+                else { Log.i(TAG, getNewDeskValuesAndAdaptForUrl(listOfStrings)); }
 
                 // TODO: 15/03/2018 Add Dates
 
@@ -251,12 +256,13 @@ public class SearchArticlesActivity extends AppCompatActivity {
      * This method builds the Url used to send the JSON request
      * using the strings created (modified) by other methods
      * */
-    public String getSearchArticlesUrl (String searchQuery) {
+    public String getSearchArticlesUrl (String searchQuery, String newsSearchQuery) {
 
         // q + begin_date + end_date + sort + page integer + api-key
 
         String searchArticleUrl = Url.ArticleSearchUrl.BASE_URL
                 + Url.ArticleSearchUrl.Q + Url.GeneralTokens.EQUAL + searchQuery + Url.GeneralTokens.AMPERSAND
+                + Url.ArticleSearchUrl.FQ + Url.GeneralTokens.EQUAL + newsSearchQuery + Url.GeneralTokens.AMPERSAND
                 + Url.ArticleSearchUrl.BEGIN_DATE + Url.GeneralTokens.EQUAL + "20120101" + Url.GeneralTokens.AMPERSAND
                 + Url.ArticleSearchUrl.END_DATE + Url.GeneralTokens.EQUAL + "20120101" + Url.GeneralTokens.AMPERSAND
                 + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
@@ -278,10 +284,21 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
     }
 
-    // TODO: 15/03/2018 Add news_desk values
-    private String getNewDeskValuesAndAdaptForUrl() {
+    private String getNewDeskValuesAndAdaptForUrl(List<String> listOfStrings) {
 
-        return "";
+        String temporary_query;
+        String news_desk_query = "";
+
+        for (int i = 0; i < listOfStrings.size() ; i++) {
+
+            if (i==0) { temporary_query = listOfStrings.get(i); }
+            else { temporary_query = "+" + listOfStrings.get(i); }
+
+            news_desk_query += temporary_query;
+
+        }
+
+        return news_desk_query;
     }
 
     // TODO: 15/03/2018 Add begin_date

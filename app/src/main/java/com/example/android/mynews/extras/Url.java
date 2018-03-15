@@ -60,6 +60,14 @@ public interface Url {
 
         String BASE_URL = "http://api.nytimes.com/svc/search/v2/articlesearch.json?";
         String Q = "q";
+        String FQ = "fq";
+        String NEWS_DESK = "news_desk";
+        String ARTS = "arts";
+        String BUSINESS = "business";
+        String ENTREPRENEURS = "entrepreneurs";
+        String POLITICS = "politics";
+        String SPORTS = "sports";
+        String TRAVEL = "travel";
         String BEGIN_DATE = "begin_date";
         String END_DATE = "end_date";
         String SORT_NEWEST = "sort=newest";
