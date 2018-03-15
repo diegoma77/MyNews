@@ -133,6 +133,12 @@ public class SearchArticlesActivity extends AppCompatActivity {
                     }
                 }
                 else tv_travel.setText("false");
+
+
+                // TODO: 15/03/2018 Add Search Query
+
+                // TODO: 15/03/2018 Add Dates
+
             }
         });
     }
