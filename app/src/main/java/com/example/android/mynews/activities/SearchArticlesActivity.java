@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.extras.Keys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +93,11 @@ public class SearchArticlesActivity extends AppCompatActivity {
         button_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cb_arts.isChecked()) tv_arts.setText(String.valueOf(listOfStrings.size()));
+                if (cb_arts.isChecked()){
+                    if (listOfStrings.contains(Keys.CheckboxFields.CB_ARTS)) {
+                        tv_arts.setText(listOfStrings.get((listOfStrings.indexOf(Keys.CheckboxFields.CB_ARTS))));
+                    }
+                }
                 else tv_arts.setText("false");
 
                 if (business_checked) tv_business.setText("true");
@@ -132,8 +137,12 @@ public class SearchArticlesActivity extends AppCompatActivity {
         // Check which checkbox was clicked
         switch(view.getId()) {
             case R.id.search_checkBox_arts:
-                if (checked) { listOfStrings.add("arts"); }
-                else { listOfStrings.remove(listOfStrings.size()-1); }
+                // TODO: 15/03/2018 Define a search algorithym
+                if (checked) { listOfStrings.add(Keys.CheckboxFields.CB_ARTS); }
+                else {
+                    if (listOfStrings.contains(Keys.CheckboxFields.CB_ARTS))
+                        listOfStrings.remove(listOfStrings.indexOf("arts"));
+                }
                 break;
             case R.id.search_checkBox_business:
                 if (checked) { business_checked = true; }
@@ -157,4 +166,10 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    private void addToSearch (List<String> listOfStrings) {
+
+            //Execute queries, etc.
+        }
 }
+
