@@ -38,7 +38,15 @@ public class Url {
     private String S_FINAL_URL = S_BASE_URL + S_news_section + S_format + S_QM_ApiKey;
 
     //ARTICLE SEARCH URL construction
-
+    private String AS_BASE_URL = "http://api.nytimes.com/svc/search/v2/articlesearch.json?";
+    private String AS_Q = "q";
+    private String AS_FQ = "fq";
+    private String AS_EQUAL = "=";
+    private String AS_AMPERSAND = "&";
+    private String AS_BEGIN_DATE = "begin_date";
+    private String AS_END_DATE = "end_date";
+    private String AS_QM_API_KEY = "?api-key=a27a66145d4542d28a719cecee6de859";
+    private String AS_PAGE = "page";
 
 
 

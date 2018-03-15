@@ -2,9 +2,11 @@ package com.example.android.mynews.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -23,13 +25,18 @@ import java.util.List;
 
 public class SearchArticlesActivity extends AppCompatActivity {
 
+    private static final String TAG = "SearchArticlesActivity";
+
     //List to trial
     private List<String> listOfStrings;
 
-    //Button Search
+    //Button Search variable
     private Button button_search;
 
-    //Checkboxes
+    //TextInput
+    private TextInputEditText mTextInputEditText;
+
+    //Checkboxes variables
     private CheckBox cb_arts;
     private CheckBox cb_business;
     private CheckBox cb_entrepreneurs;
@@ -37,6 +44,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
     private CheckBox cb_sports;
     private CheckBox cb_travel;
 
+    // TODO: 15/03/2018 Delete these variables
     //Textviews to check if the value of the variables is the correct one according to checkboxes
     private TextView tv_arts;
     private TextView tv_business;
@@ -57,7 +65,20 @@ public class SearchArticlesActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        //List
         listOfStrings = new ArrayList<>();
+
+        //TextInputEditText
+        mTextInputEditText = (TextInputEditText) findViewById(R.id.search_text_input_edit_text);
+        mTextInputEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!listOfStrings.contains(mTextInputEditText.getText().toString())) {
+                    listOfStrings.add(mTextInputEditText.getText().toString());
+                }
+            }
+        });
+
 
         //Checkboxes
         cb_arts = (CheckBox) findViewById(R.id.search_checkBox_arts);
@@ -133,6 +154,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
                     }
                 }
                 else tv_travel.setText("false");
+
+                Log.i(TAG, String.valueOf(listOfStrings.contains(mTextInputEditText.getText().toString())));
 
 
                 // TODO: 15/03/2018 Add Search Query
