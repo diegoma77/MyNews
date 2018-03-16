@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -23,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
+import com.example.android.mynews.alertdialog.PickBeginDateDialog;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 
@@ -33,7 +33,7 @@ import java.util.List;
  * Created by Diego Fajardo on 25/02/2018.
  */
 
-public class SearchArticlesActivity extends AppCompatActivity {
+public class SearchArticlesActivity extends AppCompatActivity implements PickBeginDateDialog.PickBeginDateDialogListener {
 
     private static final String TAG = "SearchArticlesActivity";
 
@@ -119,6 +119,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                openDialog();
 
             }
         });
@@ -329,6 +330,34 @@ public class SearchArticlesActivity extends AppCompatActivity {
         return news_desk_query;
     }
 
+    /** Next three methods are used for the dialogs shown
+     * when begin date and end date buttons are clicked */
+
+    public void openDialog () {
+
+        PickBeginDateDialog dialog = new PickBeginDateDialog();
+        dialog.show(getSupportFragmentManager(), "Date Picker Dialog");
+
+    }
+
+    @Override
+    public void onSubmitClicker(String string) {
+
+        Toast.makeText(SearchArticlesActivity.this, string, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onCancelClicker(String string) {
+
+        Toast.makeText(SearchArticlesActivity.this, string, Toast.LENGTH_SHORT).show();
+
+    }
+
+
+
+
+
     // TODO: 15/03/2018 Add begin_date
     private String getBeginDate() {
 
@@ -373,6 +402,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
+
 
 }
 
