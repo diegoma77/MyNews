@@ -59,7 +59,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
     private CheckBox cb_travel;
 
     // TODO: 15/03/2018 Delete these variables when they are not used anymore
-    //Textviews to check if the value of the variables is the correct one according to checkboxes
+    //TextViews to check if the value of the variables is the correct one according to checkboxes
     private TextView tv_arts;
     private TextView tv_business;
     private TextView tv_entrepreneurs;
@@ -119,10 +119,11 @@ public class SearchArticlesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
             }
         });
 
-        // TODO: 16/03/2018 Add Date Picker 
+        // TODO: 16/03/2018 Add Date Picker
         //EndDate Button onClick
         buttonEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +132,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
             }
         });
 
+        // TODO: 16/03/2018 Delete part of the code related to textViews that are not necessary
         //Search Button onClick
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
