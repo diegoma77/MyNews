@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +41,11 @@ public class SearchArticlesActivity extends AppCompatActivity {
     private List<String> listOfStrings;
 
     //Button Search variable
-    private Button button_search;
+    private Button buttonSearch;
+
+    //Button Dates
+    private LinearLayout buttonBeginDate;
+    private LinearLayout buttonEndDate;
 
     //TextInput
     private TextInputEditText mTextInputEditText;
@@ -76,6 +82,10 @@ public class SearchArticlesActivity extends AppCompatActivity {
         //List
         listOfStrings = new ArrayList<>();
 
+        buttonSearch = (Button) findViewById(R.id.search_button);
+        buttonBeginDate = (LinearLayout) findViewById(R.id.search_button_beginDate);
+        buttonEndDate = (LinearLayout) findViewById(R.id.search_button_endDate);
+
         //TextInputEditText
         mTextInputEditText = (TextInputEditText) findViewById(R.id.search_text_input_edit_text);
         mTextInputEditText.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +96,6 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         //Checkboxes
         cb_arts = (CheckBox) findViewById(R.id.search_checkBox_arts);
@@ -104,9 +113,26 @@ public class SearchArticlesActivity extends AppCompatActivity {
         tv_sports = (TextView) findViewById(R.id.tv_sports);
         tv_travel = (TextView) findViewById(R.id.tv_travel);
 
+        // TODO: 16/03/2018 Add Date Picker 
+        //BeginDate Button onClick
+        buttonBeginDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        button_search = (Button) findViewById(R.id.search_button);
-        button_search.setOnClickListener(new View.OnClickListener() {
+            }
+        });
+
+        // TODO: 16/03/2018 Add Date Picker 
+        //EndDate Button onClick
+        buttonEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        //Search Button onClick
+        buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //if the checkbox is checked, check that there is an elements (String) with that name in the list
@@ -175,7 +201,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 if (listOfStrings.isEmpty()) { Log.i(TAG, "listOfStrings is EMPTY"); }
                 else { Log.i(TAG, getNewDeskValuesAndAdaptForUrl(listOfStrings)); }
 
-                // TODO: 15/03/2018 Add Dates
+                startActivity(new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class));
 
             }
         });
@@ -256,9 +282,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
      * This method builds the Url used to send the JSON request
      * using the strings created (modified) by other methods
      * */
+    // TODO: 15/03/2018 Add Dates to the query
     public String getSearchArticlesUrl (String searchQuery, String newsSearchQuery) {
-
-        // q + begin_date + end_date + sort + page integer + api-key
 
         String searchArticleUrl = Url.ArticleSearchUrl.BASE_URL
                 + Url.ArticleSearchUrl.Q + Url.GeneralTokens.EQUAL + searchQuery + Url.GeneralTokens.AMPERSAND
@@ -346,6 +371,6 @@ public class SearchArticlesActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
-    
+
 }
 

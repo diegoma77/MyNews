@@ -15,6 +15,9 @@ import com.example.android.mynews.activities.WebViewActivity;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.pojo.MostPopularObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Diego Fajardo on 25/02/2018.
  */
@@ -23,6 +26,8 @@ public class RvAdapterSearchArticles extends RecyclerView.Adapter<RvAdapterSearc
 
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
     private static final String TAG = RvAdapterSearchArticles.class.getSimpleName();
+
+    private List<String> deleteThisList = new ArrayList<>();
 
     private Context mContext;
 
@@ -38,12 +43,23 @@ public class RvAdapterSearchArticles extends RecyclerView.Adapter<RvAdapterSearc
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 
+        for (int i = 0; i < 10; i++) {
+
+            deleteThisList.add("Random Number" + Math.random() * 50 + 1);
+
+        }
+
         View view = layoutInflater.inflate(layoutIdForListItem,
                 viewGroup,
                 shouldAttachToParentImmediately);
 
         ViewHolder viewHolder = new ViewHolder(view);
 
+        // TODO: 15/03/2018 Delete this list
+        deleteThisList = new ArrayList<>();
+
+
+        
         return viewHolder;
     }
 
@@ -52,10 +68,9 @@ public class RvAdapterSearchArticles extends RecyclerView.Adapter<RvAdapterSearc
 
         Log.d(TAG, "#" + position);
 
-        MostPopularObject currentMostPopularObject = mostPopularObjectArrayList.get(position);
-        holder.title.setText(currentMostPopularObject.getTitle());
-        holder.section.setText("Most Popular < " + currentMostPopularObject.getSection());
-        holder.published_date.setText(currentMostPopularObject.getPublished_date());
+        holder.title.setText(deleteThisList.get((int) Math.random() * 10 + 1));
+        holder.section.setText(deleteThisList.get((int) Math.random() * 10 + 1));
+        holder.published_date.setText(deleteThisList.get((int) Math.random() * 10 + 1));
         holder.imageOnLeft.setImageResource(R.drawable.rajoy);
 
 
@@ -66,18 +81,13 @@ public class RvAdapterSearchArticles extends RecyclerView.Adapter<RvAdapterSearc
                 Log.i("ONCLICK - POSITION","#" + " CLICKED");
                 Context context = v.getContext();
 
-                Intent intent = new Intent(context, WebViewActivity.class);
-                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, mostPopularObjectArrayList.get(position).getArticle_url());
-                context.startActivity(intent);
-
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        if (mostPopularObjectArrayList == null) { return 0; };
-        return mostPopularObjectArrayList.size();
+        return deleteThisList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
