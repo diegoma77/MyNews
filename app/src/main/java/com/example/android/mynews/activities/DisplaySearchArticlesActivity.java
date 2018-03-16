@@ -12,10 +12,16 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rv_fragments_layout);
+
+
+
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);

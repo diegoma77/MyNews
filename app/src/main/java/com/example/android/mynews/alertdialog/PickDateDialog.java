@@ -1,5 +1,6 @@
 package com.example.android.mynews.alertdialog;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
@@ -15,11 +16,35 @@ import com.example.android.mynews.R;
  * Created by Diego Fajardo on 16/03/2018.
  */
 
-public class AlertDialogBuilder extends DialogFragment{
+public class PickDateDialog extends DialogFragment{
 
     // TODO: 16/03/2018 Add interface to pass the info to the Activity that created the Dialog (see "Dialogs")
+    public interface PickDateDialogListener {
+        public void onDialogPositiveClick (DialogFragment dialog);
+        public void onDialogNegativeClick (DialogFragment dialog);
+    }
+
+    PickDateDialogListener mListener;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            mListener = (PickDateDialogListener) activity;
+
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement PickDateDialogListener");
+        }
+
+    }
 
     public void createAlertDialog (Context context) {
+
+
+
+
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
 
