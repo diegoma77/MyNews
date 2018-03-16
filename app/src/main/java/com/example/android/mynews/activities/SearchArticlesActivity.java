@@ -47,8 +47,16 @@ public class SearchArticlesActivity extends AppCompatActivity implements PickBeg
     private LinearLayout buttonBeginDate;
     private LinearLayout buttonEndDate;
 
+    //Variables for dates
+    private String beginDate = "TODAY";
+    private String endDate = "TODAY";
+    private TextView tv_beginDateTextView;
+    private TextView tv_endDateTextView;
+
     //TextInput
     private TextInputEditText mTextInputEditText;
+
+
 
     //Checkboxes variables
     private CheckBox cb_arts;
@@ -104,6 +112,10 @@ public class SearchArticlesActivity extends AppCompatActivity implements PickBeg
         cb_politics = (CheckBox) findViewById(R.id.search_checkBox_politics);
         cb_sports = (CheckBox) findViewById(R.id.search_checkBox_sports);
         cb_travel = (CheckBox) findViewById(R.id.search_checkBox_travel);
+
+        //Text inside datePicker buttons
+        tv_beginDateTextView = (TextView) findViewById(R.id.search_beginDate_date);
+        tv_endDateTextView = (TextView) findViewById(R.id.search_endDate_date);
 
         //TextViews
         tv_arts = (TextView) findViewById(R.id.tv_arts);
@@ -341,17 +353,14 @@ public class SearchArticlesActivity extends AppCompatActivity implements PickBeg
     }
 
     @Override
-    public void onSubmitClicker(String string) {
-
-        Toast.makeText(SearchArticlesActivity.this, string, Toast.LENGTH_SHORT).show();
-
+    public void onSubmitClicker(String selectedDateForTextView, String selectedDateForUrl) {
+        tv_beginDateTextView.setText(selectedDateForTextView);
+        beginDate = selectedDateForUrl;
     }
 
     @Override
     public void onCancelClicker(String string) {
-
-        Toast.makeText(SearchArticlesActivity.this, string, Toast.LENGTH_SHORT).show();
-
+        endDate = string;
     }
 
 

@@ -27,14 +27,15 @@ public class PickBeginDateDialog extends AppCompatDialogFragment {
 
     private PickBeginDateDialogListener mListener;
 
-    private int selectedYear;
-    private int selectedMonth;
-    private int selectedDay;
-    private String selectedDate;
+    private String selectedYear;
+    private String selectedMonth;
+    private String selectedDay;
+    private String selectedDateForTextView;
+    private String selectedDateForUrl;
 
     public interface PickBeginDateDialogListener {
-        void onSubmitClicker (String string);
-        void onCancelClicker (String string);
+        void onSubmitClicker (String selectedDateForTextView, String selectedDateForUrl);
+        void onCancelClicker (String cancelMessage);
 
     }
 
@@ -55,20 +56,34 @@ public class PickBeginDateDialog extends AppCompatDialogFragment {
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                selectedYear = year;
-                selectedMonth = monthOfYear + 1;
-                selectedDay = dayOfMonth;
 
-                selectedDate = selectedDay + "/" + selectedMonth + "/" + selectedYear;
+                // TODO: 16/03/2018 Add that the user cannot select a date further than the today date
 
-                Log.i(TAG, selectedDate);
+                selectedYear = year + "";
+
+                if ((monthOfYear+1) < 10) {
+                    selectedMonth = "0" + (monthOfYear+1);
+                }
+                else { selectedMonth = (monthOfYear+1) + ""; }
+
+                if (dayOfMonth < 10) {
+                    selectedDay = "0" + (dayOfMonth);
+                }
+                else { selectedDay = dayOfMonth + ""; }
+
+
+                selectedDateForTextView = selectedDay + "/" + selectedMonth + "/" + selectedYear;
+                selectedDateForUrl = selectedYear + selectedMonth + selectedDay;
+
+                Log.i(TAG, selectedDateForTextView);
+                Log.i(TAG, selectedDateForUrl);
             }
         });
 
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onSubmitClicker(selectedDate + " has been SUBMITTED");
+                mListener.onSubmitClicker(selectedDateForTextView, selectedDateForUrl);
                 getDialog().dismiss();
             }
         });
