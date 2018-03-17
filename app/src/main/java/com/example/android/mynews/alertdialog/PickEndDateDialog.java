@@ -20,7 +20,7 @@ import java.util.Calendar;
  * Created by Diego Fajardo on 16/03/2018.
  */
 
-public class PickBeginDateDialog extends AppCompatDialogFragment {
+public class PickEndDateDialog extends AppCompatDialogFragment {
 
     private static final String TAG = "PickBeginDateDialog";
 
@@ -28,7 +28,7 @@ public class PickBeginDateDialog extends AppCompatDialogFragment {
     private Button buttonSubmit;
     private Button buttonCancel;
 
-    private PickBeginDateDialogListener mListener;
+    private PickEndDateDialogListener mListener;
 
     private String selectedYear;
     private String selectedMonth;
@@ -36,9 +36,9 @@ public class PickBeginDateDialog extends AppCompatDialogFragment {
     private String selectedDateForTextView;
     private String selectedDateForUrl;
 
-    public interface PickBeginDateDialogListener {
-        void onBeginSubmitClicker(String selectedDateForTextView, String selectedDateForUrl);
-        void onBeginCancelClicker(String cancelMessage);
+    public interface PickEndDateDialogListener {
+        void onEndSubmitClicker(String selectedDateForTextView, String selectedDateForUrl);
+        void onEndCancelClicker(String cancelMessage);
 
     }
 
@@ -63,7 +63,7 @@ public class PickBeginDateDialog extends AppCompatDialogFragment {
         datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
+                
                 selectedYear = year + "";
 
                 if ((monthOfYear+1) < 10) {
@@ -88,7 +88,7 @@ public class PickBeginDateDialog extends AppCompatDialogFragment {
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onBeginSubmitClicker(selectedDateForTextView, selectedDateForUrl);
+                mListener.onEndSubmitClicker(selectedDateForTextView, selectedDateForUrl);
                 getDialog().dismiss();
             }
         });
@@ -96,7 +96,7 @@ public class PickBeginDateDialog extends AppCompatDialogFragment {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onBeginCancelClicker("A date was not picked");
+                mListener.onEndCancelClicker("A date was not picked");
                 getDialog().dismiss();
             }
         });
@@ -110,7 +110,7 @@ public class PickBeginDateDialog extends AppCompatDialogFragment {
         super.onAttach(context);
 
         try {
-            mListener = (PickBeginDateDialogListener) context;
+            mListener = (PickEndDateDialogListener) context;
         }catch (ClassCastException e) {
             //Exception that will be thrown if we show the dialog but forget to implement the PickEndDateDialogListener
             //in our SearchArticlesActivity

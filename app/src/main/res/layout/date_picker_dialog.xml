@@ -10,7 +10,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:padding="5dp"
-        android:layout_marginBottom="-35dp"/>
+        android:layout_marginBottom="-35dp"
+        android:minDate="01/01/1900"
+        />
 
     <Button
         android:id="@+id/date_picker_submit_button"

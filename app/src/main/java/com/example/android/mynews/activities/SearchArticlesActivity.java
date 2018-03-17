@@ -23,9 +23,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
 import com.example.android.mynews.alertdialog.PickBeginDateDialog;
+import com.example.android.mynews.alertdialog.PickEndDateDialog;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,12 +35,19 @@ import java.util.List;
  * Created by Diego Fajardo on 25/02/2018.
  */
 
-public class SearchArticlesActivity extends AppCompatActivity implements PickBeginDateDialog.PickBeginDateDialogListener {
+public class SearchArticlesActivity extends AppCompatActivity implements
+        PickBeginDateDialog.PickBeginDateDialogListener,
+        PickEndDateDialog.PickEndDateDialogListener {
 
     private static final String TAG = "SearchArticlesActivity";
+    private static final String SQ_TAG = "Search Query";
+    private static final String LOF_TAG = "List of sections";
+    private static final String BD_TAG = "Begin Date";
+    private static final String ED_TAG = "End Date";
+    private static final String URL_TAG = "URL Tag";
 
-    //List to trial
-    private List<String> listOfStrings;
+    //List for sections
+    private List<String> listOfSections;
 
     //Button Search variable
     private Button buttonSearch;
@@ -48,15 +57,13 @@ public class SearchArticlesActivity extends AppCompatActivity implements PickBeg
     private LinearLayout buttonEndDate;
 
     //Variables for dates
-    private String beginDate = "TODAY";
-    private String endDate = "TODAY";
+    private String beginDate = "";
+    private String endDate = "";
     private TextView tv_beginDateTextView;
     private TextView tv_endDateTextView;
 
     //TextInput
     private TextInputEditText mTextInputEditText;
-
-
 
     //Checkboxes variables
     private CheckBox cb_arts;
@@ -80,6 +87,8 @@ public class SearchArticlesActivity extends AppCompatActivity implements PickBeg
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_articles_layout);
 
+        // TODO: 17/03/2018 Modify keyboard when Search Query is pressed so as not to hide the Search Button
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.search_toolbar);
         setSupportActionBar(toolbar);
 
@@ -88,7 +97,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements PickBeg
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //List
-        listOfStrings = new ArrayList<>();
+        listOfSections = new ArrayList<>();
 
         buttonSearch = (Button) findViewById(R.id.search_button);
         buttonBeginDate = (LinearLayout) findViewById(R.id.search_button_beginDate);
@@ -96,14 +105,6 @@ public class SearchArticlesActivity extends AppCompatActivity implements PickBeg
 
         //TextInputEditText
         mTextInputEditText = (TextInputEditText) findViewById(R.id.search_text_input_edit_text);
-        mTextInputEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!listOfStrings.contains(mTextInputEditText.getText().toString())) {
-                    listOfStrings.add(mTextInputEditText.getText().toString());
-                }
-            }
-        });
 
         //Checkboxes
         cb_arts = (CheckBox) findViewById(R.id.search_checkBox_arts);
@@ -125,25 +126,46 @@ public class SearchArticlesActivity extends AppCompatActivity implements PickBeg
         tv_sports = (TextView) findViewById(R.id.tv_sports);
         tv_travel = (TextView) findViewById(R.id.tv_travel);
 
-        // TODO: 16/03/2018 Add Date Picker 
+
+        /** Listeners */
+
+        //TextInput onClick
+        mTextInputEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // TODO: 17/03/2018 See if we implement sth here
+
+            }
+        });
+
+        // TODO: 17/03/2018 BeginDate cannot be higher than EndDate and otherwise. Can be done passing a Date to openXDialog and modifying the constructor
+        // TODO: 17/03/2018 so it will modify a property of the class and this one modify the date options of the datePicker
         //BeginDate Button onClick
         buttonBeginDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                openDialog();
-
+                openBeginDialog();
             }
         });
 
-        // TODO: 16/03/2018 Add Date Picker
         //EndDate Button onClick
         buttonEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                openEndDialog();
             }
         });
+
+        /**
+         * Search button sends the JSONRequest using sendJSONRequestMethod.
+         * It uses the url obtained through 2 methods and 2 variables:
+         * getSearchArticlesUrl(
+         * getSearchQueryAndAdaptForUrl(method),
+         * getNewDeskValuesAndAdaptForUrl(method),
+         * beginDate,
+         * endDate)
+         * */
 
         // TODO: 16/03/2018 Delete part of the code related to textViews that are not necessary
         //Search Button onClick
@@ -155,68 +177,81 @@ public class SearchArticlesActivity extends AppCompatActivity implements PickBeg
 
                 //ARTS
                 if (cb_arts.isChecked()){
-                    if (listOfStrings.contains(Keys.CheckboxFields.CB_ARTS)) {
-                        tv_arts.setText(listOfStrings.get((listOfStrings.indexOf(Keys.CheckboxFields.CB_ARTS))));
+                    if (listOfSections.contains(Keys.CheckboxFields.CB_ARTS)) {
+                        tv_arts.setText(listOfSections.get((listOfSections.indexOf(Keys.CheckboxFields.CB_ARTS))));
                     }
                 }
                 else tv_arts.setText("false");
 
                 //BUSINESS
                 if (cb_business.isChecked()){
-                    if (listOfStrings.contains(Keys.CheckboxFields.CB_BUSINESS)) {
-                        tv_business.setText(listOfStrings.get((listOfStrings.indexOf(Keys.CheckboxFields.CB_BUSINESS))));
+                    if (listOfSections.contains(Keys.CheckboxFields.CB_BUSINESS)) {
+                        tv_business.setText(listOfSections.get((listOfSections.indexOf(Keys.CheckboxFields.CB_BUSINESS))));
                     }
                 }
                 else tv_business.setText("false");
 
                 //CB_ENTREPRENEURS
                 if (cb_entrepreneurs.isChecked()){
-                    if (listOfStrings.contains(Keys.CheckboxFields.CB_ENTREPRENEURS)) {
-                        tv_entrepreneurs.setText(listOfStrings.get((listOfStrings.indexOf(Keys.CheckboxFields.CB_ENTREPRENEURS))));
+                    if (listOfSections.contains(Keys.CheckboxFields.CB_ENTREPRENEURS)) {
+                        tv_entrepreneurs.setText(listOfSections.get((listOfSections.indexOf(Keys.CheckboxFields.CB_ENTREPRENEURS))));
                     }
                 }
                 else tv_entrepreneurs.setText("false");
 
                 //POLITICS
                 if (cb_politics.isChecked()){
-                    if (listOfStrings.contains(Keys.CheckboxFields.CB_POLITICS)) {
-                        tv_politics.setText(listOfStrings.get((listOfStrings.indexOf(Keys.CheckboxFields.CB_POLITICS))));
+                    if (listOfSections.contains(Keys.CheckboxFields.CB_POLITICS)) {
+                        tv_politics.setText(listOfSections.get((listOfSections.indexOf(Keys.CheckboxFields.CB_POLITICS))));
                     }
                 }
                 else tv_politics.setText("false");
 
                 //SPORTS
                 if (cb_sports.isChecked()){
-                    if (listOfStrings.contains(Keys.CheckboxFields.CB_SPORTS)) {
-                        tv_sports.setText(listOfStrings.get((listOfStrings.indexOf(Keys.CheckboxFields.CB_SPORTS))));
+                    if (listOfSections.contains(Keys.CheckboxFields.CB_SPORTS)) {
+                        tv_sports.setText(listOfSections.get((listOfSections.indexOf(Keys.CheckboxFields.CB_SPORTS))));
                     }
                 }
                 else tv_sports.setText("false");
 
                 //TRAVEL
                 if (cb_travel.isChecked()){
-                    if (listOfStrings.contains(Keys.CheckboxFields.CB_TRAVEL)) {
-                        tv_travel.setText(listOfStrings.get((listOfStrings.indexOf(Keys.CheckboxFields.CB_TRAVEL))));
+                    if (listOfSections.contains(Keys.CheckboxFields.CB_TRAVEL)) {
+                        tv_travel.setText(listOfSections.get((listOfSections.indexOf(Keys.CheckboxFields.CB_TRAVEL))));
                     }
                 }
                 else tv_travel.setText("false");
 
-                Log.i(TAG, String.valueOf(listOfStrings.contains(mTextInputEditText.getText().toString())));
 
-                //Toast.makeText(SearchArticlesActivity.this, getSearchQueryAndAdaptForUrl(), Toast.LENGTH_SHORT).show();
+                if (mTextInputEditText.getText().toString().equals("")) { Log.i(SQ_TAG, "searchQuery is EMPTY"); }
+                else { Log.i(SQ_TAG, mTextInputEditText.getText().toString()); }
+
+                Log.i(LOF_TAG, "size -> " + listOfSections.size() + "");
+                for (int i = 0; i < listOfSections.size(); i++) {
+                    Log.i(LOF_TAG, listOfSections.get(i));
+                }
+                Log.i(LOF_TAG, getNewDeskValuesAndAdaptForUrl(listOfSections));
+
+                if (beginDate == "") Log.i(BD_TAG, "is EMPTY");
+                else { Log.i(BD_TAG, beginDate); }
+
+                if (endDate == "") Log.i(ED_TAG, "is EMPTY");
+                else { Log.i(ED_TAG, endDate); }
 
                 Log.i(TAG, getSearchArticlesUrl(
                         getSearchQueryAndAdaptForUrl(),
-                        getNewDeskValuesAndAdaptForUrl(listOfStrings)));
+                        getNewDeskValuesAndAdaptForUrl(listOfSections),
+                        beginDate,
+                        endDate));
 
-                //sendJSONRequest(getSearchArticlesUrl(
-                //        getSearchQueryAndAdaptForUrl(),
-                //        getNewDeskValuesAndAdaptForUrl(listOfStrings)));
+                sendJSONRequest(getSearchArticlesUrl(
+                        getSearchQueryAndAdaptForUrl(),
+                        getNewDeskValuesAndAdaptForUrl(listOfSections),
+                        beginDate,
+                        endDate));
 
-                if (listOfStrings.isEmpty()) { Log.i(TAG, "listOfStrings is EMPTY"); }
-                else { Log.i(TAG, getNewDeskValuesAndAdaptForUrl(listOfStrings)); }
-
-                startActivity(new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class));
+                //startActivity(new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class));
 
             }
         });
@@ -242,52 +277,52 @@ public class SearchArticlesActivity extends AppCompatActivity implements PickBeg
         switch(view.getId()) {
             case R.id.search_checkBox_arts:
                 ///When checked, add a String with the name of the checkbox to the list
-                if (checked) { listOfStrings.add(Keys.CheckboxFields.CB_ARTS); }
+                if (checked) { listOfSections.add(Keys.CheckboxFields.CB_ARTS); }
                 //When unchecked, check if there is an element with the name of the Checkbox in the array
                 //if there is one, remove it from the list
                 else {
-                    if (listOfStrings.contains(Keys.CheckboxFields.CB_ARTS))
-                        listOfStrings.remove(listOfStrings.indexOf(Keys.CheckboxFields.CB_ARTS));
+                    if (listOfSections.contains(Keys.CheckboxFields.CB_ARTS))
+                        listOfSections.remove(listOfSections.indexOf(Keys.CheckboxFields.CB_ARTS));
                 }
                 break;
 
             case R.id.search_checkBox_business:
-                if (checked) { listOfStrings.add(Keys.CheckboxFields.CB_BUSINESS); }
+                if (checked) { listOfSections.add(Keys.CheckboxFields.CB_BUSINESS); }
                 else {
-                    if (listOfStrings.contains(Keys.CheckboxFields.CB_BUSINESS))
-                        listOfStrings.remove(listOfStrings.indexOf(Keys.CheckboxFields.CB_BUSINESS));
+                    if (listOfSections.contains(Keys.CheckboxFields.CB_BUSINESS))
+                        listOfSections.remove(listOfSections.indexOf(Keys.CheckboxFields.CB_BUSINESS));
                 }
                 break;
 
             case R.id.search_checkBox_entrepeneurs:
-                if (checked) { listOfStrings.add(Keys.CheckboxFields.CB_ENTREPRENEURS); }
+                if (checked) { listOfSections.add(Keys.CheckboxFields.CB_ENTREPRENEURS); }
                 else {
-                    if (listOfStrings.contains(Keys.CheckboxFields.CB_ENTREPRENEURS))
-                        listOfStrings.remove(listOfStrings.indexOf(Keys.CheckboxFields.CB_ENTREPRENEURS));
+                    if (listOfSections.contains(Keys.CheckboxFields.CB_ENTREPRENEURS))
+                        listOfSections.remove(listOfSections.indexOf(Keys.CheckboxFields.CB_ENTREPRENEURS));
                 }
                 break;
 
             case R.id.search_checkBox_politics:
-                if (checked) { listOfStrings.add(Keys.CheckboxFields.CB_POLITICS); }
+                if (checked) { listOfSections.add(Keys.CheckboxFields.CB_POLITICS); }
                 else {
-                    if (listOfStrings.contains(Keys.CheckboxFields.CB_POLITICS))
-                        listOfStrings.remove(listOfStrings.indexOf(Keys.CheckboxFields.CB_POLITICS));
+                    if (listOfSections.contains(Keys.CheckboxFields.CB_POLITICS))
+                        listOfSections.remove(listOfSections.indexOf(Keys.CheckboxFields.CB_POLITICS));
                 }
                 break;
 
             case R.id.search_checkBox_sports:
-                if (checked) { listOfStrings.add(Keys.CheckboxFields.CB_SPORTS); }
+                if (checked) { listOfSections.add(Keys.CheckboxFields.CB_SPORTS); }
                 else {
-                    if (listOfStrings.contains(Keys.CheckboxFields.CB_SPORTS))
-                        listOfStrings.remove(listOfStrings.indexOf(Keys.CheckboxFields.CB_SPORTS));
+                    if (listOfSections.contains(Keys.CheckboxFields.CB_SPORTS))
+                        listOfSections.remove(listOfSections.indexOf(Keys.CheckboxFields.CB_SPORTS));
                 }
                 break;
 
             case R.id.search_checkBox_travel:
-                if (checked) { listOfStrings.add(Keys.CheckboxFields.CB_TRAVEL); }
+                if (checked) { listOfSections.add(Keys.CheckboxFields.CB_TRAVEL); }
                 else {
-                    if (listOfStrings.contains(Keys.CheckboxFields.CB_TRAVEL))
-                        listOfStrings.remove(listOfStrings.indexOf(Keys.CheckboxFields.CB_TRAVEL));
+                    if (listOfSections.contains(Keys.CheckboxFields.CB_TRAVEL))
+                        listOfSections.remove(listOfSections.indexOf(Keys.CheckboxFields.CB_TRAVEL));
                 }
                 break;
         }
@@ -298,25 +333,68 @@ public class SearchArticlesActivity extends AppCompatActivity implements PickBeg
      * using the strings created (modified) by other methods
      * */
     // TODO: 15/03/2018 Add Dates to the query
-    public String getSearchArticlesUrl (String searchQuery, String newsSearchQuery) {
+    public String getSearchArticlesUrl (String searchQuery, String newsSearchQuery, String beginDate, String endDate) {
 
-        String searchArticleUrl = Url.ArticleSearchUrl.BASE_URL
-                + Url.ArticleSearchUrl.Q + Url.GeneralTokens.EQUAL + searchQuery + Url.GeneralTokens.AMPERSAND
-                + Url.ArticleSearchUrl.FQ + Url.GeneralTokens.EQUAL + newsSearchQuery + Url.GeneralTokens.AMPERSAND
-                + Url.ArticleSearchUrl.BEGIN_DATE + Url.GeneralTokens.EQUAL + "20120101" + Url.GeneralTokens.AMPERSAND
-                + Url.ArticleSearchUrl.END_DATE + Url.GeneralTokens.EQUAL + "20120101" + Url.GeneralTokens.AMPERSAND
-                + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
-                + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + Url.ArticleSearchUrl.PAGE_TWO + Url.GeneralTokens.AMPERSAND
-                + Url.ArticleSearchUrl.API_KEY;
+        String searchArticleUrl;
+
+        if (beginDate.equals("") && endDate.equals("")) {
+
+            Log.i(URL_TAG, "Both are EMPTY");
+            searchArticleUrl = Url.ArticleSearchUrl.BASE_URL
+                    + Url.ArticleSearchUrl.Q + Url.GeneralTokens.EQUAL + searchQuery + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.FQ + Url.GeneralTokens.EQUAL + newsSearchQuery + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + Url.ArticleSearchUrl.PAGE_ONE + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.API_KEY;
+
+        }
+
+        else if (beginDate.equals("") && !endDate.equals("")) {
+
+            Log.i(URL_TAG, "Only Begin is EMPTY");
+            searchArticleUrl = Url.ArticleSearchUrl.BASE_URL
+                    + Url.ArticleSearchUrl.Q + Url.GeneralTokens.EQUAL + searchQuery + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.FQ + Url.GeneralTokens.EQUAL + newsSearchQuery + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.END_DATE + Url.GeneralTokens.EQUAL + endDate + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + Url.ArticleSearchUrl.PAGE_TWO + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.API_KEY;
+
+        }
+
+        else if (!beginDate.equals("") && endDate.equals("")) {
+
+            Log.i(URL_TAG, "Only End is EMPTY");
+            searchArticleUrl = Url.ArticleSearchUrl.BASE_URL
+                    + Url.ArticleSearchUrl.Q + Url.GeneralTokens.EQUAL + searchQuery + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.FQ + Url.GeneralTokens.EQUAL + newsSearchQuery + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.BEGIN_DATE + Url.GeneralTokens.EQUAL + beginDate + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + Url.ArticleSearchUrl.PAGE_TWO + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.API_KEY;
+
+        }
+        else {
+
+            Log.i(URL_TAG, "Both are NOT EMPTY");
+            searchArticleUrl = Url.ArticleSearchUrl.BASE_URL
+                    + Url.ArticleSearchUrl.Q + Url.GeneralTokens.EQUAL + searchQuery + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.FQ + Url.GeneralTokens.EQUAL + newsSearchQuery + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.BEGIN_DATE + Url.GeneralTokens.EQUAL + beginDate + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.END_DATE + Url.GeneralTokens.EQUAL + endDate + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + Url.ArticleSearchUrl.PAGE_TWO + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.API_KEY;
+        }
 
         return searchArticleUrl;
-
     }
 
     /**
      * This method is used when the SEARCH BUTTON is clicked.
      * It starts the process of searching for the articles according to the information
      * needed from the user.
+     * Changes spaces for + symbols.
      * */
     private String getSearchQueryAndAdaptForUrl () {
         return mTextInputEditText.getText().toString().toLowerCase().replace(" ", "+");
@@ -327,56 +405,59 @@ public class SearchArticlesActivity extends AppCompatActivity implements PickBeg
      * The news_desk part is related to the checkboxes and allows to filter the
      * searches according to the category
      * */
-    private String getNewDeskValuesAndAdaptForUrl(List<String> listOfStrings) {
+    private String getNewDeskValuesAndAdaptForUrl(List<String> listOfSections) {
+
+        // TODO: 17/03/2018 Checked arts and business and showed I/SearchArticlesActivity: arts+business+
 
         String temporary_query;
         String news_desk_query = "";
 
-        for (int i = 0; i < listOfStrings.size() ; i++) {
+        for (int i = 0; i < listOfSections.size() ; i++) {
 
-            if (i==0) { temporary_query = listOfStrings.get(i); }
-            else { temporary_query = "+" + listOfStrings.get(i); }
+            if (i==0) { temporary_query = listOfSections.get(i); }
+            else { temporary_query = "+" + listOfSections.get(i); }
+
+            Log.i("NewDeskLOF.size()", this.listOfSections.size() + "");
 
             news_desk_query += temporary_query;
         }
         return news_desk_query;
     }
 
-    /** Next three methods are used for the dialogs shown
+    /** Next six methods are used for the dialogs to be shown
      * when begin date and end date buttons are clicked */
-
-    public void openDialog () {
-
+    public void openBeginDialog() {
         PickBeginDateDialog dialog = new PickBeginDateDialog();
-        dialog.show(getSupportFragmentManager(), "Date Picker Dialog");
+        dialog.show(getSupportFragmentManager(), "Date Picker Begin Dialog");
 
     }
 
+    public void openEndDialog () {
+        PickEndDateDialog dialog = new PickEndDateDialog();
+        dialog.show(getSupportFragmentManager(), "Date Picker End Dialog");
+    }
+
+
     @Override
-    public void onSubmitClicker(String selectedDateForTextView, String selectedDateForUrl) {
+    public void onBeginSubmitClicker(String selectedDateForTextView, String selectedDateForUrl) {
         tv_beginDateTextView.setText(selectedDateForTextView);
         beginDate = selectedDateForUrl;
     }
 
     @Override
-    public void onCancelClicker(String string) {
-        endDate = string;
+    public void onBeginCancelClicker(String string) {
+        Toast.makeText(SearchArticlesActivity.this, "No date was selected", Toast.LENGTH_SHORT).show();
     }
 
-
-
-
-
-    // TODO: 15/03/2018 Add begin_date
-    private String getBeginDate() {
-
-        return "";
+    @Override
+    public void onEndSubmitClicker(String selectedDateForTextView, String selectedDateForUrl) {
+        tv_endDateTextView.setText(selectedDateForTextView);
+        endDate = selectedDateForUrl;
     }
 
-    // TODO: 15/03/2018 Add end_date
-    private String getEndDate() {
-
-        return "";
+    @Override
+    public void onEndCancelClicker(String cancelMessage) {
+        Toast.makeText(SearchArticlesActivity.this, "No date was selected", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -412,6 +493,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements PickBeg
 
     }
 
+    // TODO: 17/03/2018 Carry on implementing the JSONRequest
 
 }
 
