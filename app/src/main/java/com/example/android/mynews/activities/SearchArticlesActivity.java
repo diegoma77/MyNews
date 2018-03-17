@@ -243,13 +243,18 @@ public class SearchArticlesActivity extends AppCompatActivity implements
                         getSearchQueryAndAdaptForUrl(),
                         getNewDeskValuesAndAdaptForUrl(listOfSections),
                         beginDate,
-                        endDate));
+                        endDate,
+                        Url.ArticleSearchUrl.PAGE_ONE));
 
+                // TODO: 17/03/2018 This method should be repeated 3 times with PAGE_ONE, PAGE_TWO and PAGE_THREE 
+                // TODO: 17/03/2018 The reason is that the SearchArticlesAPI only returns a max of 10 results at a time, what is a short quantity
+                
                 sendJSONRequest(getSearchArticlesUrl(
                         getSearchQueryAndAdaptForUrl(),
                         getNewDeskValuesAndAdaptForUrl(listOfSections),
                         beginDate,
-                        endDate));
+                        endDate,
+                        Url.ArticleSearchUrl.PAGE_ONE));
 
                 //startActivity(new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class));
 
@@ -333,7 +338,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
      * using the strings created (modified) by other methods
      * */
     // TODO: 15/03/2018 Add Dates to the query
-    public String getSearchArticlesUrl (String searchQuery, String newsSearchQuery, String beginDate, String endDate) {
+    public String getSearchArticlesUrl (String searchQuery, String newsSearchQuery, String beginDate, String endDate, String page) {
 
         String searchArticleUrl;
 
@@ -344,7 +349,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
                     + Url.ArticleSearchUrl.Q + Url.GeneralTokens.EQUAL + searchQuery + Url.GeneralTokens.AMPERSAND
                     + Url.ArticleSearchUrl.FQ + Url.GeneralTokens.EQUAL + newsSearchQuery + Url.GeneralTokens.AMPERSAND
                     + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + Url.ArticleSearchUrl.PAGE_ONE + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + page + Url.GeneralTokens.AMPERSAND
                     + Url.ArticleSearchUrl.API_KEY;
 
         }
@@ -357,7 +362,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
                     + Url.ArticleSearchUrl.FQ + Url.GeneralTokens.EQUAL + newsSearchQuery + Url.GeneralTokens.AMPERSAND
                     + Url.ArticleSearchUrl.END_DATE + Url.GeneralTokens.EQUAL + endDate + Url.GeneralTokens.AMPERSAND
                     + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + Url.ArticleSearchUrl.PAGE_TWO + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + page + Url.GeneralTokens.AMPERSAND
                     + Url.ArticleSearchUrl.API_KEY;
 
         }
@@ -370,7 +375,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
                     + Url.ArticleSearchUrl.FQ + Url.GeneralTokens.EQUAL + newsSearchQuery + Url.GeneralTokens.AMPERSAND
                     + Url.ArticleSearchUrl.BEGIN_DATE + Url.GeneralTokens.EQUAL + beginDate + Url.GeneralTokens.AMPERSAND
                     + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + Url.ArticleSearchUrl.PAGE_TWO + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + page + Url.GeneralTokens.AMPERSAND
                     + Url.ArticleSearchUrl.API_KEY;
 
         }
@@ -383,7 +388,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
                     + Url.ArticleSearchUrl.BEGIN_DATE + Url.GeneralTokens.EQUAL + beginDate + Url.GeneralTokens.AMPERSAND
                     + Url.ArticleSearchUrl.END_DATE + Url.GeneralTokens.EQUAL + endDate + Url.GeneralTokens.AMPERSAND
                     + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + Url.ArticleSearchUrl.PAGE_TWO + Url.GeneralTokens.AMPERSAND
+                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + page + Url.GeneralTokens.AMPERSAND
                     + Url.ArticleSearchUrl.API_KEY;
         }
 
