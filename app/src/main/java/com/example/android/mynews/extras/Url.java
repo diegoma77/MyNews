@@ -77,6 +77,10 @@ public interface Url {
         String PAGE_TWO = "2";
         String PAGE_THREE = "3";
         String API_KEY = "api-key=a27a66145d4542d28a719cecee6de859";
+        String INTENT_PAGE1 = "page1";
+        String INTENT_PAGE2 = "page2";
+        String INTENT_PAGE3 = "page3";
+
 
     }
 

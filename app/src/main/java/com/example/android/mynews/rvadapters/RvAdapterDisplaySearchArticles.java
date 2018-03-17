@@ -1,7 +1,6 @@
 package com.example.android.mynews.rvadapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,9 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
-import com.example.android.mynews.activities.WebViewActivity;
-import com.example.android.mynews.extras.Keys;
-import com.example.android.mynews.pojo.MostPopularObject;
+import com.example.android.mynews.pojo.SearchArticlesObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,16 +19,16 @@ import java.util.List;
  * Created by Diego Fajardo on 25/02/2018.
  */
 
-public class RvAdapterSearchArticles extends RecyclerView.Adapter<RvAdapterSearchArticles.ViewHolder> {
+public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapterDisplaySearchArticles.ViewHolder> {
 
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
-    private static final String TAG = RvAdapterSearchArticles.class.getSimpleName();
+    private static final String TAG = RvAdapterDisplaySearchArticles.class.getSimpleName();
 
-    private List<String> deleteThisList = new ArrayList<>();
+    private List<SearchArticlesObject> searchArticlesList = new ArrayList<>();
 
     private Context mContext;
 
-    public RvAdapterSearchArticles (Context context) {
+    public RvAdapterDisplaySearchArticles(Context context, List<String> searchArticlesList) {
         this.mContext = context;
     }
 
@@ -45,7 +42,7 @@ public class RvAdapterSearchArticles extends RecyclerView.Adapter<RvAdapterSearc
 
         for (int i = 0; i < 10; i++) {
 
-            deleteThisList.add("Random Number" + Math.random() * 50 + 1);
+            searchArticlesList.add("Random Number" + Math.random() * 50 + 1);
 
         }
 
@@ -56,7 +53,7 @@ public class RvAdapterSearchArticles extends RecyclerView.Adapter<RvAdapterSearc
         ViewHolder viewHolder = new ViewHolder(view);
 
         // TODO: 15/03/2018 Delete this list
-        deleteThisList = new ArrayList<>();
+        searchArticlesList = new ArrayList<>();
 
 
         
@@ -64,13 +61,13 @@ public class RvAdapterSearchArticles extends RecyclerView.Adapter<RvAdapterSearc
     }
 
     @Override
-    public void onBindViewHolder(RvAdapterSearchArticles.ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
         Log.d(TAG, "#" + position);
 
-        holder.title.setText(deleteThisList.get((int) Math.random() * 10 + 1));
-        holder.section.setText(deleteThisList.get((int) Math.random() * 10 + 1));
-        holder.published_date.setText(deleteThisList.get((int) Math.random() * 10 + 1));
+        holder.title.setText(searchArticlesList.get((int) Math.random() * 10 + 1));
+        holder.section.setText(searchArticlesList.get((int) Math.random() * 10 + 1));
+        holder.published_date.setText(searchArticlesList.get((int) Math.random() * 10 + 1));
         holder.imageOnLeft.setImageResource(R.drawable.rajoy);
 
 
@@ -87,7 +84,8 @@ public class RvAdapterSearchArticles extends RecyclerView.Adapter<RvAdapterSearc
 
     @Override
     public int getItemCount() {
-        return deleteThisList.size();
+        if (searchArticlesList == null) { return 0; }
+        return searchArticlesList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

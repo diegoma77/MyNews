@@ -74,6 +74,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
     private CheckBox cb_travel;
 
     // TODO: 15/03/2018 Delete these variables when they are not used anymore
+    // TODO: 17/03/2018 Delete the TextViews in search_articles_layout.xml
     //TextViews to check if the value of the variables is the correct one according to checkboxes
     private TextView tv_arts;
     private TextView tv_business;
@@ -246,17 +247,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
                         endDate,
                         Url.ArticleSearchUrl.PAGE_ONE));
 
-                // TODO: 17/03/2018 This method should be repeated 3 times with PAGE_ONE, PAGE_TWO and PAGE_THREE 
-                // TODO: 17/03/2018 The reason is that the SearchArticlesAPI only returns a max of 10 results at a time, what is a short quantity
-                
-                sendJSONRequest(getSearchArticlesUrl(
-                        getSearchQueryAndAdaptForUrl(),
-                        getNewDeskValuesAndAdaptForUrl(listOfSections),
-                        beginDate,
-                        endDate,
-                        Url.ArticleSearchUrl.PAGE_ONE));
-
-                //startActivity(new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class));
+                callIntentForDisplaySearchArticlesActivity();
 
             }
         });
@@ -465,40 +456,38 @@ public class SearchArticlesActivity extends AppCompatActivity implements
         Toast.makeText(SearchArticlesActivity.this, "No date was selected", Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * This method sends the JSON request using Volley
-     * */
-    public void sendJSONRequest (String url){
+    /**This method is used to call the Intent to change+
+     * the Activity displayed (to DisplaySearchArticlesActivity) */
+    private void callIntentForDisplaySearchArticlesActivity () {
 
-        Log.i(TAG,"SENDING JSON REQUEST");
+        Intent intent = new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class);
+        intent.putExtra(Url.ArticleSearchUrl.INTENT_PAGE1, getSearchArticlesUrl(
+                getSearchQueryAndAdaptForUrl(),
+                getNewDeskValuesAndAdaptForUrl(listOfSections),
+                beginDate,
+                endDate,
+                Url.ArticleSearchUrl.PAGE_ONE));
 
-        //String request
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.GET,
-                url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(SearchArticlesActivity.this, "Response OK", Toast.LENGTH_SHORT).show();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(SearchArticlesActivity.this, "Response ERROR", Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
+        intent.putExtra(Url.ArticleSearchUrl.INTENT_PAGE2, getSearchArticlesUrl(
+                getSearchQueryAndAdaptForUrl(),
+                getNewDeskValuesAndAdaptForUrl(listOfSections),
+                beginDate,
+                endDate,
+                Url.ArticleSearchUrl.PAGE_TWO));
 
-        //Creating a request queue
-        RequestQueue requestQueue = Volley.newRequestQueue(SearchArticlesActivity.this);
+        intent.putExtra(Url.ArticleSearchUrl.INTENT_PAGE3, getSearchArticlesUrl(
+                getSearchQueryAndAdaptForUrl(),
+                getNewDeskValuesAndAdaptForUrl(listOfSections),
+                beginDate,
+                endDate,
+                Url.ArticleSearchUrl.PAGE_THREE));
 
-        //Adding the string request to request queue
-        requestQueue.add(stringRequest);
+        startActivity(intent);
 
     }
 
-    // TODO: 17/03/2018 Carry on implementing the JSONRequest
+
+
 
 }
 
