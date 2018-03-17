@@ -15,19 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
 import com.example.android.mynews.alertdialog.PickBeginDateDialog;
 import com.example.android.mynews.alertdialog.PickEndDateDialog;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -461,21 +454,21 @@ public class SearchArticlesActivity extends AppCompatActivity implements
     private void callIntentForDisplaySearchArticlesActivity () {
 
         Intent intent = new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class);
-        intent.putExtra(Url.ArticleSearchUrl.INTENT_PAGE1, getSearchArticlesUrl(
+        intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, getSearchArticlesUrl(
                 getSearchQueryAndAdaptForUrl(),
                 getNewDeskValuesAndAdaptForUrl(listOfSections),
                 beginDate,
                 endDate,
                 Url.ArticleSearchUrl.PAGE_ONE));
 
-        intent.putExtra(Url.ArticleSearchUrl.INTENT_PAGE2, getSearchArticlesUrl(
+        intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE2, getSearchArticlesUrl(
                 getSearchQueryAndAdaptForUrl(),
                 getNewDeskValuesAndAdaptForUrl(listOfSections),
                 beginDate,
                 endDate,
                 Url.ArticleSearchUrl.PAGE_TWO));
 
-        intent.putExtra(Url.ArticleSearchUrl.INTENT_PAGE3, getSearchArticlesUrl(
+        intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE3, getSearchArticlesUrl(
                 getSearchQueryAndAdaptForUrl(),
                 getNewDeskValuesAndAdaptForUrl(listOfSections),
                 beginDate,

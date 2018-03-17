@@ -11,6 +11,7 @@ public class SearchArticlesObject {
     private String web_url = "web_url";
     private String snippet = "snippet";
     private String image_url = "url";
+    private String new_desk = "new_desk";
     private String pub_date = "pub_date";
 
     public SearchArticlesObject () { }
@@ -44,6 +45,14 @@ public class SearchArticlesObject {
 
     public void setImage_url(String image_url) {
         this.image_url = image_url;
+    }
+
+    public String getNew_desk() {
+        return new_desk;
+    }
+
+    public void setNew_desk(String new_desk) {
+        this.new_desk = new_desk;
     }
 
     public String getPub_date() {

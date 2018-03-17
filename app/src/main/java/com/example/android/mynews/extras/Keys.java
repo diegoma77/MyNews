@@ -9,6 +9,10 @@ public interface Keys {
     interface PutExtras {
 
         String ARTICLE_URL_SENT = "article_url";
+        String INTENT_SA_PAGE1 = "page1";
+        String INTENT_SA_PAGE2 = "page2";
+        String INTENT_SA_PAGE3 = "page3";
+
     }
 
     interface TopStoriesKeys {
@@ -57,6 +61,18 @@ public interface Keys {
         String KEY_UPDATED_DATE = "updated_date";
         String KEY_MULTIMEDIA = "multimedia";
         String KEY_IMAGE_URL = "url";
+
+    }
+
+    interface SearchArticles {
+
+        String KEY_WEB_URL = "web_url";
+        String KEY_SNIPPET = "snippet";
+        String KEY_IMAGE_URL = "url";
+        String KEY_NEW_DESK = "new_desk";
+        String KEY_PUB_DATE = "pub_date";
+        String KEY_DOCS = "docs";
+        String KEY_MULTIMEDIA = "multimedia";
 
     }
 

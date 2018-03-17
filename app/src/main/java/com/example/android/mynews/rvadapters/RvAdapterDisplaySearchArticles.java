@@ -1,6 +1,7 @@
 package com.example.android.mynews.rvadapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.activities.WebViewActivity;
+import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.pojo.SearchArticlesObject;
 
 import java.util.ArrayList;
@@ -28,8 +31,9 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
 
     private Context mContext;
 
-    public RvAdapterDisplaySearchArticles(Context context, List<String> searchArticlesList) {
+    public RvAdapterDisplaySearchArticles(Context context, List<SearchArticlesObject> searchArticlesList) {
         this.mContext = context;
+        this.searchArticlesList = searchArticlesList;
     }
 
 
@@ -40,23 +44,12 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 
-        for (int i = 0; i < 10; i++) {
-
-            searchArticlesList.add("Random Number" + Math.random() * 50 + 1);
-
-        }
-
         View view = layoutInflater.inflate(layoutIdForListItem,
                 viewGroup,
                 shouldAttachToParentImmediately);
 
         ViewHolder viewHolder = new ViewHolder(view);
 
-        // TODO: 15/03/2018 Delete this list
-        searchArticlesList = new ArrayList<>();
-
-
-        
         return viewHolder;
     }
 
@@ -65,18 +58,22 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
 
         Log.d(TAG, "#" + position);
 
-        holder.title.setText(searchArticlesList.get((int) Math.random() * 10 + 1));
-        holder.section.setText(searchArticlesList.get((int) Math.random() * 10 + 1));
-        holder.published_date.setText(searchArticlesList.get((int) Math.random() * 10 + 1));
+        SearchArticlesObject currentObject = searchArticlesList.get(position);
+
+        holder.title.setText(currentObject.getSnippet());
+        holder.section.setText(currentObject.getNew_desk());
+        holder.published_date.setText(currentObject.getPub_date());
         holder.imageOnLeft.setImageResource(R.drawable.rajoy);
-
-
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("ONCLICK - POSITION","#" + " CLICKED");
                 Context context = v.getContext();
+
+                Intent intent = new Intent(context, WebViewActivity.class);
+                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, searchArticlesList.get(position).getWeb_url());
+                context.startActivity(intent);
 
             }
         });
