@@ -39,14 +39,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         "CREATE TABLE " + nameOfTheTable
                 + " ("
                 + DatabaseContract.Database.RESULT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + DatabaseContract.Database.SECTION + " TEXT,"
-                + DatabaseContract.Database.TITLE + " TEXT,"
-                + DatabaseContract.Database.UPDATE_DATE + " TEXT,"
-                + DatabaseContract.Database.IMAGE_URL_THUMBNAIL + " TEXT,"
-                + DatabaseContract.Database.IMAGE_URL_THUMBLARGE + " TEXT,"
-                + DatabaseContract.Database.IMAGE_URL_NORMAL + " TEXT,"
-                + DatabaseContract.Database.IMAGE_URL_MEDIUM + " TEXT,"
-                + DatabaseContract.Database.IMAGE_URL_SUPERJUMBO + " TEXT,"
                 + DatabaseContract.Database.ARTICLE_URL + " TEXT"
                 + ")";
     }
@@ -56,10 +48,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
         //CREATING the tables
-        sqLiteDatabase.execSQL(createTableWithName(DatabaseContract.Database.TOP_STORIES_TABLE_NAME));
-        sqLiteDatabase.execSQL(createTableWithName(DatabaseContract.Database.MOST_POPULAR_TABLE_NAME));
-        sqLiteDatabase.execSQL(createTableWithName(DatabaseContract.Database.BUSINESS_TABLE_NAME));
-        sqLiteDatabase.execSQL(createTableWithName(DatabaseContract.Database.SPORTS_TABLE_NAME));
+        sqLiteDatabase.execSQL(createTableWithName(
+                DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME));
 
     }
 
@@ -68,10 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         //On upgrade drop older versions
-        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.TOP_STORIES_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.MOST_POPULAR_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.BUSINESS_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.SPORTS_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
 
         //Create new table
         onCreate(db);
@@ -79,27 +66,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //METHOD FOR INSERTING data in every table
-    public boolean insertDataWithTableName (String table_name, String section, String title, String update_date,
-                               String image_url_thumbnail, String image_url_thumblarge,
-                               String image_url_normal, String image_url_medium,
-                               String image_url_superjumbo,
-                               String article_url) {
+    public boolean insertData (String article_url) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseContract.Database.SECTION, section);
-        contentValues.put(DatabaseContract.Database.TITLE, title);
-        contentValues.put(DatabaseContract.Database.UPDATE_DATE, update_date);
-        contentValues.put(DatabaseContract.Database.IMAGE_URL_THUMBNAIL, image_url_thumbnail);
-        contentValues.put(DatabaseContract.Database.IMAGE_URL_THUMBLARGE, image_url_thumblarge);
-        contentValues.put(DatabaseContract.Database.IMAGE_URL_NORMAL, image_url_normal);
-        contentValues.put(DatabaseContract.Database.IMAGE_URL_MEDIUM, image_url_medium);
-        contentValues.put(DatabaseContract.Database.IMAGE_URL_SUPERJUMBO, image_url_superjumbo);
         contentValues.put(DatabaseContract.Database.ARTICLE_URL, article_url);
 
         long result = db.insert(
-                table_name,
+                DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME,
                 null,
                 contentValues);
 
