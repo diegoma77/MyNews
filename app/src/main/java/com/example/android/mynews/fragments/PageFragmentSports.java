@@ -226,8 +226,8 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
                     Log.i("ARTICLE_URL", sportsObject.getArticleUrl());
                 }
 
-                String updated_date = dataObject.getString(Keys.Sports.KEY_UPDATED_DATE);
-                if (updated_date != null) {
+                if (dataObject.getString(Keys.Sports.KEY_UPDATED_DATE) != null) {
+                    String updated_date = dataObject.getString(Keys.Sports.KEY_UPDATED_DATE);
                     sportsObject.setUpdatedDate(updated_date.substring(0, 10));
                     Log.i("UPDATE_DATE", sportsObject.getUpdatedDate());
                 }

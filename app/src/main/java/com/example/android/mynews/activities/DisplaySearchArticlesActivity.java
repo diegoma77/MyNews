@@ -186,7 +186,8 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
                 else { Log.i("IMAGE_URL", "ARRAY.size() = 0"); }
 
                 if (docsObject.getString(Keys.SearchArticles.KEY_PUB_DATE) != null) {
-                    searchArticlesObject.setPub_date(docsObject.getString(Keys.SearchArticles.KEY_PUB_DATE));
+                    String pub_date = docsObject.getString(Keys.SearchArticles.KEY_PUB_DATE);
+                    searchArticlesObject.setPub_date(pub_date.substring(0,10));
                     Log.i("PUB_DATE", searchArticlesObject.getPub_date());
                 }
 

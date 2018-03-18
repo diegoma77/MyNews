@@ -174,7 +174,8 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
                 }
 
                 if (dataObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE) != null) {
-                    mostPopularObject.setPublished_date(dataObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE));
+                    String published_date = dataObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE);
+                    mostPopularObject.setPublished_date(published_date.substring(0,10));
                     Log.i("PUBLISHED DATE", mostPopularObject.getPublished_date());
                 }
 

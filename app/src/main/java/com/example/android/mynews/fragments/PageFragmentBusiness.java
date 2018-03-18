@@ -223,8 +223,8 @@ public class PageFragmentBusiness extends android.support.v4.app.Fragment {
                     Log.i("ARTICLE_URL", businessObject.getArticleUrl());
                 }
 
-                String updated_date = dataObject.getString(Keys.Business.KEY_UPDATED_DATE);
-                if (updated_date != null) {
+                if (dataObject.getString(Keys.Business.KEY_UPDATED_DATE) != null) {
+                    String updated_date = dataObject.getString(Keys.Business.KEY_UPDATED_DATE);
                     businessObject.setUpdatedDate(updated_date.substring(0, 10));
                     Log.i("UPDATE_DATE", businessObject.getUpdatedDate());
                 }
