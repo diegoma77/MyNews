@@ -66,6 +66,7 @@ public interface Keys {
 
     interface SearchArticles {
 
+        String KEY_RESPONSE = "response";
         String KEY_WEB_URL = "web_url";
         String KEY_SNIPPET = "snippet";
         String KEY_IMAGE_URL = "url";

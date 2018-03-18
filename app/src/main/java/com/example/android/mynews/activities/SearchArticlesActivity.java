@@ -240,7 +240,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
                         endDate,
                         Url.ArticleSearchUrl.PAGE_ONE));
 
-                callIntentForDisplaySearchArticlesActivity();
+                callIntentForDisplayingSearchArticlesActivity();
 
             }
         });
@@ -324,59 +324,44 @@ public class SearchArticlesActivity extends AppCompatActivity implements
     // TODO: 15/03/2018 Add Dates to the query
     public String getSearchArticlesUrl (String searchQuery, String newsSearchQuery, String beginDate, String endDate, String page) {
 
-        String searchArticleUrl;
+        /** Seems that there are faster ways than += to append Strings, like StringBuffer */
 
-        if (beginDate.equals("") && endDate.equals("")) {
+        String searchArticleUrl = Url.ArticleSearchUrl.BASE_URL;
 
-            Log.i(URL_TAG, "Both are EMPTY");
-            searchArticleUrl = Url.ArticleSearchUrl.BASE_URL
-                    + Url.ArticleSearchUrl.Q + Url.GeneralTokens.EQUAL + searchQuery + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.FQ + Url.GeneralTokens.EQUAL + newsSearchQuery + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + page + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.API_KEY;
-
+        if (!searchQuery.equals("")) {
+            searchArticleUrl += Url.ArticleSearchUrl.Q
+                    + Url.GeneralTokens.EQUAL
+                    + searchQuery
+                    + Url.GeneralTokens.AMPERSAND;
         }
 
-        else if (beginDate.equals("") && !endDate.equals("")) {
-
-            Log.i(URL_TAG, "Only Begin is EMPTY");
-            searchArticleUrl = Url.ArticleSearchUrl.BASE_URL
-                    + Url.ArticleSearchUrl.Q + Url.GeneralTokens.EQUAL + searchQuery + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.FQ + Url.GeneralTokens.EQUAL + newsSearchQuery + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.END_DATE + Url.GeneralTokens.EQUAL + endDate + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + page + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.API_KEY;
-
+        if (!newsSearchQuery.equals("")) {
+            searchArticleUrl += Url.ArticleSearchUrl.FQ
+                    + Url.GeneralTokens.EQUAL
+                    + newsSearchQuery
+                    + Url.GeneralTokens.AMPERSAND;
         }
 
-        else if (!beginDate.equals("") && endDate.equals("")) {
-
-            Log.i(URL_TAG, "Only End is EMPTY");
-            searchArticleUrl = Url.ArticleSearchUrl.BASE_URL
-                    + Url.ArticleSearchUrl.Q + Url.GeneralTokens.EQUAL + searchQuery + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.FQ + Url.GeneralTokens.EQUAL + newsSearchQuery + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.BEGIN_DATE + Url.GeneralTokens.EQUAL + beginDate + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + page + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.API_KEY;
-
+        if (!beginDate.equals("")) {
+            searchArticleUrl += Url.ArticleSearchUrl.BEGIN_DATE
+                    + Url.GeneralTokens.EQUAL
+                    + beginDate
+                    + Url.GeneralTokens.AMPERSAND;
         }
-        else {
 
-            Log.i(URL_TAG, "Both are NOT EMPTY");
-            searchArticleUrl = Url.ArticleSearchUrl.BASE_URL
-                    + Url.ArticleSearchUrl.Q + Url.GeneralTokens.EQUAL + searchQuery + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.FQ + Url.GeneralTokens.EQUAL + newsSearchQuery + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.BEGIN_DATE + Url.GeneralTokens.EQUAL + beginDate + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.END_DATE + Url.GeneralTokens.EQUAL + endDate + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + page + Url.GeneralTokens.AMPERSAND
-                    + Url.ArticleSearchUrl.API_KEY;
+        if (!endDate.equals("")) {
+            searchArticleUrl += Url.ArticleSearchUrl.END_DATE
+                    + Url.GeneralTokens.EQUAL
+                    + endDate
+                    + Url.GeneralTokens.AMPERSAND;
         }
+
+        searchArticleUrl += Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
+                + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + page + Url.GeneralTokens.AMPERSAND
+                + Url.ArticleSearchUrl.API_KEY;
 
         return searchArticleUrl;
+
     }
 
     /**
@@ -386,7 +371,12 @@ public class SearchArticlesActivity extends AppCompatActivity implements
      * Changes spaces for + symbols.
      * */
     private String getSearchQueryAndAdaptForUrl () {
-        return mTextInputEditText.getText().toString().toLowerCase().replace(" ", "+");
+
+        if (!mTextInputEditText.getText().toString().equals("")) {
+            return mTextInputEditText.getText().toString().toLowerCase().replace(" ", "+");
+        }
+
+        return "";
     }
 
     /**
@@ -451,7 +441,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
 
     /**This method is used to call the Intent to change+
      * the Activity displayed (to DisplaySearchArticlesActivity) */
-    private void callIntentForDisplaySearchArticlesActivity () {
+    private void callIntentForDisplayingSearchArticlesActivity() {
 
         Intent intent = new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class);
         intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, getSearchArticlesUrl(

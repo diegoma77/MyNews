@@ -19,8 +19,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
 import com.example.android.mynews.extras.Keys;
-import com.example.android.mynews.extras.Url;
-import com.example.android.mynews.pojo.MostPopularObject;
 import com.example.android.mynews.pojo.SearchArticlesObject;
 import com.example.android.mynews.rvadapters.RvAdapterDisplaySearchArticles;
 
@@ -85,12 +83,10 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
         rvAdapterDisplaySearchArticles = new RvAdapterDisplaySearchArticles(DisplaySearchArticlesActivity.this, searchArticlesObjectList);
 
-
         // TODO: 17/03/2018 sendJSON request should be repeated 3 times with the different Urls (PAGE_ONE, PAGE_TWO and PAGE_THREE)
         // TODO: 17/03/2018 The reason is that the SearchArticlesAPI only returns a max of 10 results at a time, what is a short quantity
 
     }
-
 
     /**
      * This method sends the JSON request using Volley
@@ -129,20 +125,31 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
     }
 
-    public void parseJSONResponse (String response) {
+    public void parseJSONResponse (String responseFromServer) {
 
-        if (response == null || response.length() == 0) return;
+        String parseTAG = "PARSEtag";
+
+        if (responseFromServer == null || responseFromServer.length() == 0) return;
 
         // TODO: 13/03/2018 Add if statements to check if the data was received or not and avoid crashes
 
         try {
 
             //JSON object that gathers all the objects of the response from the API
-            JSONObject jsonObject_response = new JSONObject(response);
+            JSONObject jsonObjectResponseFromServer = new JSONObject(responseFromServer);
+            Log.i (parseTAG, "jsonObject_response READ");
 
-            //JSON array made of the objects inside the "result"
+            //There is a property of the object that is called response that doesnt' have to do
+            //with the API response itself. We get it here.
+            JSONObject responsePropertyObject =
+                    jsonObjectResponseFromServer.getJSONObject(Keys.SearchArticles.KEY_RESPONSE);
+            Log.i (parseTAG, "responseProperyObject READ");
+
+            //JSON array made of the objects inside the "response" object
             JSONArray docs_array =
-                    jsonObject_response.getJSONArray(Keys.SearchArticles.KEY_DOCS);
+                    responsePropertyObject.getJSONArray(Keys.SearchArticles.KEY_DOCS);
+            Log.i (parseTAG, "docs_array READ");
+            Log.i (parseTAG, docs_array.length() + "");
 
             //Iterating through "docs_array"
             for (int i = 0; i < docs_array.length(); i++) {
@@ -153,35 +160,38 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
                 // TODO: 13/03/2018 We have yet to decide what image to get
 
                 //We GET the "i results" object
-                JSONObject dataObject = docs_array.getJSONObject(i);
+                JSONObject docsObject = docs_array.getJSONObject(i);
 
                 //We GET the data from the dataObject
-                if (dataObject.getString(Keys.SearchArticles.KEY_WEB_URL) != null) {
-                    searchArticlesObject.setWeb_url(dataObject.getString(Keys.SearchArticles.KEY_WEB_URL));
+                if (docsObject.getString(Keys.SearchArticles.KEY_WEB_URL) != null) {
+                    searchArticlesObject.setWeb_url(docsObject.getString(Keys.SearchArticles.KEY_WEB_URL));
                     Log.i("WEB_URL", searchArticlesObject.getWeb_url());
                 }
 
-                if (dataObject.getString(Keys.SearchArticles.KEY_SNIPPET) != null) {
-                    searchArticlesObject.setSnippet(dataObject.getString(Keys.SearchArticles.KEY_SNIPPET));
+                if (docsObject.getString(Keys.SearchArticles.KEY_SNIPPET) != null) {
+                    searchArticlesObject.setSnippet(docsObject.getString(Keys.SearchArticles.KEY_SNIPPET));
                     Log.i("SNIPPET", searchArticlesObject.getSnippet());
                 }
 
-                JSONArray multimedia_array = dataObject.getJSONArray(Keys.SearchArticles.KEY_MULTIMEDIA);
+                JSONArray multimedia_array = docsObject.getJSONArray(Keys.SearchArticles.KEY_MULTIMEDIA);
 
-                JSONObject multimedia_object = multimedia_array.getJSONObject(0);
+                if (multimedia_array.length() > 0) {
+                    JSONObject multimedia_object = multimedia_array.getJSONObject(0);
 
-                if (multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL) != null) {
-                    searchArticlesObject.setImage_url(multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL));
-                    Log.i("IMAGE_URL", searchArticlesObject.getImage_url());
+                    if (multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL) != null) {
+                        searchArticlesObject.setImage_url(multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL));
+                        Log.i("IMAGE_URL", searchArticlesObject.getImage_url());
+                    }
                 }
+                else { Log.i("IMAGE_URL", "ARRAY.size() = 0"); }
 
-                if (dataObject.getString(Keys.SearchArticles.KEY_PUB_DATE) != null) {
-                    searchArticlesObject.setPub_date(dataObject.getString(Keys.SearchArticles.KEY_PUB_DATE));
+                if (docsObject.getString(Keys.SearchArticles.KEY_PUB_DATE) != null) {
+                    searchArticlesObject.setPub_date(docsObject.getString(Keys.SearchArticles.KEY_PUB_DATE));
                     Log.i("PUB_DATE", searchArticlesObject.getPub_date());
                 }
 
-                if (dataObject.getString(Keys.SearchArticles.KEY_NEW_DESK) != null) {
-                    searchArticlesObject.setNew_desk(dataObject.getString(Keys.SearchArticles.KEY_NEW_DESK));
+                if (docsObject.getString(Keys.SearchArticles.KEY_NEW_DESK) != null) {
+                    searchArticlesObject.setNew_desk(docsObject.getString(Keys.SearchArticles.KEY_NEW_DESK));
                     Log.i("NEW_DESK", searchArticlesObject.getNew_desk());
                 }
 
@@ -195,7 +205,7 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
             Log.i("SAposition # ", "" + i + " :" + searchArticlesObjectList.get(i).getSnippet());
         }
 
-        Log.i("SA_ArrayList.size():", "" + searchArticlesObjectList.size());
+        Log.i("SA_ArrayList.size()", "" + searchArticlesObjectList.size());
 
         if (searchArticlesObjectList != null) {
             recyclerView.setAdapter(new RvAdapterDisplaySearchArticles(this, searchArticlesObjectList));
