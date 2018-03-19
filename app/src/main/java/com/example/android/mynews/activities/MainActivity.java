@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.android.mynews.data.AndroidDatabaseManager;
+import com.example.android.mynews.data.DatabaseContract;
+import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
 import com.example.android.mynews.fragments.PageFragmentBusiness;
 import com.example.android.mynews.fragments.PageFragmentMostPopular;
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     // TODO: 14/03/2018 Change data structure in PageFragments dd/MM/yy
 
+    private DatabaseHelper dbH;
+
     //Toolbar variable
     private Toolbar toolbar;
 
@@ -33,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dbH = new DatabaseHelper(this);
 
         //Sets the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);

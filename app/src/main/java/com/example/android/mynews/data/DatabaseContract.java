@@ -15,7 +15,7 @@ public class DatabaseContract {
     public static class Database implements BaseColumns {
 
         //TABLE NAME
-        public static final String ALREADY_READ_ARTICLES_TABLE_NAME = "top_stories_table";
+        public static final String ALREADY_READ_ARTICLES_TABLE_NAME = "articles_read_table";
 
         //TABLE COLUMNS
         public static final String RESULT_ID = "id";
