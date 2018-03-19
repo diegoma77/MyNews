@@ -1,6 +1,7 @@
 package com.example.android.mynews.activities;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -18,6 +20,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
+import com.example.android.mynews.data.AndroidDatabaseManager;
+import com.example.android.mynews.data.DatabaseContract;
+import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.pojo.SearchArticlesObject;
 import com.example.android.mynews.rvadapters.RvAdapterDisplaySearchArticles;
@@ -33,13 +38,20 @@ import static com.example.android.mynews.activities.MainActivity.setOverflowButt
 
 public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
+    //Tag variable
     private static final String TAG = "DisplaySearchArticlesAc";
 
+    //List that will store the JSON Response objects
     private List<SearchArticlesObject> searchArticlesObjectList;
+
+    //Database Variables
+    private DatabaseHelper dbH;
+    private Cursor mCursor;
 
     //Toolbar variable
     private Toolbar toolbar;
 
+    //RecyclerView Variables
     private RecyclerView recyclerView;
     private RvAdapterDisplaySearchArticles rvAdapterDisplaySearchArticles;
 
@@ -47,6 +59,9 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rv_search_articles);
+
+        dbH = new DatabaseHelper(this);
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
 
         // TODO: 17/03/2018 Create its own layout to set the title as needed
         //Sets the toolbar
@@ -81,12 +96,28 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        rvAdapterDisplaySearchArticles = new RvAdapterDisplaySearchArticles(DisplaySearchArticlesActivity.this, searchArticlesObjectList);
+        rvAdapterDisplaySearchArticles = new RvAdapterDisplaySearchArticles(
+                DisplaySearchArticlesActivity.this,
+                searchArticlesObjectList,
+                mCursor);
 
         // TODO: 17/03/2018 sendJSON request should be repeated 3 times with the different Urls (PAGE_ONE, PAGE_TWO and PAGE_THREE)
         // TODO: 17/03/2018 The reason is that the SearchArticlesAPI only returns a max of 10 results at a time, what is a short quantity
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(DisplaySearchArticlesActivity.this, AndroidDatabaseManager.class);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     /**
      * This method sends the JSON request using Volley
@@ -209,7 +240,7 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
         Log.i("SA_ArrayList.size()", "" + searchArticlesObjectList.size());
 
         if (searchArticlesObjectList != null) {
-            recyclerView.setAdapter(new RvAdapterDisplaySearchArticles(this, searchArticlesObjectList));
+            recyclerView.setAdapter(new RvAdapterDisplaySearchArticles(this, searchArticlesObjectList, mCursor));
             Log.i("setDispSearchArtData:", "Called(size = " + searchArticlesObjectList.size() + ")");
 
         }
