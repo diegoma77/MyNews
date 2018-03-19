@@ -26,10 +26,6 @@
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.DisplaySearchArticlesActivity" />
 
-        <service
-            android:name=".services.MyService"
-            android:enabled="true"
-            android:exported="true"></service>
     </application>
 
 </manifest>
