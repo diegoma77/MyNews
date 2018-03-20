@@ -19,6 +19,9 @@ import com.example.android.mynews.extras.Keys;
 
 public class WebViewActivity extends AppCompatActivity {
 
+    // TODO: 20/03/2018 Create another webActivity for SearchArticlesActivity (when pressed back button, the article pressed doesn't show as read
+    // TODO: 20/03/2018 Implement a button for going back without pressing back button
+
     private WebView mWebView;
 
     private String article_url;

@@ -139,7 +139,8 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
     }
 
     /**
-     * Checks if the article is in the database. It's used to check if an article has already been read or not
+     * Checks if the article is in the database.
+     * It's used to check if an article has already been read or not.
      * */
     private boolean checkIfArticleUrlIsInTheDatabase(String web_url) {
 
@@ -155,7 +156,5 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
         if (counter != 0) return true;
         else return false;
     }
-
-
 
 }
