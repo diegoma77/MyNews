@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -71,8 +74,8 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
         Log.d(TAG, "#" + position);
 
         if (checkIfArticleUrlIsInTheDatabase(searchArticlesList.get(position).getWeb_url())) {
-            Log.i(TAG, "checkIfArticle... is TRUE");
-            holder.mView.setBackgroundColor(Color.LTGRAY);
+            Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
+            holder.title.setTypeface(bold);
         }
 
         holder.title.setText(searchArticlesList.get(position).getSnippet());
@@ -117,7 +120,7 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
         public ViewHolder(View view) {
             super(view);
 
-            mView = view.findViewById(R.id.list_item_news_text);
+            mView = view.findViewById(R.id.list_item_global_linearLayout);
             imageOnLeft = view.findViewById(R.id.list_item_image_news);
             section = view.findViewById(R.id.list_item_continent);
             published_date = view.findViewById(R.id.list_item_date);
@@ -144,7 +147,7 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
 
         for (int i = 0; i < mCursor.getCount() ; i++) {
             mCursor.moveToPosition(i);
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.ARTICLE_URL)) == web_url){
+            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.ARTICLE_URL)).equals(web_url)){
                 counter++;
             }
         }
