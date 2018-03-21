@@ -30,13 +30,13 @@ public class RvAdapterSports extends RecyclerView.Adapter<RvAdapterSports.ViewHo
     //Array that will store TopStoriesObject after request
     private ArrayList<SportsObject> sportsObjectArrayList = new ArrayList<>();
 
-    //Necessary for the context of the constructor of the RvAdapter
-    private final TypedValue mTypedValue = new TypedValue();
+    //Context of the activity
+    private Context mContext;
 
     //Constructor of the RvAdapter
     public RvAdapterSports(Context context) {
         //Context to work with Fragments
-        context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
+        this.mContext = context;
 
     }
 

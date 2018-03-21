@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.mynews.R;
 import com.example.android.mynews.activities.WebViewMainActivity;
 import com.example.android.mynews.extras.Keys;
@@ -30,14 +31,13 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
     //Array that will store TopStoriesObject after request
     private ArrayList<TopStoriesObject> topStoriesObjectArrayList= new ArrayList<>();
 
-    //Necessary for the context of the constructor of the RvAdapter
-    private final TypedValue mTypedValue = new TypedValue();
+    //Context of the activity
+    private Context mContext;
 
     //Constructor of the RvAdapter
     public RvAdapterTopStories(Context context) {
 
-        //Context to work with Fragments
-        context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
+        this.mContext = context;
 
     }
 
@@ -70,6 +70,9 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
         holder.title.setText(topStoriesObjectArrayList.get(position).getTitle());
         holder.section.setText("Top Stories < " + topStoriesObjectArrayList.get(position).getSection());
         holder.update_date.setText(topStoriesObjectArrayList.get(position).getUpdatedDate());
+
+        String image_url = topStoriesObjectArrayList.get(position).getImageThumbnail();
+
         holder.imageOnLeft.setImageResource(R.drawable.rajoy);
 
         Log.d(TAG, "#" + position);

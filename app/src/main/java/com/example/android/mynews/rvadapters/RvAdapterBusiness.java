@@ -30,13 +30,13 @@ public class RvAdapterBusiness extends RecyclerView.Adapter<RvAdapterBusiness.Vi
     //Array that will store TopStoriesObject after request
     private ArrayList<BusinessObject> businessObjectArrayList = new ArrayList<>();
 
-    //Necessary for the context of the constructor of the RvAdapter
-    private final TypedValue mTypedValue = new TypedValue();
+    //Context of the activity
+    private Context mContext;
 
     //Constructor of the RvAdapter
     public RvAdapterBusiness(Context context) {
         //Context to work with Fragments
-        context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
+        this.mContext = context;
 
     }
 

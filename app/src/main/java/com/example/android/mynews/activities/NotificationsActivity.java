@@ -87,10 +87,6 @@ public class NotificationsActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
     }
 
     @Override
@@ -164,6 +160,4 @@ public class NotificationsActivity extends AppCompatActivity {
                 break;
         }
     }
-
-
 }

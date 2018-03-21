@@ -30,14 +30,14 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
     //Array that will store TopStoriesObject after request
     private ArrayList<MostPopularObject> mostPopularObjectArrayList = new ArrayList<MostPopularObject>();
 
-    //Necessary for the context of the constructor of the RvAdapter
-    private final TypedValue mTypedValue = new TypedValue();
+    //Context of the activity
+    private Context mContext;
 
     //Constructor of the RvAdapter
     public RvAdapterMostPopular(Context context) {
 
         //Context to work with Fragments
-        context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
+       this.mContext = context;
 
     }
 
