@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.mynews.R;
 import com.example.android.mynews.activities.WebViewMainActivity;
 import com.example.android.mynews.activities.WebViewSearchActivity;
@@ -88,7 +89,18 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
         holder.title.setText(searchArticlesList.get(position).getSnippet());
         holder.section.setText(searchArticlesList.get(position).getNew_desk());
         holder.published_date.setText(searchArticlesList.get(position).getPub_date());
-        holder.imageOnLeft.setImageResource(R.drawable.rajoy);
+
+
+        if (searchArticlesList.get(position).getImage_url() == null) {
+            Glide.with(mContext)
+                    .load(R.drawable.nyt)
+                    .into(holder.imageOnLeft);
+        }
+        else {
+            Glide.with(mContext)
+                    .load(searchArticlesList.get(position).getImage_url())
+                    .into(holder.imageOnLeft);
+        }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

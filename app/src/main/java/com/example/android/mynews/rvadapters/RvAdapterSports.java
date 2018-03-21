@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.mynews.R;
 import com.example.android.mynews.activities.WebViewMainActivity;
 import com.example.android.mynews.extras.Keys;
@@ -69,7 +70,17 @@ public class RvAdapterSports extends RecyclerView.Adapter<RvAdapterSports.ViewHo
         holder.title.setText(sportsObjectArrayList.get(position).getTitle());
         holder.section.setText("Sports < " + sportsObjectArrayList.get(position).getSubsection());
         holder.update_date.setText(sportsObjectArrayList.get(position).getUpdatedDate());
-        holder.imageOnLeft.setImageResource(R.drawable.rajoy);
+
+        if (sportsObjectArrayList.get(position).getImageNormal() == null) {
+            Glide.with(mContext)
+                    .load(R.drawable.nyt)
+                    .into(holder.imageOnLeft);
+        }
+        else {
+            Glide.with(mContext)
+                    .load(sportsObjectArrayList.get(position).getImageNormal())
+                    .into(holder.imageOnLeft);
+        }
 
         Log.d(TAG, "#" + position);
 

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.mynews.R;
 import com.example.android.mynews.activities.WebViewMainActivity;
 import com.example.android.mynews.extras.Keys;
@@ -71,7 +72,17 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
         holder.title.setText(currentMostPopularObject.getTitle());
         holder.section.setText("Most Popular < " + currentMostPopularObject.getSection());
         holder.published_date.setText(currentMostPopularObject.getPublished_date());
-        holder.imageOnLeft.setImageResource(R.drawable.rajoy);
+
+        if (mostPopularObjectArrayList.get(position).getImage_thumbnail() == null) {
+            Glide.with(mContext)
+                    .load(R.drawable.nyt)
+                    .into(holder.imageOnLeft);
+        }
+        else {
+            Glide.with(mContext)
+                    .load(mostPopularObjectArrayList.get(position).getImage_thumbnail())
+                    .into(holder.imageOnLeft);
+        }
 
         Log.d(TAG, "#" + position);
 

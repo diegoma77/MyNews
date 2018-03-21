@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.mynews.R;
 import com.example.android.mynews.activities.WebViewMainActivity;
 import com.example.android.mynews.extras.Keys;
@@ -69,7 +70,17 @@ public class RvAdapterBusiness extends RecyclerView.Adapter<RvAdapterBusiness.Vi
         holder.title.setText(businessObjectArrayList.get(position).getTitle());
         holder.section.setText("Business < " + businessObjectArrayList.get(position).getSubsection());
         holder.update_date.setText(businessObjectArrayList.get(position).getUpdatedDate());
-        holder.imageOnLeft.setImageResource(R.drawable.rajoy);
+
+        if (businessObjectArrayList.get(position).getImageNormal() == null) {
+            Glide.with(mContext)
+                    .load(R.drawable.nyt)
+                    .into(holder.imageOnLeft);
+        }
+        else {
+            Glide.with(mContext)
+                    .load(businessObjectArrayList.get(position).getImageNormal())
+                    .into(holder.imageOnLeft);
+        }
 
         Log.d(TAG, "#" + position);
 

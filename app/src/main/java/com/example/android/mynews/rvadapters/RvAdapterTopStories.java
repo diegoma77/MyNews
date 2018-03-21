@@ -71,9 +71,18 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
         holder.section.setText("Top Stories < " + topStoriesObjectArrayList.get(position).getSection());
         holder.update_date.setText(topStoriesObjectArrayList.get(position).getUpdatedDate());
 
-        String image_url = topStoriesObjectArrayList.get(position).getImageThumbnail();
+        if (topStoriesObjectArrayList.get(position).getImageNormal() == null) {
+            Glide.with(mContext)
+                    .load(R.drawable.nyt)
+                    .into(holder.imageOnLeft);
+        }
+        else {
+            Glide.with(mContext)
+                    .load(topStoriesObjectArrayList.get(position).getImageNormal())
+                    .into(holder.imageOnLeft);
+        }
 
-        holder.imageOnLeft.setImageResource(R.drawable.rajoy);
+
 
         Log.d(TAG, "#" + position);
 
