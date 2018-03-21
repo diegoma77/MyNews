@@ -23,11 +23,16 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <EditText
-            android:id="@+id/notif_sl_editText_search"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:hint="Search query term" />
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/notifications_text_input_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search Query Term" />
+        </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:id="@+id/notif_two_columns_linearLayout"
