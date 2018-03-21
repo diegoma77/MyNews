@@ -52,7 +52,7 @@
                     android:layout_weight="4"
                     android:hint="Europe > France"
                     android:textSize="12sp"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorAccent"
                     android:textStyle="bold"
                     android:singleLine="true"/>
 
@@ -70,7 +70,7 @@
                     android:gravity="right"
                     android:hint="20/03/1988"
                     android:textSize="12sp"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorAccentDark"
                     android:textStyle="bold"
                     android:layout_gravity="right"/>
 
@@ -82,6 +82,7 @@
                 android:layout_height="wrap_content"
                 android:hint="With layout_weight you can specify a size ratio between multiple views. E.g. you have a MapView and a table which should show some additional information to the map. The map should use 3/4 of the screen and table should use 1/4 of the screen. Then you will set the layout_weight of the map to 3 and the layout_weight of the table to 1."
                 android:textSize="16sp"
+                android:textColor="@color/colorPrimaryDark"
                 android:maxLines="2"
                 android:ellipsize="end"/>
 
