@@ -3,10 +3,7 @@ package com.example.android.mynews.rvadapters;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
-import com.example.android.mynews.activities.WebViewActivity;
+import com.example.android.mynews.activities.WebViewMainActivity;
+import com.example.android.mynews.activities.WebViewSearchActivity;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
@@ -36,16 +34,25 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
 
     private List<SearchArticlesObject> searchArticlesList = new ArrayList<>();
 
+    //Variable used to avoid crashing when WebViewSearchActivity returns to DisplaySearchArticlesActivity
+    //We carry these urls to the WebViewSearchActivity so it can bring them back when home back button
+    //or back button are pressed
+    private List<String> searchArticlesListOfUrls;
+
     private Context mContext;
 
     private Cursor mCursor;
 
     private DatabaseHelper dbH;
 
-    public RvAdapterDisplaySearchArticles(Context context, List<SearchArticlesObject> searchArticlesList, Cursor cursor) {
+    public RvAdapterDisplaySearchArticles(Context context,
+                                          List<SearchArticlesObject> searchArticlesList,
+                                          Cursor cursor,
+                                          List<String> searchArticlesListOfUrls) {
         this.mContext = context;
         this.searchArticlesList = searchArticlesList;
         this.mCursor = cursor;
+        this.searchArticlesListOfUrls = searchArticlesListOfUrls;
     }
 
 
@@ -95,8 +102,16 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
                     dbH.insertData(searchArticlesList.get(position).getWeb_url());
                 }
 
-                Intent intent = new Intent(context, WebViewActivity.class);
+                Intent intent = new Intent(context, WebViewSearchActivity.class);
+
+                //Puts an extra that will be the url that the webView will read
                 intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, searchArticlesList.get(position).getWeb_url());
+
+                //Puts 3 extras that will be the urls sent to API when we return with back buttons
+                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, searchArticlesListOfUrls.get(0));
+                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE2, searchArticlesListOfUrls.get(1));
+                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE3, searchArticlesListOfUrls.get(2));
+
                 context.startActivity(intent);
 
             }

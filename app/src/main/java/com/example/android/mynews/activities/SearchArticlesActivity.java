@@ -240,7 +240,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
                         endDate,
                         Url.ArticleSearchUrl.PAGE_ONE));
 
-                callIntentForDisplayingSearchArticlesActivity();
+                createIntentForDisplayingSearchArticlesActivity();
 
             }
         });
@@ -256,6 +256,8 @@ public class SearchArticlesActivity extends AppCompatActivity implements
         }
         return super.onOptionsItemSelected(item);
     }
+
+    // TODO: 21/03/2018 At least one checkbox must be selected
 
     public void onCheckboxClicked(View view) {
 
@@ -441,7 +443,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
 
     /**This method is used to call the Intent to change+
      * the Activity displayed (to DisplaySearchArticlesActivity) */
-    private void callIntentForDisplayingSearchArticlesActivity() {
+    private void createIntentForDisplayingSearchArticlesActivity() {
 
         Intent intent = new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class);
         intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, getSearchArticlesUrl(

@@ -46,6 +46,9 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
     //List that will store the JSON Response objects
     private List<SearchArticlesObject> searchArticlesObjectList;
 
+    //List to store the urls for searching the articles
+    private List<String> searchArticlesListOfUrls;
+
     //Database Variables
     private DatabaseHelper dbH;
     private Cursor mCursor;
@@ -87,7 +90,14 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
         Log.i(TAG, intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE2));
         Log.i(TAG, intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE3));
 
+        //Creating the list to store the objects
         searchArticlesObjectList = new ArrayList<>();
+
+        //Creating the list and saving the articles url
+        searchArticlesListOfUrls = new ArrayList<>();
+        searchArticlesListOfUrls.add(intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE1));
+        searchArticlesListOfUrls.add(intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE2));
+        searchArticlesListOfUrls.add(intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE3));
 
         //The JSON request is done 3 times to get 30 articles (10 per request). It has to be done
         //leaving some time between them in order to avoid ERRORs
@@ -105,7 +115,8 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
         rvAdapterDisplaySearchArticles = new RvAdapterDisplaySearchArticles(
                 DisplaySearchArticlesActivity.this,
                 searchArticlesObjectList,
-                mCursor);
+                mCursor,
+                searchArticlesListOfUrls);
 
     }
 
@@ -247,7 +258,10 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
             Log.i("SA_ArrayList.size()", "" + searchArticlesObjectList.size());
 
             if (searchArticlesObjectList != null) {
-                recyclerView.setAdapter(new RvAdapterDisplaySearchArticles(this, searchArticlesObjectList, mCursor));
+                recyclerView.setAdapter(new RvAdapterDisplaySearchArticles(this,
+                        searchArticlesObjectList,
+                        mCursor,
+                        searchArticlesListOfUrls));
                 Log.i("setDispSearchArtData:", "Called(size = " + searchArticlesObjectList.size() + ")");
 
             }

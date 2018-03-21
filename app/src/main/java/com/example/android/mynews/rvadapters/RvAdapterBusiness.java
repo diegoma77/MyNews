@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
-import com.example.android.mynews.activities.WebViewActivity;
+import com.example.android.mynews.activities.WebViewMainActivity;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.pojo.BusinessObject;
 
@@ -79,7 +79,7 @@ public class RvAdapterBusiness extends RecyclerView.Adapter<RvAdapterBusiness.Vi
                 Log.i("ONCLICK - POSITION","#" + " CLICKED");
                 Context context = v.getContext();
 
-                Intent intent = new Intent(context, WebViewActivity.class);
+                Intent intent = new Intent(context, WebViewMainActivity.class);
                 intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, businessObjectArrayList.get(position).getArticleUrl());
                 context.startActivity(intent);
 

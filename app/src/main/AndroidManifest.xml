@@ -23,8 +23,9 @@
         <activity
             android:name=".data.AndroidDatabaseManager"
             android:label="@string/app_name" />
-        <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.DisplaySearchArticlesActivity" />
+        <activity android:name=".activities.WebViewMainActivity" />
+        <activity android:name=".activities.WebViewSearchActivity" />
 
     </application>
 
