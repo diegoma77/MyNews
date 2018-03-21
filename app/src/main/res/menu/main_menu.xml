@@ -21,6 +21,12 @@
     </item>
 
     <item
+        android:id="@+id/menu_delete_database"
+        android:title="Delete History"
+        app:showAsAction="never">
+    </item>
+
+    <item
         android:id="@+id/menu_help_button"
         android:title="Help"
         app:showAsAction="never">

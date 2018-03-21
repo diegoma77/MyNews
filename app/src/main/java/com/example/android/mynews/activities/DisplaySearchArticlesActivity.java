@@ -140,6 +140,8 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
         Log.i(TAG, "SENDING JSON REQUEST");
 
+        Log.i ("SeeTheURL", url);
+
         //String request
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET,
@@ -176,8 +178,6 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
         if (responseFromServer == null || responseFromServer.length() == 0) return;
 
-        // TODO: 13/03/2018 Add if statements to check if the data was received or not and avoid crashes
-
         try {
 
             //JSON object that gathers all the objects of the response from the API
@@ -201,8 +201,6 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
                 //We create the object that is going to store all the information
                 SearchArticlesObject searchArticlesObject = new SearchArticlesObject();
-
-                // TODO: 13/03/2018 We have yet to decide what image to get
 
                 //We GET the "i results" object
                 JSONObject docsObject = docs_array.getJSONObject(i);

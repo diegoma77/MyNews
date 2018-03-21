@@ -99,11 +99,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void deleteAllRows (String table_name) {
+    public void deleteAllRows () {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.delete(" \" " + table_name + " \" ", null, null);
+        db.delete(" \"" + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME + "\" ", null, null);
 
     }
 

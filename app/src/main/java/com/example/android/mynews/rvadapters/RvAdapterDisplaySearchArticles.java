@@ -90,7 +90,6 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
         holder.section.setText(searchArticlesList.get(position).getNew_desk());
         holder.published_date.setText(searchArticlesList.get(position).getPub_date());
 
-
         if (searchArticlesList.get(position).getImage_url() == null) {
             Glide.with(mContext)
                     .load(R.drawable.nyt)

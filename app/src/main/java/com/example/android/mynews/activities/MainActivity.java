@@ -93,12 +93,14 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent2 = new Intent(MainActivity.this, NotificationsActivity.class);
                 startActivity(intent2);
                 break;
+            case R.id.menu_delete_database:
+                dbH.deleteAllRows();
+                break;
             case R.id.menu_help_button:
                 Toast.makeText(this, "Help Button Clicked", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_about_button:
                 Toast.makeText(this, "About Button Clicked", Toast.LENGTH_SHORT).show();
-                Glide.get(this).clearMemory();
                 break;
 
         }
