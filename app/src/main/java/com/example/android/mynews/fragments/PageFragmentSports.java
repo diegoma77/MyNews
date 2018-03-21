@@ -135,8 +135,6 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
 
         if (response == null || response.length() == 0) return;
 
-        // TODO: 13/03/2018 Add if statements to check if the data was received or not and avoid crashes
-        
         try {
 
             //JSON object that gathers all the objects of the response from the API

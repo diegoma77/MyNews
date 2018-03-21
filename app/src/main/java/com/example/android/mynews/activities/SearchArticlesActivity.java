@@ -323,7 +323,6 @@ public class SearchArticlesActivity extends AppCompatActivity implements
      * This method builds the Url used to send the JSON request
      * using the strings created (modified) by other methods
      * */
-    // TODO: 15/03/2018 Add Dates to the query
     public String getSearchArticlesUrl (String searchQuery, String newsSearchQuery, String beginDate, String endDate, String page) {
 
         /** Seems that there are faster ways than += to append Strings, like StringBuffer */
@@ -387,8 +386,6 @@ public class SearchArticlesActivity extends AppCompatActivity implements
      * searches according to the category
      * */
     private String getNewDeskValuesAndAdaptForUrl(List<String> listOfSections) {
-
-        // TODO: 17/03/2018 Checked arts and business and showed I/SearchArticlesActivity: arts+business+
 
         String temporary_query;
         String news_desk_query = "";

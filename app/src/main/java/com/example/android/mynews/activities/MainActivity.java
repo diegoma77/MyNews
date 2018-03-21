@@ -3,6 +3,7 @@ package com.example.android.mynews.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
@@ -28,6 +29,9 @@ import com.example.android.mynews.R;
 public class MainActivity extends AppCompatActivity {
 
     // TODO: 14/03/2018 Change data structure in PageFragments dd/MM/yy
+
+    // TODO: 21/03/2018 Images are not loading properly. Sometimes the size is incorrect and
+    // TODO they take too long to upload
 
     private DatabaseHelper dbH;
 
@@ -94,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.menu_about_button:
                 Toast.makeText(this, "About Button Clicked", Toast.LENGTH_SHORT).show();
+                Glide.get(this).clearMemory();
                 break;
 
         }
