@@ -58,7 +58,7 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
 
         mErrorMessageDisplay = (TextView) view.findViewById(R.id.tv_error_message_display);
 
-        mLoadingIndicator = (ProgressBar) view.findViewById(R.id.progress_bar);
+        mLoadingIndicator = (ProgressBar) view.findViewById(R.id.pb_loading_indicator);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
@@ -134,6 +134,8 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
     public void parseJSONResponse (String response) {
 
         if (response == null || response.length() == 0) return;
+
+        // TODO: 13/03/2018 Add if statements to check if the data was received or not and avoid crashes
 
         try {
 

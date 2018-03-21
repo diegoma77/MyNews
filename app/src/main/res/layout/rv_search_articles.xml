@@ -12,7 +12,9 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:background="@color/colorPrimary"
         app:titleTextColor="@android:color/white"
-        app:layout_collapseMode="pin">
+        app:layout_collapseMode="pin"
+        app:title="Searched Articles"
+        >
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView

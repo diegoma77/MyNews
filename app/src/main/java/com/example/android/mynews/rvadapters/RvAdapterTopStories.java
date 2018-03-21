@@ -82,8 +82,6 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
                     .into(holder.imageOnLeft);
         }
 
-
-
         Log.d(TAG, "#" + position);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

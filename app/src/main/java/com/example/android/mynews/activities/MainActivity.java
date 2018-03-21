@@ -1,5 +1,6 @@
 package com.example.android.mynews.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -8,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -29,9 +31,7 @@ import com.example.android.mynews.R;
 public class MainActivity extends AppCompatActivity {
 
     // TODO: 14/03/2018 Change data structure in PageFragments dd/MM/yy
-
-    // TODO: 21/03/2018 Images are not loading properly. Sometimes the size is incorrect and
-    // TODO they take too long to upload
+    // TODO: 21/03/2018 Images are not loading properly. Sometimes the size is incorrect and they take too long to upload
 
     private DatabaseHelper dbH;
 
@@ -87,14 +87,14 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent1 = new Intent(MainActivity.this, SearchArticlesActivity.class);
                 startActivity(intent1);
                 break;
-            case R.id.menu_refresh_button:
-                break;
             case R.id.menu_notifications_button:
                 Intent intent2 = new Intent(MainActivity.this, NotificationsActivity.class);
                 startActivity(intent2);
                 break;
             case R.id.menu_delete_database:
-                dbH.deleteAllRows();
+                Toast.makeText(this, "Delete Button clicked", Toast.LENGTH_SHORT).show();
+                // TODO 21/03/2018 Call a dialog here to be sure the user wants to delete the data
+                alertDialogDeleteHistory();
                 break;
             case R.id.menu_help_button:
                 Toast.makeText(this, "Help Button Clicked", Toast.LENGTH_SHORT).show();
@@ -125,6 +125,29 @@ public class MainActivity extends AppCompatActivity {
             DrawableCompat.setTint(drawable.mutate(), color);
             toolbar.setOverflowIcon(drawable);
         }
+    }
+
+    private void alertDialogDeleteHistory () {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Are you sure you want to delete the search history?")
+                .setTitle("Deleting Search History")
+                .setPositiveButton("YES, I AM SURE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dbH.deleteAllRows();
+                        Toast.makeText(MainActivity.this, "History has been deleted", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Nothing happens
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 }
