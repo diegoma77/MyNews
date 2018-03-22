@@ -3,6 +3,7 @@ package com.example.android.mynews.rvadapters;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -58,6 +59,8 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
+        dbH = new DatabaseHelper(mContext);
+
         Context context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.list_item_fragment;
         LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -74,6 +77,11 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
 
     @Override
     public void onBindViewHolder(RvAdapterMostPopular.ViewHolder holder, final int position) {
+
+        if (checkIfArticleUrlIsInTheDatabase(mostPopularObjectArrayList.get(position).getArticle_url())) {
+            Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
+            holder.title.setTypeface(bold);
+        }
 
         MostPopularObject currentMostPopularObject = mostPopularObjectArrayList.get(position);
         holder.title.setText(currentMostPopularObject.getTitle());
@@ -98,6 +106,12 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
             public void onClick(View v) {
                 Log.i("ONCLICK - POSITION","#" + " CLICKED");
                 Context context = v.getContext();
+
+                //Checks that the article is not yet in the database. If it is, we don't add it.
+                //If it's not, we add it. This way we keep the track of the articles the user has read
+                if (!checkIfArticleUrlIsInTheDatabase(mostPopularObjectArrayList.get(position).getArticle_url())){
+                    dbH.insertData(mostPopularObjectArrayList.get(position).getArticle_url());
+                }
 
                 Intent intent = new Intent(context, WebViewMainActivity.class);
                 intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, mostPopularObjectArrayList.get(position).getArticle_url());

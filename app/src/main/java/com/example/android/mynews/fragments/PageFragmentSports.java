@@ -76,7 +76,7 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        rvAdapterSports = new RvAdapterSports(getActivity());
+        rvAdapterSports = new RvAdapterSports(getActivity(), mCursor);
 
         loadSportsInfo();
 
@@ -153,8 +153,6 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
     public void parseJSONResponse (String response) {
 
         if (response == null || response.length() == 0) return;
-
-        // TODO: 13/03/2018 Add if statements to check if the data was received or not and avoid crashes
 
         try {
 

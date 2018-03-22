@@ -30,8 +30,8 @@ import com.example.android.mynews.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    // TODO: 14/03/2018 Change data structure in PageFragments dd/MM/yy
     // TODO: 21/03/2018 Images are not loading properly. Sometimes the size is incorrect and they take too long to upload
+    // TODO: 22/03/2018 When History is deleted, if there was an article "bold" it remains the same till activity is changed
 
     private DatabaseHelper dbH;
 
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         dbH = new DatabaseHelper(this);
-        
+
         //Sets the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -137,6 +137,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         dbH.deleteAllRows();
                         Toast.makeText(MainActivity.this, "History has been deleted", Toast.LENGTH_SHORT).show();
+
+                        //Code used to restart the activity
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
                     }
                 })
                 .setNegativeButton("NO", new DialogInterface.OnClickListener() {

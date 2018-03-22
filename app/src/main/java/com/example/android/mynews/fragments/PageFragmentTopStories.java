@@ -76,7 +76,7 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        rvAdapterTopStories = new RvAdapterTopStories(getActivity());
+        rvAdapterTopStories = new RvAdapterTopStories(getActivity(), mCursor);
 
         loadTopStoriesInfo();
 

@@ -60,8 +60,6 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RvAdapterDisplaySearchArticles rvAdapterDisplaySearchArticles;
 
-    // TODO: 20/03/2018 Add REFRESH button to send the JSON Request again.
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +68,6 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
         dbH = new DatabaseHelper(this);
         mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
 
-        // TODO: 17/03/2018 Create its own layout to set the title as needed
         //Sets the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

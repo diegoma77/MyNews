@@ -76,7 +76,7 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        rvAdapterMostPopular = new RvAdapterMostPopular(getActivity());
+        rvAdapterMostPopular = new RvAdapterMostPopular(getActivity(), mCursor);
 
         loadMostPopularInfo();
 

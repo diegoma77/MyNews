@@ -3,6 +3,7 @@ package com.example.android.mynews.rvadapters;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -58,6 +59,8 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
+        dbH = new DatabaseHelper(mContext);
+
         Context context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.list_item_fragment;
         LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -74,6 +77,11 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
 
     @Override
     public void onBindViewHolder(RvAdapterTopStories.ViewHolder holder, final int position) {
+
+        if (checkIfArticleUrlIsInTheDatabase(topStoriesObjectArrayList.get(position).getArticleUrl())) {
+            Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
+            holder.title.setTypeface(bold);
+        }
 
         holder.title.setText(topStoriesObjectArrayList.get(position).getTitle());
         holder.section.setText("Top Stories < " + topStoriesObjectArrayList.get(position).getSection());
@@ -97,6 +105,12 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
             public void onClick(View v) {
                 Log.i("ONCLICK - POSITION","#" + " CLICKED");
                 Context context = v.getContext();
+
+                //Checks that the article is not yet in the database. If it is, we don't add it.
+                //If it's not, we add it. This way we keep the track of the articles the user has read
+                if (!checkIfArticleUrlIsInTheDatabase(topStoriesObjectArrayList.get(position).getArticleUrl())){
+                    dbH.insertData(topStoriesObjectArrayList.get(position).getArticleUrl());
+                }
 
                 Intent intent = new Intent(context, WebViewMainActivity.class);
                 intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, topStoriesObjectArrayList.get(position).getArticleUrl());

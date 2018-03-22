@@ -3,6 +3,7 @@ package com.example.android.mynews.rvadapters;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -59,6 +60,8 @@ public class RvAdapterSports extends RecyclerView.Adapter<RvAdapterSports.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
+        dbH = new DatabaseHelper(mContext);
+
         Context context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.list_item_fragment;
         LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -75,6 +78,11 @@ public class RvAdapterSports extends RecyclerView.Adapter<RvAdapterSports.ViewHo
 
     @Override
     public void onBindViewHolder(RvAdapterSports.ViewHolder holder, final int position) {
+
+        if (checkIfArticleUrlIsInTheDatabase(sportsObjectArrayList.get(position).getArticleUrl())) {
+            Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
+            holder.title.setTypeface(bold);
+        }
 
         holder.title.setText(sportsObjectArrayList.get(position).getTitle());
         holder.section.setText("Sports < " + sportsObjectArrayList.get(position).getSubsection());
@@ -98,6 +106,12 @@ public class RvAdapterSports extends RecyclerView.Adapter<RvAdapterSports.ViewHo
             public void onClick(View v) {
                 Log.i("ONCLICK - POSITION","#" + " CLICKED");
                 Context context = v.getContext();
+
+                //Checks that the article is not yet in the database. If it is, we don't add it.
+                //If it's not, we add it. This way we keep the track of the articles the user has read
+                if (!checkIfArticleUrlIsInTheDatabase(sportsObjectArrayList.get(position).getArticleUrl())){
+                    dbH.insertData(sportsObjectArrayList.get(position).getArticleUrl());
+                }
 
                 Intent intent = new Intent(context, WebViewMainActivity.class);
                 intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, sportsObjectArrayList.get(position).getArticleUrl());
