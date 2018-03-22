@@ -1,5 +1,6 @@
 package com.example.android.mynews.fragments;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
+import com.example.android.mynews.data.DatabaseContract;
+import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 import com.example.android.mynews.pojo.SportsObject;
@@ -42,9 +45,13 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
     //Array that will store the TopStoriesObject object to display in the RecyclerView
     private ArrayList<SportsObject> sportsObjectArrayList;
 
+    //Variables to store views related to the articles upload
     private TextView mErrorMessageDisplay;
+    private ProgressBar mProgressBar;
 
-    private ProgressBar mLoadingIndicator;
+    //Database variables
+    Cursor mCursor;
+    DatabaseHelper dbH;
 
     //RecyclerView and RecyclerViewAdapter
     private RecyclerView recyclerView;
@@ -57,10 +64,10 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.rv_fragments_layout, container, false);
 
         mErrorMessageDisplay = (TextView) view.findViewById(R.id.tv_error_message_display);
-
-        mLoadingIndicator = (ProgressBar) view.findViewById(R.id.pb_loading_indicator);
-
+        mProgressBar = (ProgressBar) view.findViewById(R.id.pb_loading_indicator);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        dbH = new DatabaseHelper(getContext());
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
 
         recyclerView.setHasFixedSize(true);
 
@@ -81,26 +88,37 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
 
     public void loadSportsInfo() {
 
-        showSportsView();
         sendJSONRequest(Url.SportsUrl.S_FINAL_URL);
 
     }
 
-    public void showSportsView () {
-        /* First, make sure the error is invisible */
+    public void showProgressBar () {
+
+        mProgressBar.setVisibility(View.VISIBLE);
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
-        /* Then, make sure the weather data is visible */
+        recyclerView.setVisibility(View.INVISIBLE);
+
+    }
+
+    public void showRecyclerView() {
+
+        mProgressBar.setVisibility(View.INVISIBLE);
+        mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
+
     }
 
     public void showErrorMessage () {
-        /* First, hide the currently visible data */
-        recyclerView.setVisibility(View.INVISIBLE);
-        /* Then, show the error */
+
+        mProgressBar.setVisibility(View.INVISIBLE);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
+
     }
 
     public void sendJSONRequest (String url){
+
+        showProgressBar();
 
         Toast.makeText(getContext(), "Data is loading", Toast.LENGTH_LONG).show();
 
@@ -119,6 +137,7 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getActivity(),
                                 error.getMessage(), Toast.LENGTH_SHORT).show();
+                        showErrorMessage();
                     }
                 }
         );
@@ -228,7 +247,12 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
 
                 if (dataObject.getString(Keys.Sports.KEY_UPDATED_DATE) != null) {
                     String updated_date = dataObject.getString(Keys.Sports.KEY_UPDATED_DATE);
-                    sportsObject.setUpdatedDate(updated_date.substring(0, 10));
+                    updated_date.substring(0,10);
+                    String day = updated_date.substring(8,10);
+                    String month = updated_date.substring(5,7);
+                    String year = updated_date.substring(0,4);
+                    updated_date = day + "/" + month + "/" + year;
+                    sportsObject.setUpdatedDate(updated_date);
                     Log.i("UPDATE_DATE", sportsObject.getUpdatedDate());
                 }
 
@@ -244,9 +268,9 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
 
             //Sets the RVAdapter with the data from the JSON response
             if (sportsObjectArrayList != null){
-               showSportsView();
                rvAdapterSports.setSportsData(sportsObjectArrayList);
                Log.i ("TS_ADAPTER SET WITH:", "" + sportsObjectArrayList.size() + " objects");
+               showRecyclerView();
             }
 
         } catch(JSONException e) {

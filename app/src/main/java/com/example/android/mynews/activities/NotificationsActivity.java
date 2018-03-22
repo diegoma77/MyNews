@@ -100,7 +100,7 @@ public class NotificationsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // TODO: 21/03/2018 At least one checkbox must be selected
+    // TODO: 21/03/2018 At least one checkbox must be selected (not clear)
     public void onCheckboxClicked(View view) {
 
         // Is the view now checked?

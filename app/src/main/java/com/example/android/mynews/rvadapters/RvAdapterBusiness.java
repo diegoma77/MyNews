@@ -2,6 +2,7 @@ package com.example.android.mynews.rvadapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.android.mynews.R;
 import com.example.android.mynews.activities.WebViewMainActivity;
+import com.example.android.mynews.data.DatabaseContract;
+import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.pojo.BusinessObject;
 
@@ -34,11 +37,16 @@ public class RvAdapterBusiness extends RecyclerView.Adapter<RvAdapterBusiness.Vi
     //Context of the activity
     private Context mContext;
 
-    //Constructor of the RvAdapter
-    public RvAdapterBusiness(Context context) {
-        //Context to work with Fragments
-        this.mContext = context;
+    //Cursor to check if an article is in the database
+    private Cursor mCursor;
 
+    //DatabaseHelper to add an article_url to the database if it hasn't been read
+    private DatabaseHelper dbH;
+
+    //Constructor of the RvAdapter
+    public RvAdapterBusiness(Context context, Cursor cursor) {
+        this.mContext = context;
+        this.mCursor = cursor;
     }
 
     public void setBusinessData(ArrayList<BusinessObject> businessObjectArrayList) {
@@ -131,5 +139,24 @@ public class RvAdapterBusiness extends RecyclerView.Adapter<RvAdapterBusiness.Vi
             //imageOnLeft.setImageResource(R.drawable.rajoy);
 
         }
+    }
+
+    /**
+     * Checks if the article is in the database.
+     * It's used to check if an article has already been read or not.
+     * */
+    private boolean checkIfArticleUrlIsInTheDatabase(String web_url) {
+
+        int counter = 0;
+
+        for (int i = 0; i < mCursor.getCount() ; i++) {
+            mCursor.moveToPosition(i);
+            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.ARTICLE_URL)).equals(web_url)){
+                counter++;
+            }
+        }
+
+        if (counter != 0) return true;
+        else return false;
     }
 }

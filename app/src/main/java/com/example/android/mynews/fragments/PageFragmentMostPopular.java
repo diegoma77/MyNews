@@ -1,5 +1,6 @@
 package com.example.android.mynews.fragments;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
+import com.example.android.mynews.data.DatabaseContract;
+import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 import com.example.android.mynews.pojo.MostPopularObject;
@@ -42,9 +45,13 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
     //Array that will store the TopStoriesObject object to display in the RecyclerView
     private ArrayList<MostPopularObject> mostPopularObjectsArrayList;
 
+    //Variables to store views related to the articles upload
     private TextView mErrorMessageDisplay;
+    private ProgressBar mProgressBar;
 
-    private ProgressBar mLoadingIndicator;
+    //Database variables
+    Cursor mCursor;
+    DatabaseHelper dbH;
 
     //RecyclerView and RecyclerViewAdapter
     private RecyclerView recyclerView;
@@ -57,10 +64,10 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.rv_fragments_layout, container, false);
 
         mErrorMessageDisplay = (TextView) view.findViewById(R.id.tv_error_message_display);
-
-        mLoadingIndicator = (ProgressBar) view.findViewById(R.id.pb_loading_indicator);
-
+        mProgressBar = (ProgressBar) view.findViewById(R.id.pb_loading_indicator);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        dbH = new DatabaseHelper(getContext());
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
 
         recyclerView.setHasFixedSize(true);
 
@@ -81,27 +88,37 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
 
     public void loadMostPopularInfo () {
 
-        showMostPopularView();
         sendJSONRequest(Url.MostPopularUrl.MP_FINAL_URL);
 
     }
 
-    public void showMostPopularView () {
-        /* First, make sure the error is invisible */
+    public void showProgressBar () {
+
+        mProgressBar.setVisibility(View.VISIBLE);
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
-        /* Then, make sure the weather data is visible */
+        recyclerView.setVisibility(View.INVISIBLE);
+
+    }
+
+    public void showRecyclerView() {
+
+        mProgressBar.setVisibility(View.INVISIBLE);
+        mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
+
     }
 
     public void showErrorMessage () {
-        /* First, hide the currently visible data */
-        recyclerView.setVisibility(View.INVISIBLE);
-        /* Then, show the error */
+
+        mProgressBar.setVisibility(View.INVISIBLE);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
+
     }
 
     public void sendJSONRequest (String url){
 
+        showProgressBar();
         Toast.makeText(getContext(), "Data is loading", Toast.LENGTH_LONG).show();
 
         //String request
@@ -173,7 +190,12 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
 
                 if (dataObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE) != null) {
                     String published_date = dataObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE);
-                    mostPopularObject.setPublished_date(published_date.substring(0,10));
+                    published_date.substring(0,10);
+                    String day = published_date.substring(8,10);
+                    String month = published_date.substring(5,7);
+                    String year = published_date.substring(0,4);
+                    published_date = day + "/" + month + "/" + year;
+                    mostPopularObject.setPublished_date(published_date);
                     Log.i("PUBLISHED DATE", mostPopularObject.getPublished_date());
                 }
 
@@ -193,9 +215,9 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
 
             if (mostPopularObjectsArrayList != null) {
 
-                showMostPopularView();
                 rvAdapterMostPopular.setMostPopularData(mostPopularObjectsArrayList);
                 Log.i("setMOSTPOPULARData:", "Called(size = " + mostPopularObjectsArrayList.size() + ")");
+                showRecyclerView();
 
             }
             else {

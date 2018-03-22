@@ -40,10 +40,13 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
     //or back button are pressed
     private List<String> searchArticlesListOfUrls;
 
+    //Context of the activity
     private Context mContext;
 
+    //Cursor to check if an article is in the database
     private Cursor mCursor;
 
+    //DatabaseHelper to add an article_url to the database if it hasn't been read
     private DatabaseHelper dbH;
 
     public RvAdapterDisplaySearchArticles(Context context,

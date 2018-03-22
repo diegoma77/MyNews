@@ -240,8 +240,18 @@ public class SearchArticlesActivity extends AppCompatActivity implements
                         endDate,
                         Url.ArticleSearchUrl.PAGE_ONE));
 
-                createIntentForDisplayingSearchArticlesActivity();
+                if (!cb_arts.isChecked()
+                        && !cb_business.isChecked()
+                        && !cb_entrepreneurs.isChecked()
+                        && !cb_politics.isChecked()
+                        && !cb_sports.isChecked()
+                        && !cb_travel.isChecked()) {
 
+                    Toast.makeText(SearchArticlesActivity.this, "You have to choose at least one category", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    createIntentForDisplayingSearchArticlesActivity();
+                }
             }
         });
     }
@@ -256,8 +266,6 @@ public class SearchArticlesActivity extends AppCompatActivity implements
         }
         return super.onOptionsItemSelected(item);
     }
-
-    // TODO: 21/03/2018 At least one checkbox must be selected
 
     public void onCheckboxClicked(View view) {
 

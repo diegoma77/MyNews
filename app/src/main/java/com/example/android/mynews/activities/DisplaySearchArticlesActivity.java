@@ -231,7 +231,12 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
                 if (docsObject.getString(Keys.SearchArticles.KEY_PUB_DATE) != null) {
                     String pub_date = docsObject.getString(Keys.SearchArticles.KEY_PUB_DATE);
-                    searchArticlesObject.setPub_date(pub_date.substring(0, 10));
+                    pub_date.substring(0,10);
+                    String day = pub_date.substring(8,10);
+                    String month = pub_date.substring(5,7);
+                    String year = pub_date.substring(0,4);
+                    pub_date = day + "/" + month + "/" + year;
+                    searchArticlesObject.setPub_date(pub_date);
                     Log.i("PUB_DATE", searchArticlesObject.getPub_date());
                 }
 
