@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        //Changes the color of the Toolbar Overflow Button to white
+        //Changes the color of the Toolbar Overflow ButtonListener to white
         setOverflowButtonColor(toolbar, Color.WHITE);
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
@@ -91,14 +91,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent2);
                 break;
             case R.id.menu_delete_database:
-                Toast.makeText(this, "Delete Button clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Delete ButtonListener clicked", Toast.LENGTH_SHORT).show();
                 alertDialogDeleteHistory();
                 break;
             case R.id.menu_help_button:
-                Toast.makeText(this, "Help Button Clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Help ButtonListener Clicked", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_about_button:
-                Toast.makeText(this, "About Button Clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "About ButtonListener Clicked", Toast.LENGTH_SHORT).show();
                 break;
 
         }
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(fragmentPageAdapter);
     }
 
-    //Changes the color of the Toolbar Overflow Button to white
+    //Changes the color of the Toolbar Overflow ButtonListener to white
     public static void setOverflowButtonColor(final Toolbar toolbar, final int color) {
         Drawable drawable = toolbar.getOverflowIcon();
         if(drawable != null) {

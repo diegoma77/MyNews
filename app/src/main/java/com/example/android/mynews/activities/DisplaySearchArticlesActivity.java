@@ -77,7 +77,7 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        //Changes the color of the Toolbar Overflow Button to white
+        //Changes the color of the Toolbar Overflow ButtonListener to white
         setOverflowButtonColor(toolbar, Color.WHITE);
 
         //Get the URLs from SearchArticlesActivity and display them

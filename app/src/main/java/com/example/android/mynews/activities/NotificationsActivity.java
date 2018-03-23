@@ -1,8 +1,12 @@
 package com.example.android.mynews.activities;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.RemoteViews;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -25,6 +30,17 @@ import java.util.List;
  */
 
 public class NotificationsActivity extends AppCompatActivity {
+
+    //Variables for notifications
+    private NotificationCompat.Builder mBuilder;
+    private NotificationManager mNotificationManager;
+    private int notification_id;
+    private RemoteViews remoteViews;
+    private Context context;
+
+    // TODO: 23/03/2018 Delete this button
+    //Test Button
+    Button testButton;
 
     //List for sections
     private List<String> listOfSections;
@@ -73,7 +89,51 @@ public class NotificationsActivity extends AppCompatActivity {
         cb_sports = (CheckBox) findViewById(R.id.notif_checkBox_sports);
         cb_travel = (CheckBox) findViewById(R.id.notif_checkBox_travel);
 
+        /** Code for the notifications */
 
+        //We initialize the context so as not to call it several times with getContext()
+        context = this;
+        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        remoteViews = new RemoteViews(getPackageName(), R.layout.custom_notification);
+
+        /**
+        //Allows to change the views inside the notification layout
+        remoteViews.setImageViewResource(R.id.custom_notif_icon, R.mipmap.ic_launcher );
+        remoteViews.setTextViewText(R.id.custom_notif_text, "TEXT");
+         */
+
+        //Intent for the broadcast receiver
+        //Allows to get a unique id (uses the current time, thats why it will always be unique)
+        notification_id = (int) System.currentTimeMillis();
+        final Intent button_intent = new Intent("button_clicked");
+        button_intent.putExtra("id", notification_id);
+
+        PendingIntent p_button_intent = PendingIntent.getBroadcast(context, 123, button_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.custom_notif_button, p_button_intent);
+        //Request code can be any number
+
+        //Code for the button of the notification layout
+        testButton = findViewById(R.id.test_button);
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent notification_intent = new Intent(context, MainActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(context,0,notification_intent, 0);
+
+                mBuilder = new NotificationCompat.Builder(context);
+                mBuilder.setSmallIcon(R.mipmap.ic_launcher)
+                        .setAutoCancel(true)
+                        .setCustomContentView(remoteViews)
+                        .setContentIntent(pendingIntent);
+
+                mNotificationManager.notify(notification_id,mBuilder.build());
+
+            }
+        });
+
+
+        //Code for the switch
         mSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -42,10 +42,10 @@ public class SearchArticlesActivity extends AppCompatActivity implements
     //List for sections
     private List<String> listOfSections;
 
-    //Button Search variable
+    //ButtonListener Search variable
     private Button buttonSearch;
 
-    //Button Dates
+    //ButtonListener Dates
     private LinearLayout buttonBeginDate;
     private LinearLayout buttonEndDate;
 
@@ -81,7 +81,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_articles_layout);
 
-        // TODO: 17/03/2018 Modify keyboard when Search Query is pressed so as not to hide the Search Button
+        // TODO: 17/03/2018 Modify keyboard when Search Query is pressed so as not to hide the Search ButtonListener
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.search_toolbar);
         setSupportActionBar(toolbar);
@@ -134,7 +134,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
 
         // TODO: 17/03/2018 BeginDate cannot be higher than EndDate and otherwise. Can be done passing a Date to openXDialog and modifying the constructor
         // TODO: 17/03/2018 so it will modify a property of the class and this one modify the date options of the datePicker
-        //BeginDate Button onClick
+        //BeginDate ButtonListener onClick
         buttonBeginDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,7 +142,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
             }
         });
 
-        //EndDate Button onClick
+        //EndDate ButtonListener onClick
         buttonEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,7 +160,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
          * endDate)
          * */
         // TODO: 16/03/2018 Delete part of the code related to textViews that are not necessary
-        //Search Button onClick
+        //Search ButtonListener onClick
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

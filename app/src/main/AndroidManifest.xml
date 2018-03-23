@@ -27,6 +27,11 @@
         <activity android:name=".activities.WebViewMainActivity" />
         <activity android:name=".activities.WebViewSearchActivity" />
 
+        <receiver android:name=".broadcastreceivers.ButtonListener">
+            <intent-filter>
+                <action android:name="button_clicked" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

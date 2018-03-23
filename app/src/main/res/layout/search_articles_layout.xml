@@ -79,7 +79,7 @@
                             android:textColor="@color/colorPrimary"
                             android:hint="20/03/1988"/>
 
-                    </LinearLayout> <!-- Button -->
+                    </LinearLayout>
 
                         <CheckBox
                             android:id="@+id/search_checkBox_arts"
@@ -151,7 +151,7 @@
                             android:textColor="@color/colorPrimary"
                             android:hint="20/03/1988"/>
 
-                    </LinearLayout> <!-- Button -->
+                    </LinearLayout>
 
                         <CheckBox
                             android:id="@+id/search_checkBox_politics"
