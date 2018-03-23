@@ -107,11 +107,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void resetAutoIncrement (String table_name) {
+    public void resetAutoIncrement () {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + table_name + "'");
+        db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME + "'");
 
     }
 

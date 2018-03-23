@@ -31,7 +31,6 @@ import com.example.android.mynews.R;
 public class MainActivity extends AppCompatActivity {
 
     // TODO: 21/03/2018 Images are not loading properly. Sometimes the size is incorrect and they take too long to upload
-    // TODO: 22/03/2018 When History is deleted, if there was an article "bold" it remains the same till activity is changed
 
     private DatabaseHelper dbH;
 
@@ -93,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.menu_delete_database:
                 Toast.makeText(this, "Delete Button clicked", Toast.LENGTH_SHORT).show();
-                // TODO 21/03/2018 Call a dialog here to be sure the user wants to delete the data
                 alertDialogDeleteHistory();
                 break;
             case R.id.menu_help_button:
@@ -136,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dbH.deleteAllRows();
+                        dbH.resetAutoIncrement();
                         Toast.makeText(MainActivity.this, "History has been deleted", Toast.LENGTH_SHORT).show();
 
                         //Code used to restart the activity

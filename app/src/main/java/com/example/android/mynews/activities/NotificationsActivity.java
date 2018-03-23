@@ -60,33 +60,43 @@ public class NotificationsActivity extends AppCompatActivity {
         listOfSections = new ArrayList<>();
 
         //TextInputEditText
-        mTextInputEditText = (TextInputEditText) findViewById(R.id.search_text_input_edit_text);
+        mTextInputEditText = (TextInputEditText) findViewById(R.id.notif_text_input_edit_text);
 
         //Switch
         mSwitch = (Switch) findViewById(R.id.notif_switch);
 
         //Checkboxes
-        cb_arts = (CheckBox) findViewById(R.id.search_checkBox_arts);
-        cb_business = (CheckBox) findViewById(R.id.search_checkBox_business);
-        cb_entrepreneurs = (CheckBox) findViewById(R.id.search_checkBox_entrepeneurs);
-        cb_politics = (CheckBox) findViewById(R.id.search_checkBox_politics);
-        cb_sports = (CheckBox) findViewById(R.id.search_checkBox_sports);
-        cb_travel = (CheckBox) findViewById(R.id.search_checkBox_travel);
+        cb_arts = (CheckBox) findViewById(R.id.notif_checkBox_arts);
+        cb_business = (CheckBox) findViewById(R.id.notif_checkBox_business);
+        cb_entrepreneurs = (CheckBox) findViewById(R.id.notif_checkBox_entrepeneurs);
+        cb_politics = (CheckBox) findViewById(R.id.notif_checkBox_politics);
+        cb_sports = (CheckBox) findViewById(R.id.notif_checkBox_sports);
+        cb_travel = (CheckBox) findViewById(R.id.notif_checkBox_travel);
 
 
         mSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (mSwitch.isChecked()) {
-                    Toast.makeText(NotificationsActivity.this, "Now switch is on", Toast.LENGTH_SHORT).show();
+                if (!cb_arts.isChecked()
+                        && !cb_business.isChecked()
+                        && !cb_entrepreneurs.isChecked()
+                        && !cb_politics.isChecked()
+                        && !cb_sports.isChecked()
+                        && !cb_travel.isChecked()) {
+                    // TODO: 22/03/2018 Avoid the switch to be on if at least one checkbox isn't clicked
+                    Toast.makeText(NotificationsActivity.this, "You have to choose at least one category", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(NotificationsActivity.this, "Now switch is off", Toast.LENGTH_SHORT).show();
+                    if (mSwitch.isChecked()) {
+                        Toast.makeText(NotificationsActivity.this, "Now switch is on", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(NotificationsActivity.this, "Now switch is off", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
-
     }
 
     @Override

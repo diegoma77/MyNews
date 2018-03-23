@@ -122,7 +122,6 @@ public class SearchArticlesActivity extends AppCompatActivity implements
 
 
         /** Listeners */
-
         //TextInput onClick
         mTextInputEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +159,6 @@ public class SearchArticlesActivity extends AppCompatActivity implements
          * beginDate,
          * endDate)
          * */
-
         // TODO: 16/03/2018 Delete part of the code related to textViews that are not necessary
         //Search Button onClick
         buttonSearch.setOnClickListener(new View.OnClickListener() {
@@ -240,6 +238,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
                         endDate,
                         Url.ArticleSearchUrl.PAGE_ONE));
 
+                //At least one checkbox must be checked
                 if (!cb_arts.isChecked()
                         && !cb_business.isChecked()
                         && !cb_entrepreneurs.isChecked()
@@ -250,6 +249,7 @@ public class SearchArticlesActivity extends AppCompatActivity implements
                     Toast.makeText(SearchArticlesActivity.this, "You have to choose at least one category", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    //We call the intent to change activity. This method calls the necessary method for building the URL in the next activity
                     createIntentForDisplayingSearchArticlesActivity();
                 }
             }
@@ -267,6 +267,8 @@ public class SearchArticlesActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
+    /** This method is used to know
+     * if a checkbox is checked or not*/
     public void onCheckboxClicked(View view) {
 
         // Is the view now checked?
@@ -446,8 +448,9 @@ public class SearchArticlesActivity extends AppCompatActivity implements
         Toast.makeText(SearchArticlesActivity.this, "No date was selected", Toast.LENGTH_SHORT).show();
     }
 
-    /**This method is used to call the Intent to change+
-     * the Activity displayed (to DisplaySearchArticlesActivity) */
+    /**This method is used to call the Intent to change
+     * the Activity displayed (to DisplaySearchArticlesActivity). The intent
+     * carries information about the urls than have to be displayed*/
     private void createIntentForDisplayingSearchArticlesActivity() {
 
         Intent intent = new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class);

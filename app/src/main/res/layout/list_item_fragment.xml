@@ -10,7 +10,8 @@
         android:id="@+id/list_item_two_columns"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@drawable/bottom_border">
 
         <LinearLayout
             android:id="@+id/list_item_column_one"
@@ -35,8 +36,7 @@
             android:layout_height="100dp"
             android:layout_weight="75"
             android:padding="10dp"
-            android:orientation="vertical"
-            android:background="@drawable/bottom_border">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/list_item_continent_space_date"

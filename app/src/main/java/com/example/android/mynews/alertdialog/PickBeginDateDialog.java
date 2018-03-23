@@ -22,6 +22,8 @@ import java.util.Calendar;
 
 public class PickBeginDateDialog extends AppCompatDialogFragment {
 
+    // TODO: 22/03/2018 Modify Date dialog layout
+
     private static final String TAG = "PickBeginDateDialog";
 
     private DatePicker datePicker;
@@ -75,7 +77,6 @@ public class PickBeginDateDialog extends AppCompatDialogFragment {
                     selectedDay = "0" + (dayOfMonth);
                 }
                 else { selectedDay = dayOfMonth + ""; }
-
 
                 selectedDateForTextView = selectedDay + "/" + selectedMonth + "/" + selectedYear;
                 selectedDateForUrl = selectedYear + selectedMonth + selectedDay;

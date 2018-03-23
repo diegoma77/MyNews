@@ -31,7 +31,7 @@
                 android:id="@+id/search_text_input_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Search Query Term" />
+                android:hint="Search Query Term"/>
         </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
@@ -61,18 +61,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:paddingBottom="10dp">
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="10dp">
 
                         <TextView
                             android:id="@+id/search_beginDate_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="Begin date"/>
+                            android:text="Begin Date"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorAccent"/>
 
                         <TextView
                             android:id="@+id/search_beginDate_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/colorPrimary"
                             android:hint="20/03/1988"/>
 
                     </LinearLayout> <!-- Button -->
@@ -82,6 +86,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Arts"
+                            android:buttonTint="@color/colorPrimary"
+                            android:textColor="@color/colorPrimary"
                             android:onClick="onCheckboxClicked"
                             />
 
@@ -90,6 +96,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Business"
+                            android:buttonTint="@color/colorPrimary"
+                            android:textColor="@color/colorPrimary"
                             android:onClick="onCheckboxClicked"
                             />
 
@@ -98,6 +106,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Entrepeneurs"
+                            android:buttonTint="@color/colorPrimary"
+                            android:textColor="@color/colorPrimary"
                             android:onClick="onCheckboxClicked"
                             />
 
@@ -123,18 +133,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:paddingBottom="10dp">
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="10dp">
 
                         <TextView
                             android:id="@+id/search_endDate_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="End date"/>
+                            android:text="End Date"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorAccent"/>
 
                         <TextView
                             android:id="@+id/search_endDate_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/colorPrimary"
                             android:hint="20/03/1988"/>
 
                     </LinearLayout> <!-- Button -->
@@ -144,6 +158,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Politics"
+                            android:buttonTint="@color/colorPrimary"
+                            android:textColor="@color/colorPrimary"
                             android:onClick="onCheckboxClicked"
                             />
 
@@ -152,6 +168,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Sports"
+                            android:buttonTint="@color/colorPrimary"
+                            android:textColor="@color/colorPrimary"
                             android:onClick="onCheckboxClicked"
                             />
 
@@ -160,6 +178,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Travel"
+                            android:buttonTint="@color/colorPrimary"
+                            android:textColor="@color/colorPrimary"
                             android:onClick="onCheckboxClicked"
                             />
 

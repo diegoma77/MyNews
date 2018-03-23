@@ -171,6 +171,8 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
     public void parseJSONResponse(String responseFromServer) {
 
+        // TODO: 22/03/2018 Doesn't get the IMAGES
+        
         String parseTAG = "PARSEtag";
 
         if (responseFromServer == null || responseFromServer.length() == 0) return;
