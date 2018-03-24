@@ -133,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("YES, I AM SURE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dbH.deleteAllRows();
-                        dbH.resetAutoIncrement();
+                        dbH.deleteAllRowsFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
+                        dbH.resetAutoIncrement(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
                         Toast.makeText(MainActivity.this, "History has been deleted", Toast.LENGTH_SHORT).show();
 
                         //Code used to restart the activity

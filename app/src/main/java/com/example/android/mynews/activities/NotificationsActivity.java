@@ -1,5 +1,6 @@
 package com.example.android.mynews.activities;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -10,19 +11,21 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.broadcastreceiver.NotificationReceiver;
 import com.example.android.mynews.extras.Keys;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -30,6 +33,8 @@ import java.util.List;
  */
 
 public class NotificationsActivity extends AppCompatActivity {
+
+    private static final String TAG = "NotificationsActivity";
 
     //Variables for notifications
     private NotificationCompat.Builder mBuilder;
@@ -108,30 +113,61 @@ public class NotificationsActivity extends AppCompatActivity {
         final Intent button_intent = new Intent("button_clicked");
         button_intent.putExtra("id", notification_id);
 
+        /**
+        //Code for the button
         PendingIntent p_button_intent = PendingIntent.getBroadcast(context, 123, button_intent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.custom_notif_button, p_button_intent);
         //Request code can be any number
+         */
 
         //Code for the button of the notification layout
-        testButton = findViewById(R.id.test_button);
-        testButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.test_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent notification_intent = new Intent(context, MainActivity.class);
-                PendingIntent pendingIntent = PendingIntent.getActivity(context,0,notification_intent, 0);
+                Toast.makeText(context, "Notification is set", Toast.LENGTH_SHORT).show();
 
-                mBuilder = new NotificationCompat.Builder(context);
-                mBuilder.setSmallIcon(R.mipmap.ic_launcher)
-                        .setAutoCancel(true)
-                        .setCustomContentView(remoteViews)
-                        .setContentIntent(pendingIntent);
+                Calendar calendar = Calendar.getInstance();
 
-                mNotificationManager.notify(notification_id,mBuilder.build());
+                calendar.set(Calendar.HOUR_OF_DAY, 19);
+                calendar.set(Calendar.MINUTE, 23);
+                calendar.set(Calendar.SECOND, 0);
 
+                //Calls the broadcast receiver to set the alarm
+                Intent notification_intent = new Intent(context, NotificationReceiver.class);
+
+                /** The intent will have several extras:
+                 * 1: size of the arrayList
+                 * 2: each section */
+                if (listOfSections.size() != 0) {
+
+                    Log.i(TAG, "Before putting the size");
+                    notification_intent.putExtra("Size", listOfSections.size());
+                    Log.i(TAG, "After putting the size");
+
+                    for (int i = 0; i < listOfSections.size(); i++) {
+                        notification_intent.putExtra("ListOfSections" + i, listOfSections.get(i));
+                    }
+                }
+
+                for (int i = 0; i < listOfSections.size() ; i++) {
+                    Log.i(TAG, listOfSections.get(i));
+                }
+
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                        getApplicationContext(),
+                        100,
+                        notification_intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                alarmManager.setRepeating(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis(),
+                        AlarmManager.INTERVAL_DAY,
+                        pendingIntent);
             }
         });
-
 
         //Code for the switch
         mSwitch.setOnClickListener(new View.OnClickListener() {

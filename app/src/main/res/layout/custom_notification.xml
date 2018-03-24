@@ -1,39 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="64dp"
-    android:background="@color/colorPrimary"
-    android:padding="5dp">
+    android:paddingLeft="25dp"
+    android:paddingTop="2dp"
+    android:paddingBottom="10dp">
 
-    <ImageView
-        android:id="@+id/custom_notif_icon"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/custom_notif_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="MyNews"
+            android:paddingTop="7dp"
+            android:paddingLeft="5dp"/>
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/custom_notif_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_dialog_info"
-        android:layout_gravity="center"/>
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimary"
+        android:text="New Articles to read" />
 
     <TextView
         android:id="@+id/custom_notif_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You have new articles ready to read"
-        android:textColor="#ffffff"
-        android:textStyle="bold" />
-
-    <FrameLayout
-        android:layout_width="50dp"
-        android:layout_height="wrap_content">
-    </FrameLayout>
-
-    <Button
-        android:id="@+id/custom_notif_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Go to articles"
-        android:background="@color/colorPrimaryDark"
-        android:textColor="#ffffff"
-        android:textStyle="bold" />
+        android:textSize="12sp"
+        android:textColor="@color/colorAccent"
+        android:text="Tap to read the articles"
+        android:padding="5dp"/>
 
 </LinearLayout>

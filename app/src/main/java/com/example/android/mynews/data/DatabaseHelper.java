@@ -7,6 +7,7 @@ import android.database.MatrixCursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -32,24 +33,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    //METHOD to create all tables from the table name
-    private String createTableWithName (String nameOfTheTable) {
+    //TABLE CREATION STATEMENTS
+    private static final String CREATE_ARTICLES_READ_TABLE =
+            "CREATE TABLE " + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME
+                    + " ("
+                    + DatabaseContract.Database.RESULT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + DatabaseContract.Database.ARTICLE_URL + " TEXT NOT NULL"
+                    + ")";
 
-        return
-        "CREATE TABLE " + nameOfTheTable
-                + " ("
-                + DatabaseContract.Database.RESULT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + DatabaseContract.Database.ARTICLE_URL + " TEXT"
-                + ")";
-    }
+    private static final String CREATE_NOTIFICATIONS_TABLE =
+            "CREATE TABLE " + DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME
+            + " ("
+            + DatabaseContract.Database.SECTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + DatabaseContract.Database.SECTION + " TEXT NOT NULL"
+            + ")";
+
 
     //CREATING the tables
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
         //CREATING the tables
-        sqLiteDatabase.execSQL(createTableWithName(
-                DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME));
+        sqLiteDatabase.execSQL(CREATE_ARTICLES_READ_TABLE);
+        sqLiteDatabase.execSQL(CREATE_NOTIFICATIONS_TABLE);
 
     }
 
@@ -59,14 +65,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //On upgrade drop older versions
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME);
 
         //Create new table
         onCreate(db);
 
     }
 
-    //METHOD FOR INSERTING data in every table
-    public boolean insertData (String article_url) {
+    /**
+     * METHOD FOR INSERTING data in every table
+     * */
+    public boolean insertDataUsingTableName (String table_name, String article_url) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -74,7 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(DatabaseContract.Database.ARTICLE_URL, article_url);
 
         long result = db.insert(
-                DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME,
+                table_name,
                 null,
                 contentValues);
 
@@ -88,6 +97,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * METHOD FOR GETTING the data from each table
+     * */
     public Cursor getAllDataFromTableName(String table_name) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -99,19 +111,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void deleteAllRows () {
+    /**
+     * METHOD FOR DELETING the data from each table
+     * */
+    public void deleteAllRowsFromTableName (String table_name) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-
-        db.delete(" \"" + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME + "\" ", null, null);
+        db.delete(table_name, null, null);
 
     }
 
-    public void resetAutoIncrement () {
+
+//    public void deleteAllRows () {
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        db.delete(" \"" + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME + "\" ", null, null);
+//
+//    }
+
+    /**
+     * METHOD FOR RESETTING AUTOINCREMENT ID from each table
+     * */
+    public void resetAutoIncrement (String table_name) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME + "'");
+        db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + table_name + "'");
 
     }
 
