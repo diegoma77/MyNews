@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,7 +108,7 @@ public class RvAdapterBusiness extends RecyclerView.Adapter<RvAdapterBusiness.Vi
                 //Checks that the article is not yet in the database. If it is, we don't add it.
                 //If it's not, we add it. This way we keep the track of the articles the user has read
                 if (!checkIfArticleUrlIsInTheDatabase(businessObjectArrayList.get(position).getArticleUrl())){
-                    dbH.insertData(businessObjectArrayList.get(position).getArticleUrl());
+                    dbH.insertDataToAlreadyReadArticlesTable(businessObjectArrayList.get(position).getArticleUrl());
                 }
 
                 Intent intent = new Intent(context, WebViewMainActivity.class);

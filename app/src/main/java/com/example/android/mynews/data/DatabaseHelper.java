@@ -73,9 +73,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * METHOD FOR INSERTING data in every table
+     * METHOD FOR INSERTING data in Already Read Articles Table
      * */
-    public boolean insertDataUsingTableName (String table_name, String article_url) {
+    public boolean insertDataToAlreadyReadArticlesTable(String article_url) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -83,7 +83,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(DatabaseContract.Database.ARTICLE_URL, article_url);
 
         long result = db.insert(
-                table_name,
+                DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME,
+                null,
+                contentValues);
+
+        db.close();
+
+        if (result == -1) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    /**
+     * METHOD FOR INSERTING data in Notifications Sectionf Table
+     * */
+    public boolean insertDataToNotificationsSectionTable(String section) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseContract.Database.SECTION, section);
+
+        long result = db.insert(
+                DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME,
                 null,
                 contentValues);
 
@@ -121,6 +146,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public boolean deleteSingleRowFromTableName (String table_name, String key) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(table_name, DatabaseContract.Database.SECTION + " = " + key, null) > 0;
+
+    }
 
 //    public void deleteAllRows () {
 //

@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,7 +109,7 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
                 //Checks that the article is not yet in the database. If it is, we don't add it.
                 //If it's not, we add it. This way we keep the track of the articles the user has read
                 if (!checkIfArticleUrlIsInTheDatabase(mostPopularObjectArrayList.get(position).getArticle_url())){
-                    dbH.insertData(mostPopularObjectArrayList.get(position).getArticle_url());
+                    dbH.insertDataToAlreadyReadArticlesTable(mostPopularObjectArrayList.get(position).getArticle_url());
                 }
 
                 Intent intent = new Intent(context, WebViewMainActivity.class);

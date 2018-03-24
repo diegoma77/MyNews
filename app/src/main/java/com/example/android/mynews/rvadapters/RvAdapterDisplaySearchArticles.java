@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.mynews.R;
-import com.example.android.mynews.activities.WebViewMainActivity;
 import com.example.android.mynews.activities.WebViewSearchActivity;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
@@ -113,7 +112,7 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
                 //Checks that the article is not yet in the database. If it is, we don't add it.
                 //If it's not, we add it. This way we keep the track of the articles the user has read
                 if (!checkIfArticleUrlIsInTheDatabase(searchArticlesList.get(position).getWeb_url())){
-                    dbH.insertData(searchArticlesList.get(position).getWeb_url());
+                    dbH.insertDataToAlreadyReadArticlesTable(searchArticlesList.get(position).getWeb_url());
                 }
 
                 Intent intent = new Intent(context, WebViewSearchActivity.class);

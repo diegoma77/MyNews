@@ -63,6 +63,7 @@
                         android:buttonTint="@color/colorPrimary"
                         android:textColor="@color/colorPrimary"
                         android:text="Arts"
+                        android:onClick="onCheckboxClicked"
                         />
 
                     <CheckBox
@@ -72,6 +73,7 @@
                         android:buttonTint="@color/colorPrimary"
                         android:textColor="@color/colorPrimary"
                         android:text="Business"
+                        android:onClick="onCheckboxClicked"
                         />
 
                     <CheckBox
@@ -80,7 +82,9 @@
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/colorPrimary"
                         android:textColor="@color/colorPrimary"
-                        android:text="Entrepeneurs"/>
+                        android:text="Entrepeneurs"
+                        android:onClick="onCheckboxClicked"
+                        />
 
                 </LinearLayout>
 
@@ -105,6 +109,7 @@
                         android:buttonTint="@color/colorPrimary"
                         android:textColor="@color/colorPrimary"
                         android:text="Politics"
+                        android:onClick="onCheckboxClicked"
                         />
 
                     <CheckBox
@@ -114,6 +119,7 @@
                         android:buttonTint="@color/colorPrimary"
                         android:textColor="@color/colorPrimary"
                         android:text="Sports"
+                        android:onClick="onCheckboxClicked"
                         />
 
                     <CheckBox
@@ -122,7 +128,9 @@
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/colorPrimary"
                         android:textColor="@color/colorPrimary"
-                        android:text="Travel"/>
+                        android:text="Travel"
+                        android:onClick="onCheckboxClicked"
+                        />
 
                 </LinearLayout>
 
@@ -134,10 +142,10 @@
             android:id="@+id/notif_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:text="Enable notifications (once per day)           "
-            android:paddingTop="20dp"
             android:paddingBottom="10dp"
+            android:paddingTop="20dp"
+            android:text="Enable notifications (once per day)           "
+            android:textColor="@color/colorPrimary"
             />
 
         <Button
