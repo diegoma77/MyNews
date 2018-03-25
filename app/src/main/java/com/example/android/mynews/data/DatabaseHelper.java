@@ -146,10 +146,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean deleteSingleRowFromTableName (String table_name, String key) {
+    public void deleteSingleRowFromTableName (String table_name, String key) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(table_name, DatabaseContract.Database.SECTION + " = " + key, null) > 0;
+
+        db.delete(
+                table_name,
+                DatabaseContract.Database.SECTION + "=?",
+                new String[] {key} );
 
     }
 
