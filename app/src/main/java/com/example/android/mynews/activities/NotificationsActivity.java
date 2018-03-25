@@ -4,7 +4,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.NotificationCompat;
@@ -26,9 +25,6 @@ import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Diego Fajardo on 26/02/2018.
  */
@@ -36,6 +32,7 @@ import java.util.List;
 public class NotificationsActivity extends AppCompatActivity {
 
     private static final String TAG = "NotificationsActivity";
+    private static final String C_TAG = "CursorErrorTag";
 
     //Variables for notifications
     private NotificationCompat.Builder mBuilder;
@@ -80,30 +77,6 @@ public class NotificationsActivity extends AppCompatActivity {
 
         dbH = new DatabaseHelper (this);
 
-        /** This method updates the user interface according to the information that can be found
-         * in the database
-         * */
-        if (!dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME)) {
-            checkAllCheckboxesIfInTable();
-        }
-
-        // TODO: 24/03/2018 Delete
-        button_test = (Button) findViewById(R.id.test_button);
-
-        //Switch
-        mSwitch = (Switch) findViewById(R.id.notif_switch);
-
-        //If the notifications_section table is not empty, then Switch must be on. If its empty, must be disabled
-        if (dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME)) {
-            mSwitch.setEnabled(false);
-            Toast.makeText(NotificationsActivity.this,
-                    "Please, choose at least one category",
-                    Toast.LENGTH_LONG).show();
-        }
-        else {
-            mSwitch.setChecked(true);
-        }
-
         //TextInputEditText
         mTextInputEditText = (TextInputEditText) findViewById(R.id.notif_text_input_edit_text);
 
@@ -115,6 +88,46 @@ public class NotificationsActivity extends AppCompatActivity {
         cb_sports = (CheckBox) findViewById(R.id.notif_checkBox_sports);
         cb_travel = (CheckBox) findViewById(R.id.notif_checkBox_travel);
 
+        // TODO: 24/03/2018 Delete
+        button_test = (Button) findViewById(R.id.test_button);
+
+        //Switch
+        mSwitch = (Switch) findViewById(R.id.notif_switch);
+
+        if (dbH.isTableEmpty(DatabaseContract.Database.SWITCH_TABLE_NAME)) {
+            dbH.insertDataToSwitchTable(0);
+        }
+
+        /** This method updates the user interface according to the information that can be found
+         * in the database
+         * */
+        if (!dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME)) {
+            checkAllCheckboxesIfInTable();
+        }
+
+        /** If the notifications_section table is NOT EMPTY and Switch WAS ON, then Switch must be on.
+         * If te notifications table its empty, must be disabled */
+        if (dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME)) {
+            mSwitch.setEnabled(false);
+            Toast.makeText(NotificationsActivity.this,
+                    "Please, choose at least one category",
+                    Toast.LENGTH_LONG).show();
+        }
+        else {
+            Log.i(C_TAG, "else clause");
+            // TODO: 25/03/2018 Change this: if Switch was not checked it turns on if the table is NOT EMPTY
+            mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.SWITCH_TABLE_NAME);
+            Log.i(C_TAG, "got all data");
+            mCursor.moveToFirst();
+            Log.i(C_TAG, "moved to first");
+            if (mCursor.getInt(mCursor.getColumnIndex(DatabaseContract.Database.SWITCH_STATE)) > 0) {
+                Log.i(C_TAG, "Got the info");
+                mSwitch.setChecked(true);
+            }
+            else {
+                mSwitch.setChecked(false);
+            }
+        }
 
         /** Code for the notifications */
 
@@ -141,6 +154,8 @@ public class NotificationsActivity extends AppCompatActivity {
 
                 if (isChecked == true) {
                     Toast.makeText(context, "Switch is checked", Toast.LENGTH_SHORT).show();
+                    mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.SWITCH_TABLE_NAME);
+                    dbH.setSwitchOnInDatabase();
 
                     mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME);
                     mCursor.moveToFirst();
@@ -158,7 +173,10 @@ public class NotificationsActivity extends AppCompatActivity {
 
                 else {
                     Toast.makeText(context, "Switch is NOT checked", Toast.LENGTH_SHORT).show();
+
                     dbH.deleteAllRowsFromTableName(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME);
+                    dbH.resetAutoIncrement(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME);
+                    dbH.setSwitchOffInDatabase();
                     setAllCheckboxesToUnChecked();
                 }
 
@@ -422,12 +440,13 @@ public class NotificationsActivity extends AppCompatActivity {
 
         for (int i = 0; i < mCursor.getCount() ; i++) {
 
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)) == Keys.CheckboxFields.CB_ARTS) cb_arts.setChecked(true);
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)) == Keys.CheckboxFields.CB_BUSINESS) cb_business.setChecked(true);
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)) == Keys.CheckboxFields.CB_ENTREPRENEURS) cb_entrepreneurs.setChecked(true);
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)) == Keys.CheckboxFields.CB_POLITICS) cb_politics.setChecked(true);
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)) == Keys.CheckboxFields.CB_SPORTS) cb_sports.setChecked(true);
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)) == Keys.CheckboxFields.CB_TRAVEL) cb_travel.setChecked(true);
+            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)).equals(Keys.CheckboxFields.CB_ARTS)) cb_arts.setChecked(true);
+            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)).equals(Keys.CheckboxFields.CB_BUSINESS)) cb_business.setChecked(true);
+            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)).equals(Keys.CheckboxFields.CB_ENTREPRENEURS)) cb_entrepreneurs.setChecked(true);
+            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)).equals(Keys.CheckboxFields.CB_POLITICS)) cb_politics.setChecked(true);
+            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)).equals(Keys.CheckboxFields.CB_SPORTS)) cb_sports.setChecked(true);
+            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)).equals(Keys.CheckboxFields.CB_TRAVEL)) cb_travel.setChecked(true);
+            mCursor.moveToNext();
 
         }
     }

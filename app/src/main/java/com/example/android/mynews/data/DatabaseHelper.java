@@ -7,7 +7,6 @@ import android.database.MatrixCursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_ARTICLES_READ_TABLE =
             "CREATE TABLE " + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME
                     + " ("
-                    + DatabaseContract.Database.RESULT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + DatabaseContract.Database.ARTICLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + DatabaseContract.Database.ARTICLE_URL + " TEXT NOT NULL"
                     + ")";
 
@@ -48,6 +47,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + DatabaseContract.Database.SECTION + " TEXT NOT NULL"
             + ")";
 
+    private static final String CREATE_SWITCH_TABLE =
+            "CREATE TABLE " + DatabaseContract.Database.SWITCH_TABLE_NAME
+            + " ("
+            + DatabaseContract.Database.SWITCH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + DatabaseContract.Database.SWITCH_STATE + " FLAG INTEGER DEFAULT 0"
+            + ")";
+
 
     //CREATING the tables
     @Override
@@ -56,6 +62,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //CREATING the tables
         sqLiteDatabase.execSQL(CREATE_ARTICLES_READ_TABLE);
         sqLiteDatabase.execSQL(CREATE_NOTIFICATIONS_TABLE);
+        sqLiteDatabase.execSQL(CREATE_SWITCH_TABLE);
 
     }
 
@@ -120,6 +127,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else {
             return true;
         }
+    }
+
+    /**
+     * METHOD FOR INSERTING data in Notifications Sectionf Table
+     * */
+    public boolean insertDataToSwitchTable(int state) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseContract.Database.SWITCH_STATE, state);
+
+        long result = db.insert(
+                DatabaseContract.Database.SWITCH_TABLE_NAME,
+                null,
+                contentValues);
+
+        db.close();
+
+        if (result == -1) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public void setSwitchOnInDatabase() {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseContract.Database.SWITCH_STATE, 1);
+
+        db.update(DatabaseContract.Database.SWITCH_TABLE_NAME,
+                contentValues,
+                DatabaseContract.Database.SECTION_ID + "=?",
+                new String[] { "1" });
+    }
+
+    public void setSwitchOffInDatabase() {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseContract.Database.SWITCH_STATE, 0);
+
+        db.update(DatabaseContract.Database.SWITCH_TABLE_NAME,
+                contentValues,
+                DatabaseContract.Database.SECTION_ID + "=?",
+                new String[] { "1" });
     }
 
     /**
