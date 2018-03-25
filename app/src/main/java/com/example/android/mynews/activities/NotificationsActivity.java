@@ -1,6 +1,8 @@
 package com.example.android.mynews.activities;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,9 +23,12 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.broadcastreceiver.NotificationReceiver;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
+
+import java.util.Calendar;
 
 /**
  * Created by Diego Fajardo on 26/02/2018.
@@ -94,38 +99,50 @@ public class NotificationsActivity extends AppCompatActivity {
         //Switch
         mSwitch = (Switch) findViewById(R.id.notif_switch);
 
-        if (dbH.isTableEmpty(DatabaseContract.Database.SWITCH_TABLE_NAME)) {
+        /** Called the first time the Activity is created (and only this time).
+         * Inserts data into the Notifications' Switch table.
+         * Sets the switch in the database to false.
+         * Inserts "" strings into all ids in Query or Search table
+         *  */
+        if (dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME)) {
             dbH.insertDataToSwitchTable(0);
+        }
+        if (dbH.isTableEmpty(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME)){
+
+            for (int i = 0; i < 7; i++) {
+                dbH.insertDataToSearchQueryTable("");
+            }
         }
 
         /** This method updates the user interface according to the information that can be found
-         * in the database
+         * in the database.
+         * It shows in the Search Query the last search
          * */
-        if (!dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME)) {
+        if (!dbH.isTableEmpty(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME)) {
+            mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+            mCursor.moveToFirst();
+            mTextInputEditText.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)).toUpperCase());
+        }
+
+        /** This method updates the user interface according to the information that can be found
+         * in the database. If the user left any checkBox checked, this information will be at the
+         * the database and this code will update the UI according to the information
+         * */
+        if (!dbH.isTableEmpty(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME)) {
             checkAllCheckboxesIfInTable();
         }
 
-        /** If the notifications_section table is NOT EMPTY and Switch WAS ON, then Switch must be on.
-         * If te notifications table its empty, must be disabled */
-        if (dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME)) {
-            mSwitch.setEnabled(false);
-            Toast.makeText(NotificationsActivity.this,
-                    "Please, choose at least one category",
-                    Toast.LENGTH_LONG).show();
-        }
-        else {
-            Log.i(C_TAG, "else clause");
-            // TODO: 25/03/2018 Change this: if Switch was not checked it turns on if the table is NOT EMPTY
-            mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.SWITCH_TABLE_NAME);
-            Log.i(C_TAG, "got all data");
+        /** This method updates the switch state according to the information in the database. */
+        if (!dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME)) {
+            mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME);
             mCursor.moveToFirst();
-            Log.i(C_TAG, "moved to first");
-            if (mCursor.getInt(mCursor.getColumnIndex(DatabaseContract.Database.SWITCH_STATE)) > 0) {
-                Log.i(C_TAG, "Got the info");
-                mSwitch.setChecked(true);
+
+            if (mCursor.getInt(mCursor.getColumnIndex(DatabaseContract.Database.SWITCH_STATE)) == 0) {
+                mSwitch.setChecked(false);
+                disableSwitchIfNeeded();
             }
             else {
-                mSwitch.setChecked(false);
+                mSwitch.setChecked(true);
             }
         }
 
@@ -148,36 +165,37 @@ public class NotificationsActivity extends AppCompatActivity {
         final Intent button_intent = new Intent("button_clicked");
         button_intent.putExtra("id", notification_id);
 
+
+        /** LISTENERS */
+
         mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked == true) {
-                    Toast.makeText(context, "Switch is checked", Toast.LENGTH_SHORT).show();
-                    mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.SWITCH_TABLE_NAME);
+                    Toast.makeText(context, "Switch is CHECKED", Toast.LENGTH_SHORT).show();
+
+                    /** First, the state of the switch is updated in the database (ON) */
+                    mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME);
                     dbH.setSwitchOnInDatabase();
 
-                    mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME);
-                    mCursor.moveToFirst();
+                    /** Second, Search Query table is updated with the information from the Text Input */
+                    dbH.updateSearchQueryOrSection(mTextInputEditText.getText().toString(), 1);
 
-                    for (int i = 0; i < mCursor.getCount(); i++) {
-                        if (mCursor.getPosition() == 0) {
-                            Log.i("mCursor", mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)));
-                            mCursor.moveToNext();
-                        } else {
-                            Log.i("mCursor", mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)));
-                            mCursor.moveToNext();
-                        }
-                    }
+                    /** Third, we create the alarm manager, which will
+                     * call the DisplayNotificationsActivity*/
+                    Toast.makeText(context, "Notification Created", Toast.LENGTH_SHORT).show();
+                    createAlarm();
+
                 }
 
                 else {
-                    Toast.makeText(context, "Switch is NOT checked", Toast.LENGTH_SHORT).show();
-
-                    dbH.deleteAllRowsFromTableName(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME);
-                    dbH.resetAutoIncrement(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME);
+                    Toast.makeText(context, "Switch is NOT CHECKED", Toast.LENGTH_SHORT).show();
                     dbH.setSwitchOffInDatabase();
-                    setAllCheckboxesToUnChecked();
+
+                    // TODO: 25/03/2018 If alarmManager existed, then cancel it
+                    cancelAlarm();
+
                 }
 
             }
@@ -190,6 +208,7 @@ public class NotificationsActivity extends AppCompatActivity {
          //Request code can be any number
          */
         //Code for the button of the notification layout
+        // TODO: 25/03/2018 Delete when finished
         button_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,102 +216,24 @@ public class NotificationsActivity extends AppCompatActivity {
                 Toast.makeText(context, "Test Button is clicked", Toast.LENGTH_SHORT).show();
 
                 dbH = new DatabaseHelper(getApplicationContext());
-                mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME);
+                mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+                mCursor.moveToFirst();
 
-                Log.i("TEST BUTTON", "mCursor count =" + mCursor.getCount());
-
-
-                /**
-                if (listOfSections.size() != 0) {
-
-                    for (int i = 0; i < listOfSections.size(); i++) {
-                        Log.i ( "LIST OF SECTIONS(" + i + ")", listOfSections.get(i));
-                    }
-
-                }
-                else { Log.i ( "LIST OF SECTIONS", "IS EMPTY"); }
-
-                 */
-
-
-                /**
-
-                Calendar calendar = Calendar.getInstance();
-
-                calendar.set(Calendar.HOUR_OF_DAY, 19);
-                calendar.set(Calendar.MINUTE, 23);
-                calendar.set(Calendar.SECOND, 0);
-
-                //Calls the broadcast receiver to set the alarm
-                Intent notification_intent = new Intent(context, NotificationReceiver.class);
-
-                 */
-
-                /** The intent will have several extras:
-                 * 1: size of the arrayList
-                 * 2: each section */
-
-                /**
-
-                if (listOfSections.size() != 0) {
-
-                    Log.i(TAG, "Before putting the size");
-                    notification_intent.putExtra("Size", listOfSections.size());
-                    Log.i(TAG, "After putting the size");
-
-                    for (int i = 0; i < listOfSections.size(); i++) {
-                        notification_intent.putExtra("ListOfSections" + i, listOfSections.get(i));
-                    }
-                }
-
-                for (int i = 0; i < listOfSections.size() ; i++) {
-                    Log.i(TAG, listOfSections.get(i));
-                }
-
-
-
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                        getApplicationContext(),
-                        100,
-                        notification_intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-
-                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                alarmManager.setRepeating(
-                        AlarmManager.RTC_WAKEUP,
-                        calendar.getTimeInMillis(),
-                        AlarmManager.INTERVAL_DAY,
-                        pendingIntent);
-
-                 */
-            }
-        });
-
-        //Code for the switch
-        // TODO: 25/03/2018 Can be removed
-        mSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (!cb_arts.isChecked()
-                        && !cb_business.isChecked()
-                        && !cb_entrepreneurs.isChecked()
-                        && !cb_politics.isChecked()
-                        && !cb_sports.isChecked()
-                        && !cb_travel.isChecked()) {
-                    
-                    Toast.makeText(NotificationsActivity.this, "You have to choose at least one category", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    if (mSwitch.isChecked()) {
-                        Toast.makeText(NotificationsActivity.this, "Now switch is on", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Toast.makeText(NotificationsActivity.this, "Now switch is off", Toast.LENGTH_SHORT).show();
+                for (int i = 0; i < mCursor.getCount(); i++) {
+                    if (mCursor.getPosition() == 0) {
+                        Log.i(
+                                "ID --> " + mCursor.getInt(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION_ID)),
+                                mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)));
                     }
                 }
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        dbH.updateSearchQueryOrSection(mTextInputEditText.getText().toString().toLowerCase(), 1);
+        super.onPause();
     }
 
     /** Menu listeners */
@@ -307,175 +248,206 @@ public class NotificationsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /** Method to add and delete sections as well as disable the switch if needed */
+    /** Method to add and delete sections as well as disable the switch if needed.
+     * When a checkbox is checked, add a String with the name of the checkbox to the list if it doesn't exist.
+     * When unchecked, check if there is an element with the name of the checkbox in the array. If there is any,
+     * remove it from the list. Additionally, set the switch to unchecked */
     public void onCheckboxClicked(View view) {
 
         // Is the view now checked?
         boolean checked = ((CheckBox) view).isChecked();
 
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+
         // Check which checkbox was clicked
         switch(view.getId()) {
             case R.id.notif_checkBox_arts:
-                ///When checked, add a String with the name of the checkbox to the list if it doesn't exist
                 if (checked) {
-                    addSectionToTable(Keys.CheckboxFields.CB_ARTS);
+                    dbH.updateSearchQueryOrSection(Keys.CheckboxFields.CB_ARTS, 2);
+                    mSwitch.setEnabled(true);
                 }
-                //When unchecked, check if there is an element with the name of the checkbox in the array
-                //if there is one, remove it from the list
                 else {
-                    deleteSectionFromTable(Keys.CheckboxFields.CB_ARTS);
+                    dbH.updateSearchQueryOrSection("", 2);
                     disableSwitchIfNeeded();
                 }
                 break;
 
             case R.id.notif_checkBox_business:
-                ///When checked, add a String with the name of the checkbox to the list if it doesn't exist
                 if (checked) {
-                    addSectionToTable(Keys.CheckboxFields.CB_BUSINESS);
+                    dbH.updateSearchQueryOrSection(Keys.CheckboxFields.CB_BUSINESS, 3);
+                    mSwitch.setEnabled(true);
                 }
-                //When unchecked, check if there is an element with the name of the checkbox in the array
-                //if there is one, remove it from the list
                 else {
-                    deleteSectionFromTable(Keys.CheckboxFields.CB_BUSINESS);
+                    dbH.updateSearchQueryOrSection("", 3);
                     disableSwitchIfNeeded();
                 }
                 break;
 
             case R.id.notif_checkBox_entrepeneurs:
-                ///When checked, add a String with the name of the checkbox to the list if it doesn't exist
                 if (checked) {
-                    addSectionToTable(Keys.CheckboxFields.CB_ENTREPRENEURS);
+                    dbH.updateSearchQueryOrSection(Keys.CheckboxFields.CB_ENTREPRENEURS, 4);
+                    mSwitch.setEnabled(true);
                 }
-                //When unchecked, check if there is an element with the name of the checkbox in the array
-                //if there is one, remove it from the list
                 else {
-                    deleteSectionFromTable(Keys.CheckboxFields.CB_ENTREPRENEURS);
+                    dbH.updateSearchQueryOrSection("", 4);
                     disableSwitchIfNeeded();
                 }
                 break;
 
             case R.id.notif_checkBox_politics:
-                ///When checked, add a String with the name of the checkbox to the list if it doesn't exist
                 if (checked) {
-                    addSectionToTable(Keys.CheckboxFields.CB_POLITICS);
+                    dbH.updateSearchQueryOrSection(Keys.CheckboxFields.CB_POLITICS, 5);
+                    mSwitch.setEnabled(true);
                 }
-                //When unchecked, check if there is an element with the name of the checkbox in the array
-                //if there is one, remove it from the list
                 else {
-                    deleteSectionFromTable(Keys.CheckboxFields.CB_POLITICS);
+                    dbH.updateSearchQueryOrSection("", 5);
                     disableSwitchIfNeeded();
                 }
                 break;
 
             case R.id.notif_checkBox_sports:
-                ///When checked, add a String with the name of the checkbox to the list if it doesn't exist
                 if (checked) {
-                    addSectionToTable(Keys.CheckboxFields.CB_SPORTS);
+                    dbH.updateSearchQueryOrSection(Keys.CheckboxFields.CB_SPORTS, 6);
+                    mSwitch.setEnabled(true);
                 }
-                //When unchecked, check if there is an element with the name of the checkbox in the array
-                //if there is one, remove it from the list
                 else {
-                    deleteSectionFromTable(Keys.CheckboxFields.CB_SPORTS);
+                    dbH.updateSearchQueryOrSection("", 6);
                     disableSwitchIfNeeded();
                 }
                 break;
 
             case R.id.notif_checkBox_travel:
-                ///When checked, add a String with the name of the checkbox to the list if it doesn't exist
                 if (checked) {
-                    addSectionToTable(Keys.CheckboxFields.CB_TRAVEL);
+                    dbH.updateSearchQueryOrSection(Keys.CheckboxFields.CB_TRAVEL, 7);
+                    mSwitch.setEnabled(true);
                 }
-                //When unchecked, check if there is an element with the name of the checkbox in the array
-                //if there is one, remove it from the list
                 else {
-                    deleteSectionFromTable(Keys.CheckboxFields.CB_TRAVEL);
+                    dbH.updateSearchQueryOrSection("", 7);
                     disableSwitchIfNeeded();
                 }
                 break;
         }
     }
 
-    /** This method is called when the Switch turns unchecked. It unchecks all the checkboxes */
-    private void setAllCheckboxesToUnChecked() {
-
-        cb_arts.setChecked(false);
-        cb_business.setChecked(false);
-        cb_entrepreneurs.setChecked(false);
-        cb_politics.setChecked(false);
-        cb_sports.setChecked(false);
-        cb_travel.setChecked(false);
-
-    }
-
-    /** This method is called when the table doesn't have the section but the checkbox is checked. It
-     * adds the section to the table */
-    private void addSectionToTable (String section) {
-
-        int counter = 0;
-        dbH = new DatabaseHelper(this);
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME);
-        mCursor.moveToFirst();
-        for (int i = 0; i < mCursor.getCount() ; i++) {
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)).equals(section)) {
-                counter++;
-            }
-        }
-
-        if (counter == 0) {
-            dbH.insertDataToNotificationsSectionTable(section);
-            mSwitch.setEnabled(true);
-        }
-
-    }
-
     /**
-     * This method is called when the activity is created to update the UI according to the information
-     * already present in the database. It checks the checkbox if the section is already present in the table
+     * This method is called when the activity is created
+     * to update the UI according to the information
+     * already present in the database. It checks
+     * the checkbox if the section is already in the table
      * */
     private void checkAllCheckboxesIfInTable () {
 
         dbH = new DatabaseHelper(this);
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME);
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
         mCursor.moveToFirst();
 
-        for (int i = 0; i < mCursor.getCount() ; i++) {
+        for (int i = 0; i < mCursor.getCount()-1 ; i++) {
 
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)).equals(Keys.CheckboxFields.CB_ARTS)) cb_arts.setChecked(true);
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)).equals(Keys.CheckboxFields.CB_BUSINESS)) cb_business.setChecked(true);
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)).equals(Keys.CheckboxFields.CB_ENTREPRENEURS)) cb_entrepreneurs.setChecked(true);
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)).equals(Keys.CheckboxFields.CB_POLITICS)) cb_politics.setChecked(true);
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)).equals(Keys.CheckboxFields.CB_SPORTS)) cb_sports.setChecked(true);
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)).equals(Keys.CheckboxFields.CB_TRAVEL)) cb_travel.setChecked(true);
             mCursor.moveToNext();
 
-        }
-    }
-
-    /**
-     * This method is called when the checkbox is unchecked. It deletes the section from the table
-     * */
-    private void deleteSectionFromTable (String section) {
-
-        dbH = new DatabaseHelper(this);
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME);
-        mCursor.moveToFirst();
-
-        for (int i = 0; i < mCursor.getCount() ; i++) {
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)).equals(section)) {
-                dbH.deleteSingleRowFromTableName(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME, section);
+            if (mCursor.getString(
+                    mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION))
+                    .equals(Keys.CheckboxFields.CB_ARTS)) {
+                cb_arts.setChecked(true);
             }
-            mCursor.moveToNext();
+
+            if (mCursor.getString(
+                    mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION))
+                    .equals(Keys.CheckboxFields.CB_BUSINESS)) {
+                cb_business.setChecked(true);
+            }
+
+            if (mCursor.getString(
+                    mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION))
+                    .equals(Keys.CheckboxFields.CB_ENTREPRENEURS)) {
+                cb_entrepreneurs.setChecked(true);
+            }
+
+            if (mCursor.getString(
+                    mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION))
+                    .equals(Keys.CheckboxFields.CB_POLITICS)) {
+                cb_politics.setChecked(true);
+            }
+
+            if (mCursor.getString(
+                    mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION))
+                    .equals(Keys.CheckboxFields.CB_SPORTS)) {
+                cb_sports.setChecked(true);
+            }
+
+            if (mCursor.getString(
+                    mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION))
+                    .equals(Keys.CheckboxFields.CB_TRAVEL)) {
+                cb_travel.setChecked(true);
+            }
         }
     }
 
-    /**This method disables the switch to prevent the user to call the alarm manager if no section
-     * has been selected. It is called when the last checked checkbox turns unchecked
+    /**This method disables the switch to prevent the user to call
+     * the alarm manager if no section has been selected.
+     * It is called when the last checked checkbox turns unchecked
      * */
     private void disableSwitchIfNeeded () {
 
-        if (dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME)) {
+        int counter = 0;
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+        mCursor.moveToFirst();
+
+        for (int i = 0; i < mCursor.getCount()-1 ; i++) {
+            mCursor.moveToNext();
+            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)).equals("")) {
+                counter++;
+            }
+        }
+        //If counter is 6, then no checkbox is checked and mSwitch must be disabled
+        if (counter == mCursor.getCount()-1) {
             mSwitch.setChecked(false);
             mSwitch.setEnabled(false);
         }
     }
+
+    /** This method creates the alarm for the notification */
+    private void createAlarm () {
+        //We create an instance of a calendar class to set
+        // the time when the notification will appear
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.HOUR_OF_DAY, 19);
+        calendar.set(Calendar.MINUTE, 23);
+        calendar.set(Calendar.SECOND, 0);
+
+        //Calls the broadcast receiver to set the alarm
+        Intent notification_intent = new Intent(context, NotificationReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getApplicationContext(),
+                100,
+                notification_intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent);
+
+    }
+
+    /** This method cancels the alarm */
+    private void cancelAlarm () {
+
+        Intent notification_intent = new Intent(context, NotificationReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getApplicationContext(),
+                100,
+                notification_intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+
+    }
+
 }

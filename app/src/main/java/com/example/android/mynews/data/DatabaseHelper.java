@@ -40,19 +40,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + DatabaseContract.Database.ARTICLE_URL + " TEXT NOT NULL"
                     + ")";
 
-    private static final String CREATE_NOTIFICATIONS_TABLE =
-            "CREATE TABLE " + DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME
+    private static final String CREATE_QUERY_OR_SECTION_TABLE =
+            "CREATE TABLE " + DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME
             + " ("
-            + DatabaseContract.Database.SECTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + DatabaseContract.Database.SECTION + " TEXT NOT NULL"
+            + DatabaseContract.Database.QUERY_OR_SECTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + DatabaseContract.Database.QUERY_OR_SECTION + " TEXT NOT NULL"
             + ")";
 
     private static final String CREATE_SWITCH_TABLE =
-            "CREATE TABLE " + DatabaseContract.Database.SWITCH_TABLE_NAME
-            + " ("
-            + DatabaseContract.Database.SWITCH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + DatabaseContract.Database.SWITCH_STATE + " FLAG INTEGER DEFAULT 0"
-            + ")";
+            "CREATE TABLE " + DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME
+                    + " ("
+                    + DatabaseContract.Database.SWITCH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + DatabaseContract.Database.SWITCH_STATE + " FLAG INTEGER DEFAULT 0"
+                    + ")";
 
 
     //CREATING the tables
@@ -61,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //CREATING the tables
         sqLiteDatabase.execSQL(CREATE_ARTICLES_READ_TABLE);
-        sqLiteDatabase.execSQL(CREATE_NOTIFICATIONS_TABLE);
+        sqLiteDatabase.execSQL(CREATE_QUERY_OR_SECTION_TABLE);
         sqLiteDatabase.execSQL(CREATE_SWITCH_TABLE);
 
     }
@@ -72,7 +72,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //On upgrade drop older versions
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME);
 
         //Create new table
         onCreate(db);
@@ -80,7 +81,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * METHOD FOR INSERTING data in Already Read Articles Table
+     * METHOD FOR INSERTING data in Search Queries' Table
+     * */
+    public boolean insertDataToSearchQueryTable (String queryOrSection) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseContract.Database.QUERY_OR_SECTION, queryOrSection);
+
+        long result = db.insert(
+                DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME,
+                null,
+                contentValues);
+
+        db.close();
+
+        if (result == -1) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    /** Updates the Query or Section in the database  */
+    public void updateSearchQueryOrSection(String queryOrSection, int position) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseContract.Database.QUERY_OR_SECTION, queryOrSection);
+
+        db.update(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME,
+                contentValues,
+                DatabaseContract.Database.QUERY_OR_SECTION_ID + "=?",
+                new String[] { "" + position });
+    }
+
+    /**
+     * METHOD FOR INSERTING data in Already Read Articles' Table
      * */
     public boolean insertDataToAlreadyReadArticlesTable(String article_url) {
 
@@ -105,32 +145,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * METHOD FOR INSERTING data in Notifications Sectionf Table
-     * */
-    public boolean insertDataToNotificationsSectionTable(String section) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseContract.Database.SECTION, section);
-
-        long result = db.insert(
-                DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME,
-                null,
-                contentValues);
-
-        db.close();
-
-        if (result == -1) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-
-    /**
-     * METHOD FOR INSERTING data in Notifications Sectionf Table
+     * METHOD FOR INSERTING data in Notifications Switch Table
      * */
     public boolean insertDataToSwitchTable(int state) {
 
@@ -140,7 +155,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(DatabaseContract.Database.SWITCH_STATE, state);
 
         long result = db.insert(
-                DatabaseContract.Database.SWITCH_TABLE_NAME,
+                DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME,
                 null,
                 contentValues);
 
@@ -154,6 +169,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /** Sets the state of the switch in the database to true */
     public void setSwitchOnInDatabase() {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -161,12 +177,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseContract.Database.SWITCH_STATE, 1);
 
-        db.update(DatabaseContract.Database.SWITCH_TABLE_NAME,
+        db.update(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME,
                 contentValues,
-                DatabaseContract.Database.SECTION_ID + "=?",
+                DatabaseContract.Database.SWITCH_ID + "=?",
                 new String[] { "1" });
     }
 
+    /** Sets the state of the switch in the database to false */
     public void setSwitchOffInDatabase() {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -174,9 +191,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseContract.Database.SWITCH_STATE, 0);
 
-        db.update(DatabaseContract.Database.SWITCH_TABLE_NAME,
+        db.update(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME,
                 contentValues,
-                DatabaseContract.Database.SECTION_ID + "=?",
+                DatabaseContract.Database.SWITCH_ID + "=?",
                 new String[] { "1" });
     }
 
@@ -203,25 +220,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(table_name, null, null);
 
     }
-
-    public void deleteSingleRowFromTableName (String table_name, String key) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        db.delete(
-                table_name,
-                DatabaseContract.Database.SECTION + "=?",
-                new String[] {key} );
-
-    }
-
-//    public void deleteAllRows () {
-//
-//        SQLiteDatabase db = this.getWritableDatabase();
-//
-//        db.delete(" \"" + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME + "\" ", null, null);
-//
-//    }
 
     /**
      * METHOD FOR RESETTING AUTOINCREMENT ID from each table

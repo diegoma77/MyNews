@@ -26,17 +26,5 @@ public class NotificationsArticleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.repeating_activity_layout);
 
-        dbH = new DatabaseHelper(this);
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME);
-
-        tv1 = (TextView) findViewById(R.id.repeat_act_tv1);
-        tv2 = (TextView) findViewById(R.id.repeat_act_tv2);
-
-        mCursor.moveToFirst();
-        tv1.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME)));
-        mCursor.moveToNext();
-        tv2.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.NOTIFICATIONS_SECTION_TABLE_NAME)));
-
-
     }
 }

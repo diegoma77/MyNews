@@ -14,6 +14,8 @@ public class DatabaseContract {
 
     public static class Database implements BaseColumns {
 
+        /** READ ARTICLES' TABLE (for keeping track of which have been read) */
+
         //TABLE NAME for keeping track of the read articles
         public static final String ALREADY_READ_ARTICLES_TABLE_NAME = "articles_read_table";
 
@@ -21,16 +23,18 @@ public class DatabaseContract {
         public static final String ARTICLE_ID = "id";
         public static final String ARTICLE_URL = "article_url";
 
-        //TABLE NAME for notifications
-        public static final String NOTIFICATIONS_SECTION_TABLE_NAME = "notifications_section_table";
+        /** INFORMATION TABLE (for saving the information and pass it to the activity
+         * called by the notification */
+
+        //TABLE NAME for information to search articles
+        public static final String QUERY_OR_SECTION_TABLE_NAME = "query_or_section_table";
 
         //TABLE COLUMNS
-        public static final String SECTION_ID = "id";
-        public static final String SECTION = "section";
+        public static final String QUERY_OR_SECTION_ID = "id";
+        public static final String QUERY_OR_SECTION = "query_or_section";
 
-        // TODO: 25/03/2018 Create another table just for Switch, ON/OFF
-        //TABLE NAME for Switch
-        public static final String SWITCH_TABLE_NAME = "switch_table";
+        //TABLE NAME for Switch of notifications
+        public static final String NOTIFICATIONS_SWITCH_TABLE_NAME = "switch_table";
 
         //TABLE COLUMNS
         public static final String SWITCH_ID = "id";
