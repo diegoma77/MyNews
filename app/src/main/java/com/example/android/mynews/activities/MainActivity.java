@@ -46,11 +46,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Displays home button in toolbar
-        final ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
         //Changes the color of the Toolbar Overflow ButtonListener to white
         setOverflowButtonColor(toolbar, Color.WHITE);
 
@@ -76,10 +71,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
-                startActivity(intent);
-                break;
             case R.id.menu_search_button:
                 Intent intent1 = new Intent(MainActivity.this, SearchArticlesActivity.class);
                 startActivity(intent1);
@@ -89,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent2);
                 break;
             case R.id.menu_delete_database:
-                Toast.makeText(this, "Delete ButtonListener clicked", Toast.LENGTH_SHORT).show();
                 alertDialogDeleteHistory();
                 break;
             case R.id.menu_help_button:
@@ -106,10 +96,10 @@ public class MainActivity extends AppCompatActivity {
     //Uses de FragmentPageAdapter to link the PageFragmentTopStories to the ViewPager
     private void setupViewPager(ViewPager viewPager) {
         FragmentPageAdapter fragmentPageAdapter = new FragmentPageAdapter(getSupportFragmentManager());
-        fragmentPageAdapter.addFragment(new PageFragmentTopStories(), "TOP STORIES");
-        fragmentPageAdapter.addFragment(new PageFragmentMostPopular(), "MOST POPULAR");
-        fragmentPageAdapter.addFragment(new PageFragmentBusiness(), "BUSINESS");
-        fragmentPageAdapter.addFragment(new PageFragmentSports(), "SPORTS");
+        fragmentPageAdapter.addFragment(new PageFragmentTopStories(), getResources().getString(R.string.top_stories_tag));
+        fragmentPageAdapter.addFragment(new PageFragmentMostPopular(), getResources().getString(R.string.most_popular_tag));
+        fragmentPageAdapter.addFragment(new PageFragmentBusiness(), getResources().getString(R.string.business_tag));
+        fragmentPageAdapter.addFragment(new PageFragmentSports(), getResources().getString(R.string.sports_tag));
         viewPager.setAdapter(fragmentPageAdapter);
     }
 
@@ -126,14 +116,14 @@ public class MainActivity extends AppCompatActivity {
     private void alertDialogDeleteHistory () {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setMessage("Are you sure you want to delete the search history?")
-                .setTitle("Deleting Search History")
-                .setPositiveButton("YES, I AM SURE", new DialogInterface.OnClickListener() {
+        builder.setMessage(getResources().getString(R.string.delete_history_message))
+                .setTitle(getResources().getString(R.string.delete_history_title))
+                .setPositiveButton(getResources().getString(R.string.delete_history_positive_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dbH.deleteAllRowsFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
                         dbH.resetAutoIncrement(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
-                        Toast.makeText(MainActivity.this, "History has been deleted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.delete_history_toast), Toast.LENGTH_SHORT).show();
 
                         //Code used to restart the activity
                         Intent intent = getIntent();
@@ -141,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 })
-                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.delete_history_negative_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //Nothing happens

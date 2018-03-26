@@ -17,8 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.mynews.R;
-import com.example.android.mynews.alertdialog.PickBeginDateDialog;
-import com.example.android.mynews.alertdialog.PickEndDateDialog;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 
@@ -228,13 +226,22 @@ public class SearchArticlesActivity extends AppCompatActivity {
                         && !cb_sports.isChecked()
                         && !cb_travel.isChecked()) {
 
-                    Toast.makeText(SearchArticlesActivity.this, "You have to choose at least one category", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchArticlesActivity.this,
+                            getResources().getString(R.string.search_articles_toast_choose_one_category),
+                            Toast.LENGTH_SHORT)
+                            .show();
                 }
                 else if (!checkIfEndDateIsAfterBeginDate()) {
-                    Toast.makeText(SearchArticlesActivity.this, "End Date must be after the Begin Date", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchArticlesActivity.this,
+                            getResources().getString(R.string.search_articles_toast_end_and_begin_dates),
+                            Toast.LENGTH_SHORT)
+                            .show();
                 }
                 else if (checkIfEndDateIsAfterToday()) {
-                    Toast.makeText(SearchArticlesActivity.this, "End Date can't be after today", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchArticlesActivity.this,
+                            getResources().getString(R.string.search_articles_toast_end_and_today_dates),
+                            Toast.LENGTH_SHORT)
+                            .show();
                 }
                 else {
                     //We call the intent to change activity. This method calls the necessary method for building the URL in the next activity

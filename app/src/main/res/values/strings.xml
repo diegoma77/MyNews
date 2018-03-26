@@ -1,6 +1,55 @@
 <resources>
     <string name="app_name">My News</string>
 
+    <!-- MAIN ACTIVITY STRINGS -->
+
+    <string name="top_stories_tag"> TOP STORIES </string>
+    <string name="most_popular_tag"> MOST POPULAR </string>
+    <string name="business_tag"> BUSINESS </string>
+    <string name="sports_tag"> SPORTS </string>
+
+    <string name="delete_history_title">Deleting Read Articles\' History</string>
+    <string name="delete_history_message">Are you sure you want to delete the Read Articles\' History?</string>
+    <string name="delete_history_positive_button">Yes, I am sure</string>
+    <string name="delete_history_negative_button">No</string>
+    <string name="delete_history_toast">History has been deleted</string>
+
+    <!-- SEARCH QUERY TERM, CHECKBOXES AND DATE BUTTONS -->
+
+    <string name="search_query_term"> Search Query Term </string>
+    <string name="cb_arts">Arts</string>
+    <string name="cb_business">Business</string>
+    <string name="cb_entrepreneurs">Entrepreneurs</string>
+    <string name="cb_politics">Politics</string>
+    <string name="cb_sports">Sports</string>
+    <string name="cb_travel">Travel</string>
+    <string name="date_begin">Begin Date</string>
+    <string name="date_end">End Date</string>
+    <string name="date_begin_numbers">01/01/1900</string>
+    <string name="date_end_numbers">26/03/2018</string>
+    <string name="enable_notifications">Enable Notifications (once per day)"\       "</string>
+    <string name="search_button">Search Button</string>
+
+    <!-- NOTIFICATION -->
+
+    <string name="notification_app"> My News </string>
+    <string name="notification_title">New Articles to read</string>
+    <string name="notification_message">Tap to read Articles</string>
+    <string name="image_for_mynews">Image for MyNews</string>
+
+
+
+
+
+
+
+
+    <!-- SEARCH ARTICLES ACTIVITY STRINGS -->
+
+    <string name="search_articles_toast_choose_one_category"> You have to choose at least one category </string>
+    <string name="search_articles_toast_end_and_begin_dates"> End Date must be after the Begin Date </string>
+    <string name="search_articles_toast_end_and_today_dates"> End Date can\'t be after today </string>
+
 
 
 

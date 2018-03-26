@@ -17,13 +17,14 @@
             android:id="@+id/custom_notif_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+            app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+            android:contentDescription="@string/image_for_mynews" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
-            android:text="MyNews"
+            android:text="@string/notification_app"
             android:paddingTop="7dp"
             android:paddingLeft="5dp"/>
     </LinearLayout>
@@ -36,7 +37,7 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:textColor="@color/colorPrimary"
-        android:text="New Articles to read" />
+        android:text="@string/notification_title" />
 
     <TextView
         android:id="@+id/custom_notif_text"
@@ -44,7 +45,7 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:textColor="@color/colorAccent"
-        android:text="Tap to read the articles"
+        android:text="@string/notification_message"
         android:padding="5dp"/>
 
 </LinearLayout>
