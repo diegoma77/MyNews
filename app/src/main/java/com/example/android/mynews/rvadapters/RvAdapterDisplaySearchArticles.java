@@ -149,7 +149,7 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
         public ViewHolder(View view) {
             super(view);
 
-            mView = view.findViewById(R.id.list_item_global_linearLayout);
+            mView = view.findViewById(R.id.list_item_globalLayout);
             imageOnLeft = view.findViewById(R.id.list_item_image_news);
             section = view.findViewById(R.id.list_item_continent);
             published_date = view.findViewById(R.id.list_item_date);

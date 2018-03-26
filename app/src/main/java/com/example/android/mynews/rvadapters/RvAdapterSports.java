@@ -87,14 +87,14 @@ public class RvAdapterSports extends RecyclerView.Adapter<RvAdapterSports.ViewHo
         holder.section.setText("Sports < " + sportsObjectArrayList.get(position).getSubsection());
         holder.update_date.setText(sportsObjectArrayList.get(position).getUpdatedDate());
 
-        if (sportsObjectArrayList.get(position).getImageNormal() == null) {
+        if (sportsObjectArrayList.get(position).getImageThumblarge() == null) {
             Glide.with(mContext)
                     .load(R.drawable.nyt)
                     .into(holder.imageOnLeft);
         }
         else {
             Glide.with(mContext)
-                    .load(sportsObjectArrayList.get(position).getImageNormal())
+                    .load(sportsObjectArrayList.get(position).getImageThumblarge())
                     .into(holder.imageOnLeft);
         }
 
@@ -138,7 +138,7 @@ public class RvAdapterSports extends RecyclerView.Adapter<RvAdapterSports.ViewHo
         public ViewHolder(View view) {
             super(view);
 
-            mView = view;
+            mView = view.findViewById(R.id.list_item_globalLayout);
             imageOnLeft = view.findViewById(R.id.list_item_image_news);
             section = view.findViewById(R.id.list_item_continent);
             update_date = view.findViewById(R.id.list_item_date);

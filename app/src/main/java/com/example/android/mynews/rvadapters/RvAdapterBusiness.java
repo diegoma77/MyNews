@@ -86,14 +86,14 @@ public class RvAdapterBusiness extends RecyclerView.Adapter<RvAdapterBusiness.Vi
         holder.section.setText("Business < " + businessObjectArrayList.get(position).getSubsection());
         holder.update_date.setText(businessObjectArrayList.get(position).getUpdatedDate());
 
-        if (businessObjectArrayList.get(position).getImageNormal() == null) {
+        if (businessObjectArrayList.get(position).getImageThumblarge() == null) {
             Glide.with(mContext)
                     .load(R.drawable.nyt)
                     .into(holder.imageOnLeft);
         }
         else {
             Glide.with(mContext)
-                    .load(businessObjectArrayList.get(position).getImageNormal())
+                    .load(businessObjectArrayList.get(position).getImageThumblarge())
                     .into(holder.imageOnLeft);
         }
 
@@ -136,7 +136,7 @@ public class RvAdapterBusiness extends RecyclerView.Adapter<RvAdapterBusiness.Vi
         public ViewHolder(View view) {
             super(view);
 
-            mView = view;
+            mView = view.findViewById(R.id.list_item_globalLayout);
             imageOnLeft = view.findViewById(R.id.list_item_image_news);
             section = view.findViewById(R.id.list_item_continent);
             update_date = view.findViewById(R.id.list_item_date);

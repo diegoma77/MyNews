@@ -86,14 +86,14 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
         holder.section.setText("Top Stories < " + topStoriesObjectArrayList.get(position).getSection());
         holder.update_date.setText(topStoriesObjectArrayList.get(position).getUpdatedDate());
 
-        if (topStoriesObjectArrayList.get(position).getImageNormal() == null) {
+        if (topStoriesObjectArrayList.get(position).getImageThumblarge() == null) {
             Glide.with(mContext)
                     .load(R.drawable.nyt)
                     .into(holder.imageOnLeft);
         }
         else {
             Glide.with(mContext)
-                    .load(topStoriesObjectArrayList.get(position).getImageNormal())
+                    .load(topStoriesObjectArrayList.get(position).getImageThumblarge())
                     .into(holder.imageOnLeft);
         }
 
@@ -136,7 +136,7 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
         public ViewHolder(View view) {
             super(view);
 
-            mView = view;
+            mView = view.findViewById(R.id.list_item_globalLayout);
             imageOnLeft = view.findViewById(R.id.list_item_image_news);
             section = view.findViewById(R.id.list_item_continent);
             update_date = view.findViewById(R.id.list_item_date);

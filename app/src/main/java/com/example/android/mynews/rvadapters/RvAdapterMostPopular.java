@@ -137,7 +137,7 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
         public ViewHolder(View view) {
             super(view);
 
-            mView = view;
+            mView = view.findViewById(R.id.list_item_globalLayout);
             imageOnLeft = view.findViewById(R.id.list_item_image_news);
             section = view.findViewById(R.id.list_item_continent);
             published_date = view.findViewById(R.id.list_item_date);
