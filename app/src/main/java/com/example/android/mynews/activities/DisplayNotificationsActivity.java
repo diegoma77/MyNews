@@ -172,8 +172,6 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
     }
 
     public void parseJSONResponse(String responseFromServer) {
-
-        // TODO: 22/03/2018 Doesn't get the IMAGES
         
         String parseTAG = "PARSEtag";
 
@@ -373,9 +371,9 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
 
         String searchQueryAdaptedForUrl = mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION));
 
-        // TODO: 26/03/2018 Take care, if the user adds spaces at the end, we should not write + 
         if (!searchQueryAdaptedForUrl.equals("")) {
-            searchQueryAdaptedForUrl.toLowerCase().replace(" ", "+");
+            searchQueryAdaptedForUrl = searchQueryAdaptedForUrl.trim();
+            searchQueryAdaptedForUrl = searchQueryAdaptedForUrl.toLowerCase().replace(" ", "+");
         }
 
         return searchQueryAdaptedForUrl;
@@ -397,9 +395,15 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
 
         for (int i = 0; i < mCursor.getCount() - 1; i++) {
 
-            temporaryQuery = "+" + mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION));
-            sectionsQuery += temporaryQuery;
-            mCursor.moveToNext();
+            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)).equals("")) {
+                mCursor.moveToNext();
+            }
+            else {
+                temporaryQuery = "+" + mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION));
+                sectionsQuery += temporaryQuery;
+                mCursor.moveToNext();
+            }
+
         }
 
         return sectionsQuery.substring(1);

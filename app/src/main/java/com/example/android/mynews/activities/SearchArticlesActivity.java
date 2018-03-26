@@ -382,12 +382,15 @@ public class SearchArticlesActivity extends AppCompatActivity implements
      * Changes spaces for + symbols.
      * */
     private String getSearchQueryAndAdaptForUrl () {
-        // TODO: 26/03/2018 Take care, if the user adds spaces at the end, we should not write +
-        if (!mTextInputEditText.getText().toString().equals("")) {
-            return mTextInputEditText.getText().toString().toLowerCase().replace(" ", "+");
+
+        String searchQueryAdaptedForUrl = mTextInputEditText.getText().toString();
+
+        if (!searchQueryAdaptedForUrl.equals("")) {
+            searchQueryAdaptedForUrl = searchQueryAdaptedForUrl.trim();
+            searchQueryAdaptedForUrl = searchQueryAdaptedForUrl.toLowerCase().replace(" ", "+");
         }
 
-        return "";
+        return searchQueryAdaptedForUrl;
     }
 
     /**
