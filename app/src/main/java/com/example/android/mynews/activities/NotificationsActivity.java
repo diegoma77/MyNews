@@ -47,10 +47,6 @@ public class NotificationsActivity extends AppCompatActivity {
     //TextInput
     private TextInputEditText mTextInputEditText;
 
-    // TODO: 24/03/2018 Delete
-    //Test Button
-    Button button_test;
-
     //Switch
     private Switch mSwitch;
 
@@ -93,9 +89,6 @@ public class NotificationsActivity extends AppCompatActivity {
         cb_politics = (CheckBox) findViewById(R.id.notif_checkBox_politics);
         cb_sports = (CheckBox) findViewById(R.id.notif_checkBox_sports);
         cb_travel = (CheckBox) findViewById(R.id.notif_checkBox_travel);
-
-        // TODO: 24/03/2018 Delete
-        button_test = (Button) findViewById(R.id.test_button);
 
         //Switch
         mSwitch = (Switch) findViewById(R.id.notif_switch);
@@ -153,7 +146,7 @@ public class NotificationsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked == true) {
+                if (isChecked) {
 
                     /** First, the state of the switch is updated in the database (ON) */
                     mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME);
@@ -177,40 +170,6 @@ public class NotificationsActivity extends AppCompatActivity {
                     cancelAlarm();
 
                 }
-
-            }
-        });
-
-        /**
-         //Code for the button todo TEST PURPOSES
-         */
-        //Code for the button of the notification layout
-        // TODO: 25/03/2018 Delete when finished
-        button_test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(context, "Test Button is clicked", Toast.LENGTH_SHORT).show();
-
-                List<String> listOfQueriesOrSections = new ArrayList<>();
-
-                mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
-
-                mCursor.moveToFirst();
-                listOfQueriesOrSections.add(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)));
-
-                for (int i = 0; i < mCursor.getCount()-1 ; i++) {
-                    mCursor.moveToNext();
-                    listOfQueriesOrSections.add(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)));
-                }
-
-                for (int i = 0; i < listOfQueriesOrSections.size() ; i++) {
-                    Log.i("list " + i, listOfQueriesOrSections.get(i));
-
-                }
-
-                Intent intent = new Intent(NotificationsActivity.this, DisplayNotificationsActivity.class);
-                startActivity(intent);
             }
         });
     }

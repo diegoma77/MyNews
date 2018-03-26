@@ -13,7 +13,7 @@
         android:background="@color/colorPrimary"
         app:titleTextColor="@android:color/white"
         app:layout_collapseMode="pin"
-        app:title="Searched Articles"
+        app:title="Found Articles"
         >
     </android.support.v7.widget.Toolbar>
 

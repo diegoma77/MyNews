@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,15 +23,14 @@ import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by Diego Fajardo on 25/02/2018.
  */
 
-public class SearchArticlesActivity extends AppCompatActivity implements
-        PickBeginDateDialog.PickBeginDateDialogListener,
-        PickEndDateDialog.PickEndDateDialogListener {
+public class SearchArticlesActivity extends AppCompatActivity {
 
     private static final String TAG = "SearchArticlesActivity";
     private static final String SQ_TAG = "Search Query";
@@ -55,6 +55,18 @@ public class SearchArticlesActivity extends AppCompatActivity implements
     private TextView tv_beginDateTextView;
     private TextView tv_endDateTextView;
 
+    //Variables used to check that dates are consistent
+    private int beginYear;
+    private int beginMonth;
+    private int beginDay;
+    private int endYear;
+    private int endMonth;
+    private int endDay;
+
+    //Date Picker Dialog variables
+    private android.app.DatePickerDialog.OnDateSetListener mBeginDateSetListener;
+    private android.app.DatePickerDialog.OnDateSetListener mEndDateSetListener;
+
     //TextInput
     private TextInputEditText mTextInputEditText;
 
@@ -65,16 +77,6 @@ public class SearchArticlesActivity extends AppCompatActivity implements
     private CheckBox cb_politics;
     private CheckBox cb_sports;
     private CheckBox cb_travel;
-
-    // TODO: 15/03/2018 Delete these variables when they are not used anymore
-    // TODO: 17/03/2018 Delete the TextViews in search_articles_layout.xml
-    //TextViews to check if the value of the variables is the correct one according to checkboxes
-    private TextView tv_arts;
-    private TextView tv_business;
-    private TextView tv_entrepreneurs;
-    private TextView tv_politics;
-    private TextView tv_sports;
-    private TextView tv_travel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,122 +112,113 @@ public class SearchArticlesActivity extends AppCompatActivity implements
         tv_beginDateTextView = (TextView) findViewById(R.id.search_beginDate_date);
         tv_endDateTextView = (TextView) findViewById(R.id.search_endDate_date);
 
-        //TextViews
-        tv_arts = (TextView) findViewById(R.id.tv_arts);
-        tv_business = (TextView) findViewById(R.id.tv_business);
-        tv_entrepreneurs = (TextView) findViewById(R.id.tv_entrepeneurs);
-        tv_politics = (TextView) findViewById(R.id.tv_politics);
-        tv_sports = (TextView) findViewById(R.id.tv_sports);
-        tv_travel = (TextView) findViewById(R.id.tv_travel);
-
-        // TODO: 17/03/2018 BeginDate cannot be higher than EndDate and otherwise. Can be done passing a Date to openXDialog and modifying the constructor
-        // TODO: 17/03/2018 so it will modify a property of the class and this one modify the date options of the datePicker
-
-        /** Listeners */
+        /** Date Listeners */
 
         //BeginDate ButtonListener onClick
         buttonBeginDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openBeginDialog();
+
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                android.app.DatePickerDialog dialog = new android.app.DatePickerDialog(
+                        SearchArticlesActivity.this,
+                        mBeginDateSetListener,
+                        year, month, day);
+                dialog.show();
             }
         });
+
+        mBeginDateSetListener = new android.app.DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+                String selectedYear;
+                String selectedMonth;
+                String selectedDay;
+
+                selectedYear =  year + "";
+
+                if ((month+1) < 10) {
+                    selectedMonth = "0" + (month+1);
+                }
+                else { selectedMonth = (month+1) + ""; }
+
+                if (dayOfMonth < 10) {
+                    selectedDay = "0" + (dayOfMonth);
+                }
+                else { selectedDay = dayOfMonth + ""; }
+
+                String selectedDateForTextView = selectedDay + "/" + selectedMonth + "/" + selectedYear;
+                String selectedDateForUrl = selectedYear + selectedMonth + selectedDay;
+
+                tv_beginDateTextView.setText(selectedDateForTextView);
+                beginDate = selectedDateForUrl;
+
+                beginYear = year;
+                beginMonth = month + 1;
+                beginDay = dayOfMonth;
+            }
+        };
 
         //EndDate ButtonListener onClick
         buttonEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openEndDialog();
+
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                android.app.DatePickerDialog dialog = new android.app.DatePickerDialog(
+                        SearchArticlesActivity.this,
+                        mEndDateSetListener,
+                        year, month, day);
+                dialog.show();
             }
         });
 
-        /**
-         * Search button sends the JSONRequest using sendJSONRequestMethod.
-         * It uses the url obtained through 2 methods and 2 variables:
-         * getSearchArticlesUrl(
-         * getSearchQueryAndAdaptForUrl(method),
-         * getNewDeskValuesAndAdaptForUrl(method),
-         * beginDate,
-         * endDate)
-         * */
-        // TODO: 16/03/2018 Delete part of the code related to textViews that are not necessary
+        mEndDateSetListener = new android.app.DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+                String selectedYear;
+                String selectedMonth;
+                String selectedDay;
+
+                selectedYear =  year + "";
+
+                if ((month+1) < 10) {
+                    selectedMonth = "0" + (month+1);
+                }
+                else { selectedMonth = (month+1) + ""; }
+
+                if (dayOfMonth < 10) {
+                    selectedDay = "0" + (dayOfMonth);
+                }
+                else { selectedDay = dayOfMonth + ""; }
+
+                String selectedDateForTextView = selectedDay + "/" + selectedMonth + "/" + selectedYear;
+                String selectedDateForUrl = selectedYear + selectedMonth + selectedDay;
+
+                tv_endDateTextView.setText(selectedDateForTextView);
+                endDate = selectedDateForUrl;
+
+                endYear = year;
+                endMonth = month + 1;
+                endDay = dayOfMonth;
+
+            }
+        };
+
         //Search ButtonListener onClick
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //if the checkbox is checked, check that there is an elements (String) with that name in the list
-                //if there is any, set that name to the text view
-
-                //ARTS
-                if (cb_arts.isChecked()){
-                    if (listOfSections.contains(Keys.CheckboxFields.CB_ARTS)) {
-                        tv_arts.setText(listOfSections.get((listOfSections.indexOf(Keys.CheckboxFields.CB_ARTS))));
-                    }
-                }
-                else tv_arts.setText("false");
-
-                //BUSINESS
-                if (cb_business.isChecked()){
-                    if (listOfSections.contains(Keys.CheckboxFields.CB_BUSINESS)) {
-                        tv_business.setText(listOfSections.get((listOfSections.indexOf(Keys.CheckboxFields.CB_BUSINESS))));
-                    }
-                }
-                else tv_business.setText("false");
-
-                //CB_ENTREPRENEURS
-                if (cb_entrepreneurs.isChecked()){
-                    if (listOfSections.contains(Keys.CheckboxFields.CB_ENTREPRENEURS)) {
-                        tv_entrepreneurs.setText(listOfSections.get((listOfSections.indexOf(Keys.CheckboxFields.CB_ENTREPRENEURS))));
-                    }
-                }
-                else tv_entrepreneurs.setText("false");
-
-                //POLITICS
-                if (cb_politics.isChecked()){
-                    if (listOfSections.contains(Keys.CheckboxFields.CB_POLITICS)) {
-                        tv_politics.setText(listOfSections.get((listOfSections.indexOf(Keys.CheckboxFields.CB_POLITICS))));
-                    }
-                }
-                else tv_politics.setText("false");
-
-                //SPORTS
-                if (cb_sports.isChecked()){
-                    if (listOfSections.contains(Keys.CheckboxFields.CB_SPORTS)) {
-                        tv_sports.setText(listOfSections.get((listOfSections.indexOf(Keys.CheckboxFields.CB_SPORTS))));
-                    }
-                }
-                else tv_sports.setText("false");
-
-                //TRAVEL
-                if (cb_travel.isChecked()){
-                    if (listOfSections.contains(Keys.CheckboxFields.CB_TRAVEL)) {
-                        tv_travel.setText(listOfSections.get((listOfSections.indexOf(Keys.CheckboxFields.CB_TRAVEL))));
-                    }
-                }
-                else tv_travel.setText("false");
-
-
-                if (mTextInputEditText.getText().toString().equals("")) { Log.i(SQ_TAG, "searchQuery is EMPTY"); }
-                else { Log.i(SQ_TAG, mTextInputEditText.getText().toString()); }
-
-                Log.i(LOF_TAG, "size -> " + listOfSections.size() + "");
-                for (int i = 0; i < listOfSections.size(); i++) {
-                    Log.i(LOF_TAG, listOfSections.get(i));
-                }
-                Log.i(LOF_TAG, getNewDeskValuesAndAdaptForUrl(listOfSections));
-
-                if (beginDate == "") Log.i(BD_TAG, "is EMPTY");
-                else { Log.i(BD_TAG, beginDate); }
-
-                if (endDate == "") Log.i(ED_TAG, "is EMPTY");
-                else { Log.i(ED_TAG, endDate); }
-
-                Log.i(TAG, getSearchArticlesUrl(
-                        getSearchQueryAndAdaptForUrl(),
-                        getNewDeskValuesAndAdaptForUrl(listOfSections),
-                        beginDate,
-                        endDate,
-                        Url.ArticleSearchUrl.PAGE_ONE));
 
                 //At least one checkbox must be checked
                 if (!cb_arts.isChecked()
@@ -236,6 +229,12 @@ public class SearchArticlesActivity extends AppCompatActivity implements
                         && !cb_travel.isChecked()) {
 
                     Toast.makeText(SearchArticlesActivity.this, "You have to choose at least one category", Toast.LENGTH_SHORT).show();
+                }
+                else if (!checkIfEndDateIsAfterBeginDate()) {
+                    Toast.makeText(SearchArticlesActivity.this, "End Date must be after the Begin Date", Toast.LENGTH_SHORT).show();
+                }
+                else if (checkIfEndDateIsAfterToday()) {
+                    Toast.makeText(SearchArticlesActivity.this, "End Date can't be after today", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     //We call the intent to change activity. This method calls the necessary method for building the URL in the next activity
@@ -404,42 +403,6 @@ public class SearchArticlesActivity extends AppCompatActivity implements
         return news_desk_query;
     }
 
-    /** Next six methods are used for the dialogs to be shown
-     * when begin date and end date buttons are clicked */
-    public void openBeginDialog() {
-        PickBeginDateDialog dialog = new PickBeginDateDialog();
-        dialog.show(getSupportFragmentManager(), "Date Picker Begin Dialog");
-
-    }
-
-    public void openEndDialog () {
-        PickEndDateDialog dialog = new PickEndDateDialog();
-        dialog.show(getSupportFragmentManager(), "Date Picker End Dialog");
-    }
-
-
-    @Override
-    public void onBeginSubmitClicker(String selectedDateForTextView, String selectedDateForUrl) {
-        tv_beginDateTextView.setText(selectedDateForTextView);
-        beginDate = selectedDateForUrl;
-    }
-
-    @Override
-    public void onBeginCancelClicker(String string) {
-        Toast.makeText(SearchArticlesActivity.this, "No date was selected", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onEndSubmitClicker(String selectedDateForTextView, String selectedDateForUrl) {
-        tv_endDateTextView.setText(selectedDateForTextView);
-        endDate = selectedDateForUrl;
-    }
-
-    @Override
-    public void onEndCancelClicker(String cancelMessage) {
-        Toast.makeText(SearchArticlesActivity.this, "No date was selected", Toast.LENGTH_SHORT).show();
-    }
-
     /**This method is used to call the Intent to change
      * the Activity displayed (to DisplaySearchArticlesActivity). The intent
      * carries information about the urls than have to be displayed*/
@@ -469,6 +432,65 @@ public class SearchArticlesActivity extends AppCompatActivity implements
 
         startActivity(intent);
 
+    }
+
+    /** Method to check that the end Date is not after today */
+    private boolean checkIfEndDateIsAfterToday() {
+
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        month = month + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        if (endYear > year) {
+            return true;
+        }
+        else if (endYear == year){
+            if (endMonth > month){
+                return true;
+            }
+            else if (endMonth == month){
+                if (endDay > day) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else return false;
+
+        }
+        else {
+            return false;
+        }
+    }
+
+    /** Method to check that the end Date is after the Begin Date */
+
+    private boolean checkIfEndDateIsAfterBeginDate() {
+
+        if (endYear > beginYear) {
+            return true;
+        }
+        else if (endYear == beginYear){
+            if (endMonth > beginMonth){
+                return true;
+            }
+            else if (endMonth == beginMonth){
+                if (endDay > beginDay) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else return false;
+
+        }
+        else {
+            return false;
+        }
     }
 
 

@@ -198,42 +198,6 @@
             android:background="@color/colorPrimary"
             android:textColor="@android:color/white" />
 
-        <TextView
-            android:id="@+id/tv_arts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Arts checked"/>
-
-        <TextView
-            android:id="@+id/tv_business"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Business checked"/>
-
-        <TextView
-            android:id="@+id/tv_entrepeneurs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Entrepeneurs checked"/>
-
-        <TextView
-            android:id="@+id/tv_politics"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Politics checked"/>
-
-        <TextView
-            android:id="@+id/tv_sports"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Sports checked"/>
-
-        <TextView
-            android:id="@+id/tv_travel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Travel checked"/>
-
     </LinearLayout> <!-- global (after toolbar) -->
 
 </LinearLayout> <!-- general -->

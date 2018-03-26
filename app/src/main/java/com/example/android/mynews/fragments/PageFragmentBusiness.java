@@ -182,7 +182,6 @@ public class PageFragmentBusiness extends android.support.v4.app.Fragment {
 
                     JSONObject multimedia_object = multimedia_array.getJSONObject(j);
 
-                    // TODO: 13/03/2018 Erase "switch statement" when decided which image to take
                     switch (j) {
                         case 0:
                             if (multimedia_object.getString(Keys.Business.KEY_IMAGE_URL) != null) {
