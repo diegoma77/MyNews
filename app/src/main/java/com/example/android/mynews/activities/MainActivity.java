@@ -30,8 +30,6 @@ import com.example.android.mynews.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    // TODO: 21/03/2018 Images are not loading properly. Sometimes the size is incorrect and they take too long to upload
-
     private DatabaseHelper dbH;
 
     //Toolbar variable

@@ -398,8 +398,8 @@ public class NotificationsActivity extends AppCompatActivity {
         // the time when the notification will appear
         Calendar calendar = Calendar.getInstance();
 
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
         //Calls the broadcast receiver to set the alarm

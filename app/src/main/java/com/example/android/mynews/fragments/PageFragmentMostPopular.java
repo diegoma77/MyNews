@@ -167,8 +167,6 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
                 //We create the object that is going to store all the information
                 MostPopularObject mostPopularObject = new MostPopularObject();
 
-                // TODO: 13/03/2018 We have yet to get the image url
-
                 //We get the "i results object"
                 JSONObject resultsObject = results_array.getJSONObject(i);
 

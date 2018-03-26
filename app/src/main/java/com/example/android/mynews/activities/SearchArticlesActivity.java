@@ -81,8 +81,6 @@ public class SearchArticlesActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_articles_layout);
 
-        // TODO: 17/03/2018 Modify keyboard when Search Query is pressed so as not to hide the Search ButtonListener
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.search_toolbar);
         setSupportActionBar(toolbar);
 
@@ -120,20 +118,11 @@ public class SearchArticlesActivity extends AppCompatActivity implements
         tv_sports = (TextView) findViewById(R.id.tv_sports);
         tv_travel = (TextView) findViewById(R.id.tv_travel);
 
-
-        /** Listeners */
-        //TextInput onClick
-        mTextInputEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // TODO: 17/03/2018 See if we implement sth here
-
-            }
-        });
-
         // TODO: 17/03/2018 BeginDate cannot be higher than EndDate and otherwise. Can be done passing a Date to openXDialog and modifying the constructor
         // TODO: 17/03/2018 so it will modify a property of the class and this one modify the date options of the datePicker
+
+        /** Listeners */
+
         //BeginDate ButtonListener onClick
         buttonBeginDate.setOnClickListener(new View.OnClickListener() {
             @Override

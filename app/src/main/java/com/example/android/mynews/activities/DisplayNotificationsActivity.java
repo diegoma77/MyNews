@@ -31,7 +31,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.android.mynews.activities.MainActivity.setOverflowButtonColor;
@@ -82,12 +86,27 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
         //Creating the list to store the objects
         notificationsArticlesObjectList = new ArrayList<>();
 
-        // TODO: 25/03/2018 Modify dates
+       /** Getting the dates for the urls.
+        * Today and 7 days ago
+        * */
+        //Today
+        DateFormat df = new SimpleDateFormat("yyyyMMdd");
+        Date today = Calendar.getInstance().getTime();
+        String todayDate = df.format(today);
+        Log.i ("DATE", todayDate);
+
+        //7 days ago
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, -7);
+        Date sevenDaysAgo = c.getTime();
+        String sevenDaysAgoDate = df.format(sevenDaysAgo);
+        Log.i ("DATE", sevenDaysAgoDate);
+
         //Creating the list and saving the articles url
         notificationsArticlesListOfUrls = new ArrayList<>();
-        String url_page1 = getSearchArticlesUrl(getSearchQueryAndAdaptForUrl(), getSectionsAndAdaptForUrl(),"20180125" , "20180325" , "1");
-        String url_page2 = getSearchArticlesUrl(getSearchQueryAndAdaptForUrl(), getSectionsAndAdaptForUrl(), "20180125" , "20180325" , "2");
-        String url_page3 = getSearchArticlesUrl(getSearchQueryAndAdaptForUrl(), getSectionsAndAdaptForUrl(), "20180125" , "20180325" , "3");
+        String url_page1 = getSearchArticlesUrl(getSearchQueryAndAdaptForUrl(), getSectionsAndAdaptForUrl(), sevenDaysAgoDate , todayDate , "1");
+        String url_page2 = getSearchArticlesUrl(getSearchQueryAndAdaptForUrl(), getSectionsAndAdaptForUrl(), sevenDaysAgoDate , todayDate , "2");
+        String url_page3 = getSearchArticlesUrl(getSearchQueryAndAdaptForUrl(), getSectionsAndAdaptForUrl(), sevenDaysAgoDate , todayDate , "3");
 
         Log.i("url1", url_page1);
         Log.i("url2", url_page2);
@@ -394,7 +413,6 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
         String sectionsQuery = "";
 
         for (int i = 0; i < mCursor.getCount() - 1; i++) {
-
             if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)).equals("")) {
                 mCursor.moveToNext();
             }
@@ -403,10 +421,7 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
                 sectionsQuery += temporaryQuery;
                 mCursor.moveToNext();
             }
-
         }
-
         return sectionsQuery.substring(1);
-
     }
 }
