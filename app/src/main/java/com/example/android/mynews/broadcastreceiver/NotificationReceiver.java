@@ -18,12 +18,12 @@ import java.util.List;
  * Created by Diego Fajardo on 24/03/2018.
  */
 
+
 public class NotificationReceiver extends BroadcastReceiver {
 
-    private static final String TAG = "NotificationReceiver";
+    /** This class is used for displaying the notifications */
 
-    private int sizeOfListOfSections;
-    private List <String> listOfSections;
+    private static final String TAG = "NotificationReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
