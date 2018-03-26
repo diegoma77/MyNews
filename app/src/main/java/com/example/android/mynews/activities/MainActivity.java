@@ -93,10 +93,10 @@ public class MainActivity extends AppCompatActivity {
                 alertDialogDeleteHistory();
                 break;
             case R.id.menu_help_button:
-                Toast.makeText(this, "Help ButtonListener Clicked", Toast.LENGTH_SHORT).show();
+                startActivity (new Intent(MainActivity.this, HelpActivity.class));
                 break;
             case R.id.menu_about_button:
-                Toast.makeText(this, "About ButtonListener Clicked", Toast.LENGTH_SHORT).show();
+                startActivity (new Intent(MainActivity.this, AboutActivity.class));
                 break;
 
         }

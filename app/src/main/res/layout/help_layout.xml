@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:background="@color/colorPrimary"
+        app:title="Help"
+        app:titleTextColor="@android:color/white"
+        app:layout_collapseMode="pin">
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/about_tv1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/help_text_intro"
+                android:textSize="16sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:padding="15dp"/>
+
+            <TextView
+                android:id="@+id/about_tv2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/help_text_basics"
+                android:textSize="16sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:padding="15dp"/>
+
+            <TextView
+                android:id="@+id/about_tv3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/help_text_delete_history"
+                android:textSize="16sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:padding="15dp"/>
+
+            <TextView
+                android:id="@+id/about_tv4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/help_text_search"
+                android:textSize="16sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:padding="15dp"/>
+
+            <TextView
+                android:id="@+id/about_tv5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/help_text_notifications"
+                android:textSize="16sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:padding="15dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
