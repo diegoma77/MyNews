@@ -28,7 +28,9 @@ import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Diego Fajardo on 26/02/2018.
@@ -39,11 +41,7 @@ public class NotificationsActivity extends AppCompatActivity {
     private static final String TAG = "NotificationsActivity";
     private static final String C_TAG = "CursorErrorTag";
 
-    //Variables for notifications
-    private NotificationCompat.Builder mBuilder;
-    private NotificationManager mNotificationManager;
-    private int notification_id;
-    private RemoteViews remoteViews;
+    //Needed for getApplicationContext() to work
     private Context context;
 
     //TextInput
@@ -72,6 +70,9 @@ public class NotificationsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notifications_layout);
+
+        //Needed for getApplicationContext() to work
+        context = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.notif_toolbar);
         setSupportActionBar(toolbar);
@@ -146,34 +147,13 @@ public class NotificationsActivity extends AppCompatActivity {
             }
         }
 
-        /** Code for the notifications */
-
-        //We initialize the context so as not to call it several times with getContext()
-        context = this;
-        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        remoteViews = new RemoteViews(getPackageName(), R.layout.custom_notification);
-
-        /**
-        //Allows to change the views inside the notification layout
-        remoteViews.setImageViewResource(R.id.custom_notif_icon, R.mipmap.ic_launcher );
-        remoteViews.setTextViewText(R.id.custom_notif_text, "TEXT");
-         */
-
-        //Intent for the broadcast receiver
-        //Allows to get a unique id (uses the current time, thats why it will always be unique)
-        notification_id = (int) System.currentTimeMillis();
-        final Intent button_intent = new Intent("button_clicked");
-        button_intent.putExtra("id", notification_id);
-
-
-        /** LISTENERS */
+        /** Switch listener */
 
         mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked == true) {
-                    Toast.makeText(context, "Switch is CHECKED", Toast.LENGTH_SHORT).show();
 
                     /** First, the state of the switch is updated in the database (ON) */
                     mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME);
@@ -184,16 +164,16 @@ public class NotificationsActivity extends AppCompatActivity {
 
                     /** Third, we create the alarm manager, which will
                      * call the DisplayNotificationsActivity*/
-                    Toast.makeText(context, "Notification Created", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NotificationsActivity.this, "Notification Created", Toast.LENGTH_SHORT).show();
                     createAlarm();
 
                 }
 
                 else {
-                    Toast.makeText(context, "Switch is NOT CHECKED", Toast.LENGTH_SHORT).show();
+                    //We set the switch to off in the database
                     dbH.setSwitchOffInDatabase();
 
-                    // TODO: 25/03/2018 If alarmManager existed, then cancel it
+                    //We cancel the alarm
                     cancelAlarm();
 
                 }
@@ -202,10 +182,7 @@ public class NotificationsActivity extends AppCompatActivity {
         });
 
         /**
-         //Code for the button
-         PendingIntent p_button_intent = PendingIntent.getBroadcast(context, 123, button_intent, PendingIntent.FLAG_UPDATE_CURRENT);
-         remoteViews.setOnClickPendingIntent(R.id.custom_notif_button, p_button_intent);
-         //Request code can be any number
+         //Code for the button todo TEST PURPOSES
          */
         //Code for the button of the notification layout
         // TODO: 25/03/2018 Delete when finished
@@ -215,21 +192,30 @@ public class NotificationsActivity extends AppCompatActivity {
 
                 Toast.makeText(context, "Test Button is clicked", Toast.LENGTH_SHORT).show();
 
-                dbH = new DatabaseHelper(getApplicationContext());
-                mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
-                mCursor.moveToFirst();
+                List<String> listOfQueriesOrSections = new ArrayList<>();
 
-                for (int i = 0; i < mCursor.getCount(); i++) {
-                    if (mCursor.getPosition() == 0) {
-                        Log.i(
-                                "ID --> " + mCursor.getInt(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION_ID)),
-                                mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)));
-                    }
+                mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+
+                mCursor.moveToFirst();
+                listOfQueriesOrSections.add(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)));
+
+                for (int i = 0; i < mCursor.getCount()-1 ; i++) {
+                    mCursor.moveToNext();
+                    listOfQueriesOrSections.add(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)));
                 }
+
+                for (int i = 0; i < listOfQueriesOrSections.size() ; i++) {
+                    Log.i("list " + i, listOfQueriesOrSections.get(i));
+
+                }
+
+                Intent intent = new Intent(NotificationsActivity.this, DisplayNotificationsActivity.class);
+                startActivity(intent);
             }
         });
     }
 
+    /** Used to update the String put in the TextInput */
     @Override
     protected void onPause() {
         dbH.updateSearchQueryOrSection(mTextInputEditText.getText().toString().toLowerCase(), 1);
@@ -383,7 +369,7 @@ public class NotificationsActivity extends AppCompatActivity {
         }
     }
 
-    /**This method disables the switch to prevent the user to call
+    /** This method disables the switch to prevent the user to call
      * the alarm manager if no section has been selected.
      * It is called when the last checked checkbox turns unchecked
      * */
@@ -412,8 +398,8 @@ public class NotificationsActivity extends AppCompatActivity {
         // the time when the notification will appear
         Calendar calendar = Calendar.getInstance();
 
-        calendar.set(Calendar.HOUR_OF_DAY, 19);
-        calendar.set(Calendar.MINUTE, 23);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 1);
         calendar.set(Calendar.SECOND, 0);
 
         //Calls the broadcast receiver to set the alarm

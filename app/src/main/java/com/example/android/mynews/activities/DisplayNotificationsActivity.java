@@ -3,16 +3,14 @@ package com.example.android.mynews.activities;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -22,7 +20,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
-import com.example.android.mynews.data.AndroidDatabaseManager;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
@@ -39,16 +36,16 @@ import java.util.List;
 
 import static com.example.android.mynews.activities.MainActivity.setOverflowButtonColor;
 
-public class DisplaySearchArticlesActivity extends AppCompatActivity {
+public class DisplayNotificationsActivity extends AppCompatActivity {
 
     //Tag variable
     private static final String TAG = "DisplaySearchArticlesAc";
 
     //List that will store the JSON Response objects
-    private List<SearchArticlesObject> searchArticlesObjectList;
+    private List<SearchArticlesObject> notificationsArticlesObjectList;
 
     //List to store the urls for searching the articles
-    private List<String> searchArticlesListOfUrls;
+    private List<String> notificationsArticlesListOfUrls;
 
     //Database Variables
     private DatabaseHelper dbH;
@@ -67,7 +64,7 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
         setContentView(R.layout.rv_search_articles);
 
         dbH = new DatabaseHelper(this);
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
 
         //Sets the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -77,33 +74,38 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Notifications Articles");
 
         //Changes the color of the Toolbar Overflow ButtonListener to white
         setOverflowButtonColor(toolbar, Color.WHITE);
 
-        //Get the URLs from SearchArticlesActivity and display them
-        final Intent intent = getIntent();
-
-        Log.i(TAG, intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE1));
-        Log.i(TAG, intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE2));
-        Log.i(TAG, intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE3));
-
         //Creating the list to store the objects
-        searchArticlesObjectList = new ArrayList<>();
+        notificationsArticlesObjectList = new ArrayList<>();
 
+        // TODO: 25/03/2018 Modify dates
         //Creating the list and saving the articles url
-        searchArticlesListOfUrls = new ArrayList<>();
-        searchArticlesListOfUrls.add(intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE1));
-        searchArticlesListOfUrls.add(intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE2));
-        searchArticlesListOfUrls.add(intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE3));
+        notificationsArticlesListOfUrls = new ArrayList<>();
+        String url_page1 = getSearchArticlesUrl(getSearchQueryAndAdaptForUrl(), getSectionsAndAdaptForUrl(),"20180125" , "20180325" , "1");
+        String url_page2 = getSearchArticlesUrl(getSearchQueryAndAdaptForUrl(), getSectionsAndAdaptForUrl(), "20180125" , "20180325" , "2");
+        String url_page3 = getSearchArticlesUrl(getSearchQueryAndAdaptForUrl(), getSectionsAndAdaptForUrl(), "20180125" , "20180325" , "3");
+
+        Log.i("url1", url_page1);
+        Log.i("url2", url_page2);
+        Log.i("url3", url_page3);
+
+        notificationsArticlesListOfUrls.add(url_page1);
+        notificationsArticlesListOfUrls.add(url_page2);
+        notificationsArticlesListOfUrls.add(url_page3);
 
         //The JSON request is done 3 times to get 30 articles (10 per request). It has to be done
         //leaving some time between them in order to avoid ERRORs
         doItInAnotherThread(
-                intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE1),
-                intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE2),
-                intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE3),
+                url_page1,
+                url_page2,
+                url_page3,
                 1000);
+
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -111,10 +113,10 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         rvAdapterDisplaySearchArticles = new RvAdapterDisplaySearchArticles(
-                DisplaySearchArticlesActivity.this,
-                searchArticlesObjectList,
+                DisplayNotificationsActivity.this,
+                notificationsArticlesObjectList,
                 mCursor,
-                searchArticlesListOfUrls);
+                notificationsArticlesListOfUrls);
 
     }
 
@@ -123,13 +125,12 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(DisplaySearchArticlesActivity.this, SearchArticlesActivity.class);
+                Intent intent = new Intent(DisplayNotificationsActivity.this, MainActivity.class);
                 startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     /**
      * This method sends the JSON request using Volley
@@ -148,7 +149,7 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.i("SendJSONResponse OK___", url);
-                        Toast.makeText(DisplaySearchArticlesActivity.this, "Response OK", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DisplayNotificationsActivity.this, "Response OK", Toast.LENGTH_SHORT).show();
                         parseJSONResponse(response);
 
                     }
@@ -157,13 +158,13 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i("SendJSONResponse ERROR", url);
-                        Toast.makeText(DisplaySearchArticlesActivity.this, "Response ERROR", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DisplayNotificationsActivity.this, "Response ERROR", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
 
         //Creating a request queue
-        RequestQueue requestQueue = Volley.newRequestQueue(DisplaySearchArticlesActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(DisplayNotificationsActivity.this);
 
         //Adding the string request to request queue
         requestQueue.add(stringRequest);
@@ -249,24 +250,26 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
                     Log.i("NEW_DESK", searchArticlesObject.getNew_desk());
                 }
 
-                //We put the object with the results into the ArrayList searchArticlesObjectList;
-                searchArticlesObjectList.add(searchArticlesObject);
-                Log.i("SAposition # ", "" + i + " :" + searchArticlesObjectList.get(i).getSnippet());
+                //We put the object with the results into the ArrayList notificationsArticlesObjectList;
+                notificationsArticlesObjectList.add(searchArticlesObject);
+                Log.i("NAposition # ", "" + i + " :" + notificationsArticlesObjectList.get(i).getSnippet());
 
             }
 
-            for (int i = 0; i < searchArticlesObjectList.size(); i++) {
-                Log.i("SAposition # ", "" + i + " :" + searchArticlesObjectList.get(i).getSnippet());
+            for (int i = 0; i < notificationsArticlesObjectList.size(); i++) {
+                Log.i("NAposition # ", "" + i + " :" + notificationsArticlesObjectList.get(i).getSnippet());
             }
 
-            Log.i("SA_ArrayList.size()", "" + searchArticlesObjectList.size());
+            Log.i("NA_ArrayList.size()", "" + notificationsArticlesObjectList.size());
 
-            if (searchArticlesObjectList != null) {
+            mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
+
+            if (notificationsArticlesObjectList != null) {
                 recyclerView.setAdapter(new RvAdapterDisplaySearchArticles(this,
-                        searchArticlesObjectList,
+                        notificationsArticlesObjectList,
                         mCursor,
-                        searchArticlesListOfUrls));
-                Log.i("setDispSearchArtData:", "Called(size = " + searchArticlesObjectList.size() + ")");
+                        notificationsArticlesListOfUrls));
+                Log.i("setDispNotArtData:", "Called(size = " + notificationsArticlesObjectList.size() + ")");
 
             }
 
@@ -305,58 +308,101 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
             }
+
         }).start();
     }
 
+    /**
+     * This method builds the Url used to send the JSON request
+     * using the strings created (modified) by other methods
+     * */
+    public String getSearchArticlesUrl (String searchQuery, String sectionsQuery, String beginDate, String endDate, String page) {
 
-}
+        /** Seems that there are faster ways than += to append Strings, like StringBuffer */
 
-/** ASYNCTASK THEORY
- *
-    //First parameter of AsyncTask: execute and doInBackground
-    //Second parameter: publishedProgress
-    //Third parameter: the return type
-    private class MyAsyncTask extends AsyncTask<String,void,String> {
+        String searchArticleUrl = Url.ArticleSearchUrl.BASE_URL;
 
-
-        //AsyncTask calls this method on the UI Thread so you can initialize
-        // anything you might want to in the UI thread
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+        if (!searchQuery.equals("")) {
+            searchArticleUrl += Url.ArticleSearchUrl.Q
+                    + Url.GeneralTokens.EQUAL
+                    + searchQuery
+                    + Url.GeneralTokens.AMPERSAND;
         }
 
-        //Then it calls this method in another thread which is where
-        // your long running task will run
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            //If you want to update some UI with the progress from your long-running task,
-            //you call "publishProgress" here with the progress parameters. This causes
-            //onProgressUpdate to be called on the UI thread with you progress parameters.
-
-            //"publishProgress" can be called all the times you like
-
-            ;sendJSONRequest();
-
-
-            //When the task is complete, you return the result This causes the onPostExecute function
-            //to be called on the UI thread with the result you returned
-            return null;
+        if (!sectionsQuery.equals("")) {
+            searchArticleUrl += Url.ArticleSearchUrl.FQ
+                    + Url.GeneralTokens.EQUAL
+                    + sectionsQuery
+                    + Url.GeneralTokens.AMPERSAND;
         }
 
-
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
+        if (!beginDate.equals("")) {
+            searchArticleUrl += Url.ArticleSearchUrl.BEGIN_DATE
+                    + Url.GeneralTokens.EQUAL
+                    + beginDate
+                    + Url.GeneralTokens.AMPERSAND;
         }
 
-        @Override
-        protected void onProgressUpdate(Object[] values) {
-            super.onProgressUpdate(values);
+        if (!endDate.equals("")) {
+            searchArticleUrl += Url.ArticleSearchUrl.END_DATE
+                    + Url.GeneralTokens.EQUAL
+                    + endDate
+                    + Url.GeneralTokens.AMPERSAND;
         }
+
+        searchArticleUrl += Url.ArticleSearchUrl.SORT_NEWEST + Url.GeneralTokens.AMPERSAND
+                + Url.ArticleSearchUrl.PAGE + Url.GeneralTokens.EQUAL + page + Url.GeneralTokens.AMPERSAND
+                + Url.ArticleSearchUrl.API_KEY;
+
+        return searchArticleUrl;
+
     }
 
+    /**
+     * This method is used when the SEARCH BUTTON is clicked.
+     * It starts the process of searching for the articles according to the information
+     * needed from the user.
+     * Changes spaces for + symbols.
+     * */
+    private String getSearchQueryAndAdaptForUrl () {
 
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+        mCursor.moveToFirst();
+
+        String searchQueryAdaptedForUrl = mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION));
+
+        // TODO: 26/03/2018 Take care, if the user adds spaces at the end, we should not write + 
+        if (!searchQueryAdaptedForUrl.equals("")) {
+            searchQueryAdaptedForUrl.toLowerCase().replace(" ", "+");
+        }
+
+        return searchQueryAdaptedForUrl;
+    }
+
+    /**
+     * This method us used to build the news_desk part of the Url.
+     * The news_desk part is related to the checkboxes and allows to filter the
+     * searches according to the category
+     * */
+    private String getSectionsAndAdaptForUrl() {
+
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+        mCursor.moveToFirst();
+        mCursor.moveToNext();
+
+        String temporaryQuery;
+        String sectionsQuery = "";
+
+        for (int i = 0; i < mCursor.getCount() - 1; i++) {
+
+            temporaryQuery = "+" + mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION));
+            sectionsQuery += temporaryQuery;
+            mCursor.moveToNext();
+        }
+
+        return sectionsQuery.substring(1);
+
+    }
 }
-*/

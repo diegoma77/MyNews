@@ -20,20 +20,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.SearchArticlesActivity" />
+        <activity android:name=".activities.DisplayNotificationsActivity"
+            android:exported="true"/>
+        <activity android:name=".activities.DisplaySearchArticlesActivity" />
         <activity android:name=".activities.NotificationsActivity" />
+        <activity android:name=".activities.SearchArticlesActivity" />
+        <activity android:name=".activities.WebViewMainActivity" />
+        <activity android:name=".activities.WebViewSearchActivity" />
         <activity
             android:name=".data.AndroidDatabaseManager"
             android:label="@string/app_name" />
-        <activity android:name=".activities.DisplaySearchArticlesActivity" />
-        <activity android:name=".activities.WebViewMainActivity" />
-        <activity android:name=".activities.WebViewSearchActivity" />
-        <activity android:name=".broadcastreceiver.RepeatingActivity" />
-
         <receiver android:name=".broadcastreceiver.NotificationReceiver">
-            <intent-filter>
-                <action android:name="button_clicked" />
-            </intent-filter>
         </receiver>
     </application>
 

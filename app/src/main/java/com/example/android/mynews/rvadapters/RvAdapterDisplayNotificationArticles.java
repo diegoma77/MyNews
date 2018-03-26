@@ -27,17 +27,17 @@ import java.util.List;
  * Created by Diego Fajardo on 25/02/2018.
  */
 
-public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapterDisplaySearchArticles.ViewHolder> {
+public class RvAdapterDisplayNotificationArticles extends RecyclerView.Adapter<RvAdapterDisplayNotificationArticles.ViewHolder> {
 
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
-    private static final String TAG = RvAdapterDisplaySearchArticles.class.getSimpleName();
+    private static final String TAG = RvAdapterDisplayNotificationArticles.class.getSimpleName();
 
-    private List<SearchArticlesObject> searchArticlesList = new ArrayList<>();
+    private List<SearchArticlesObject> notificationArticlesList = new ArrayList<>();
 
     //Variable used to avoid crashing when WebViewSearchActivity returns to DisplaySearchArticlesActivity
     //We carry these urls to the WebViewSearchActivity so it can bring them back when home back button
     //or back button are pressed
-    private List<String> searchArticlesListOfUrls;
+    private List<String> notificationArticlesListOfUrls;
 
     //Context of the activity
     private Context mContext;
@@ -48,14 +48,14 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
     //DatabaseHelper to add an article_url to the database if it hasn't been read
     private DatabaseHelper dbH;
 
-    public RvAdapterDisplaySearchArticles(Context context,
-                                          List<SearchArticlesObject> searchArticlesList,
-                                          Cursor cursor,
-                                          List<String> searchArticlesListOfUrls) {
+    public RvAdapterDisplayNotificationArticles(Context context,
+                                                List<SearchArticlesObject> notificationArticlesList,
+                                                Cursor cursor,
+                                                List<String> notificationArticlesListOfUrls) {
         this.mContext = context;
-        this.searchArticlesList = searchArticlesList;
+        this.notificationArticlesList = notificationArticlesList;
         this.mCursor = cursor;
-        this.searchArticlesListOfUrls = searchArticlesListOfUrls;
+        this.notificationArticlesListOfUrls = notificationArticlesListOfUrls;
     }
 
 
@@ -83,26 +83,27 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
 
         Log.d(TAG, "#" + position);
 
-        if (checkIfArticleUrlIsInTheDatabase(searchArticlesList.get(position).getWeb_url())) {
+        if (checkIfArticleUrlIsInTheDatabase(notificationArticlesList.get(position).getWeb_url())) {
             Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
             holder.title.setTypeface(bold);
         }
 
-        holder.title.setText(searchArticlesList.get(position).getSnippet());
-        holder.section.setText(searchArticlesList.get(position).getNew_desk());
-        holder.published_date.setText(searchArticlesList.get(position).getPub_date());
+        holder.title.setText(notificationArticlesList.get(position).getSnippet());
+        holder.section.setText(notificationArticlesList.get(position).getNew_desk());
+        holder.published_date.setText(notificationArticlesList.get(position).getPub_date());
 
-        if (searchArticlesList.get(position).getImage_url() == null ||
-                searchArticlesList.get(position).getImage_url().equals("")) {
+        if (notificationArticlesList.get(position).getImage_url() == null ||
+                notificationArticlesList.get(position).getImage_url().equals("")) {
             Glide.with(mContext)
                     .load(R.drawable.nyt)
                     .into(holder.imageOnLeft);
         }
         else {
             Glide.with(mContext)
-                    .load(searchArticlesList.get(position).getImage_url())
+                    .load(notificationArticlesList.get(position).getImage_url())
                     .into(holder.imageOnLeft);
         }
+
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,19 +113,19 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
 
                 //Checks that the article is not yet in the database. If it is, we don't add it.
                 //If it's not, we add it. This way we keep the track of the articles the user has read
-                if (!checkIfArticleUrlIsInTheDatabase(searchArticlesList.get(position).getWeb_url())){
-                    dbH.insertDataToAlreadyReadArticlesTable(searchArticlesList.get(position).getWeb_url());
+                if (!checkIfArticleUrlIsInTheDatabase(notificationArticlesList.get(position).getWeb_url())){
+                    dbH.insertDataToAlreadyReadArticlesTable(notificationArticlesList.get(position).getWeb_url());
                 }
 
                 Intent intent = new Intent(context, WebViewSearchActivity.class);
 
                 //Puts an extra that will be the url that the webView will read
-                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, searchArticlesList.get(position).getWeb_url());
+                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, notificationArticlesList.get(position).getWeb_url());
 
                 //Puts 3 extras that will be the urls sent to API when we return with back buttons
-                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, searchArticlesListOfUrls.get(0));
-                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE2, searchArticlesListOfUrls.get(1));
-                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE3, searchArticlesListOfUrls.get(2));
+                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, notificationArticlesListOfUrls.get(0));
+                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE2, notificationArticlesListOfUrls.get(1));
+                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE3, notificationArticlesListOfUrls.get(2));
 
                 context.startActivity(intent);
 
@@ -134,8 +135,8 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
 
     @Override
     public int getItemCount() {
-        if (searchArticlesList == null) { return 0; }
-        return searchArticlesList.size();
+        if (notificationArticlesList == null) { return 0; }
+        return notificationArticlesList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

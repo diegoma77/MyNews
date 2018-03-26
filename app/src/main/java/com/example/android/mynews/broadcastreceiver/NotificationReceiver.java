@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.android.mynews.activities.DisplayNotificationsActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,37 +28,15 @@ public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        listOfSections = new ArrayList<>();
-
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(
                 Context.NOTIFICATION_SERVICE);
 
         //When the user clicks the notification the app will be redirected to the activity
-        Intent repeating_intent = new Intent(context, RepeatingActivity.class);
+        Intent repeating_intent = new Intent(context, DisplayNotificationsActivity.class);
 
-        if (sizeOfListOfSections != 0){
-
-            Log.i(TAG, "Before getting the size");
-            //We get the size of ListOfSections array
-            sizeOfListOfSections = intent.getExtras().getInt("Size");
-            Log.i(TAG, "After getting the size");
-
-            for (int i = 0; i < sizeOfListOfSections; i++) {
-                listOfSections.add(intent.getExtras().getString("ListOfSections" + i));
-            }
-
-            //We put the extras into repeating_intent
-            repeating_intent.putExtra("Size", sizeOfListOfSections);
-
-            for (int i = 0; i < sizeOfListOfSections ; i++) {
-                repeating_intent.putExtra("ListOfSections" + i, listOfSections.get(i));
-
-            }
-
-        }
-
-        repeating_intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //Ensures that the activity will
-        // be replaced if needed, although the activity was already open or running in the background
+        //Ensures that the activity will be replaced if needed, although the activity
+        // was already open or running in the background
+        repeating_intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context,
                 100,

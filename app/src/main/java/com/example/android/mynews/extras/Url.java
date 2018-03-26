@@ -77,6 +77,7 @@ public interface Url {
         String PAGE_TWO = "2";
         String PAGE_THREE = "3";
         String API_KEY = "api-key=a27a66145d4542d28a719cecee6de859";
+        String IMAGE_URL_BASE = "https://www.nytimes.com/";
 
     }
 
