@@ -219,7 +219,7 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
                 JSONArray multimedia_array = docsObject.getJSONArray(Keys.SearchArticles.KEY_MULTIMEDIA);
 
                 if (multimedia_array.length() > 0) {
-                    JSONObject multimedia_object = multimedia_array.getJSONObject(3);
+                    JSONObject multimedia_object = multimedia_array.getJSONObject(2);
 
                     if (multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL) != null) {
                         searchArticlesObject.setImage_url(Url.ArticleSearchUrl.IMAGE_URL_BASE + multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL));

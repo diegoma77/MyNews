@@ -170,26 +170,26 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
                 // TODO: 13/03/2018 We have yet to get the image url
 
                 //We get the "i results object"
-                JSONObject dataObject = results_array.getJSONObject(i);
+                JSONObject resultsObject = results_array.getJSONObject(i);
 
                 //GETS the rest of the data from the dataObject
-                if (dataObject.getString(Keys.MostPopularKeys.KEY_SECTION) != null) {
-                    mostPopularObject.setSection(dataObject.getString(Keys.MostPopularKeys.KEY_SECTION));
+                if (resultsObject.getString(Keys.MostPopularKeys.KEY_SECTION) != null) {
+                    mostPopularObject.setSection(resultsObject.getString(Keys.MostPopularKeys.KEY_SECTION));
                     Log.i("SECTION", mostPopularObject.getSection());
                 }
 
-                if (dataObject.getString(Keys.MostPopularKeys.KEY_TITLE) != null) {
-                    mostPopularObject.setTitle(dataObject.getString(Keys.MostPopularKeys.KEY_TITLE));
+                if (resultsObject.getString(Keys.MostPopularKeys.KEY_TITLE) != null) {
+                    mostPopularObject.setTitle(resultsObject.getString(Keys.MostPopularKeys.KEY_TITLE));
                     Log.i("TITLE", mostPopularObject.getTitle());
                 }
 
-                if (dataObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL) != null) {
-                    mostPopularObject.setArticle_url(dataObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL));
+                if (resultsObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL) != null) {
+                    mostPopularObject.setArticle_url(resultsObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL));
                     Log.i("ARTICLE_URL", mostPopularObject.getArticle_url());
                 }
 
-                if (dataObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE) != null) {
-                    String published_date = dataObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE);
+                if (resultsObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE) != null) {
+                    String published_date = resultsObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE);
                     published_date.substring(0,10);
                     String day = published_date.substring(8,10);
                     String month = published_date.substring(5,7);
@@ -199,6 +199,17 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
                     Log.i("PUBLISHED DATE", mostPopularObject.getPublished_date());
                 }
 
+                JSONArray media_array = resultsObject.getJSONArray(Keys.MostPopularKeys.KEY_MEDIA);
+
+                JSONObject media_Object0 = media_array.getJSONObject(0);
+
+                JSONArray media_metadata = media_Object0.getJSONArray(Keys.MostPopularKeys.KEY_MEDIA_METADATA);
+
+                JSONObject media_metadata0 = media_metadata.getJSONObject(0);
+
+                if (media_metadata0.getString(Keys.MostPopularKeys.KEY_IMAGE_URL) != null){
+                    mostPopularObject.setImage_thumbnail(media_metadata0.getString(Keys.MostPopularKeys.KEY_IMAGE_URL));
+                }
                 //We put the object with the results into the ArrayList topStoriesObjectArrayList;
                 mostPopularObjectsArrayList.add(mostPopularObject);
                 Log.i("MPposition # ", "" + i + " :" + mostPopularObjectsArrayList.get(i).getTitle());

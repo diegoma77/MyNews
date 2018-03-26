@@ -35,7 +35,7 @@ public interface Keys {
         String KEY_TITLE = "title";
         String KEY_PUBLISHED_DATE = "published_date";
         String KEY_MEDIA = "media";
-        String KEY_MEDIA_METADATA = "media_metadata";
+        String KEY_MEDIA_METADATA = "media-metadata";
         String KEY_IMAGE_URL = "url";
 
     }
