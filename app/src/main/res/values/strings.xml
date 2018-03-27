@@ -33,7 +33,7 @@
     <!-- NOTIFICATION -->
 
     <string name="notification_app"> My News </string>
-    <string name="notification_title">New Articles to read</string>
+    <string name="notification_title">New Articles available!</string>
     <string name="notification_message">Tap to read Articles</string>
     <string name="image_for_mynews">Image for MyNews</string>
 

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.android.mynews.R;
 import com.example.android.mynews.activities.DisplayNotificationsActivity;
 
 import java.util.ArrayList;
@@ -48,8 +49,8 @@ public class NotificationReceiver extends BroadcastReceiver {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(android.R.drawable.ic_menu_sort_by_size)
-                .setContentTitle("New Articles Available")
-                .setContentText("Tap for reading them!")
+                .setContentTitle(context.getResources().getString(R.string.notification_title))
+                .setContentText(context.getResources().getString(R.string.notification_message))
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE)
                 .setAutoCancel(true);
 

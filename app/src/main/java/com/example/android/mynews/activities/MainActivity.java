@@ -28,6 +28,10 @@ import com.example.android.mynews.fragments.PageFragmentSports;
 import com.example.android.mynews.fragments.PageFragmentTopStories;
 import com.example.android.mynews.R;
 
+// TODO: 27/03/2018 Check notifications (it is sounding immediately)
+// TODO: 27/03/2018 Might change that, when a notification is sent and the article is seen, if you go back, you go to SearchArticlesActivity (and not to MainActivity)
+// TODO: 27/03/2018 Might change that, sometimes, there are no more articles but anyway, the notification is called
+
 public class MainActivity extends AppCompatActivity {
 
     private DatabaseHelper dbH;

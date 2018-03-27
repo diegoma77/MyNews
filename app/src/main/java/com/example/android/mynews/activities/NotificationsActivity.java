@@ -371,11 +371,13 @@ public class NotificationsActivity extends AppCompatActivity {
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY,
-                pendingIntent);
+        if (alarmManager != null) {
+            alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY,
+                    pendingIntent);
+        }
 
     }
 
