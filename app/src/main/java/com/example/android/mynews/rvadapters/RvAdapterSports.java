@@ -21,6 +21,7 @@ import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.pojo.SportsObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Diego Fajardo on 25/02/2018.
@@ -32,7 +33,7 @@ public class RvAdapterSports extends RecyclerView.Adapter<RvAdapterSports.ViewHo
     private static final String TAG = RvAdapterSports.class.getSimpleName();
 
     //Array that will store TopStoriesObject after request
-    private ArrayList<SportsObject> sportsObjectArrayList = new ArrayList<>();
+    private List<SportsObject> sportsObjectArrayList = new ArrayList<>();
 
     //Context of the activity
     private Context mContext;
@@ -50,7 +51,7 @@ public class RvAdapterSports extends RecyclerView.Adapter<RvAdapterSports.ViewHo
 
     }
 
-    public void setSportsData(ArrayList<SportsObject> sportsObjectArrayList) {
+    public void setSportsData(List<SportsObject> sportsObjectArrayList) {
         this.sportsObjectArrayList = sportsObjectArrayList;
         notifyDataSetChanged();
     }

@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Diego Fajardo on 22/02/2018.
@@ -43,7 +44,7 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
     private static final String TAG = "PageFragmentTopStories";
 
     //Array that will store the TopStoriesObject object to display in the RecyclerView
-    private ArrayList<MostPopularObject> mostPopularObjectsArrayList;
+    private List<MostPopularObject> mostPopularObjectsArrayList;
 
     //Variables to store views related to the articles upload
     private TextView mErrorMessageDisplay;
@@ -119,7 +120,6 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
     public void sendJSONRequestToMostPopularAPI (String url){
 
         showProgressBar();
-        Toast.makeText(getContext(), "Data is loading", Toast.LENGTH_LONG).show();
 
         //String request
         StringRequest stringRequest = new StringRequest(

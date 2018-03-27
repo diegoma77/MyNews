@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Diego Fajardo on 22/02/2018.
@@ -43,7 +44,7 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
     private static final String TAG = "PageFragmentTopStories";
 
     //Array that will store the TopStoriesObject object to display in the RecyclerView
-    private ArrayList<TopStoriesObject> topStoriesObjectArrayList;
+    private List<TopStoriesObject> topStoriesObjectList;
 
     //Variables to store views related to the articles upload
     private TextView mErrorMessageDisplay;
@@ -71,7 +72,7 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
 
         recyclerView.setHasFixedSize(true);
 
-        topStoriesObjectArrayList = new ArrayList<>();
+        topStoriesObjectList = new ArrayList<>();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -119,8 +120,6 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
     public void sendJSONRequestToTopStoriesAPI(String url){
 
         showProgressBar();
-
-        Toast.makeText(getContext(), "Data is loading", Toast.LENGTH_LONG).show();
 
         //String request
         StringRequest stringRequest = new StringRequest(
@@ -253,21 +252,21 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
                     Log.i("UPDATE_DATE", topStoriesObject.getUpdatedDate());
                 }
 
-                topStoriesObjectArrayList.add(topStoriesObject);
-                Log.i("TS_ARRAYLIST # ", "" + i + ", " + topStoriesObjectArrayList.get(i).getTitle());
+                topStoriesObjectList.add(topStoriesObject);
+                Log.i("TS_ARRAYLIST # ", "" + i + ", " + topStoriesObjectList.get(i).getTitle());
 
             }
 
             //Loop to see that all objects ib the ArrayList are different
-            for (int i = 0; i < topStoriesObjectArrayList.size() ; i++) {
-               Log.i("TS_ARRAY_SUMM_TITLES # ", "" + i + " :" + topStoriesObjectArrayList.get(i).getTitle());
+            for (int i = 0; i < topStoriesObjectList.size() ; i++) {
+               Log.i("TS_ARRAY_SUMM_TITLES # ", "" + i + " :" + topStoriesObjectList.get(i).getTitle());
             }
 
             //Sets the RVAdapter with the data from the JSON response
-            if (topStoriesObjectArrayList != null){
+            if (topStoriesObjectList != null){
                showRecyclerView();
-               rvAdapterTopStories.setTopStoriesData(topStoriesObjectArrayList);
-               Log.i ("TS_ADAPTER SET WITH:", "" + topStoriesObjectArrayList.size() + " objects");
+               rvAdapterTopStories.setTopStoriesData(topStoriesObjectList);
+               Log.i ("TS_ADAPTER SET WITH:", "" + topStoriesObjectList.size() + " objects");
                showRecyclerView();
             }
 

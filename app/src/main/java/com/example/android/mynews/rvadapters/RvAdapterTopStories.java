@@ -21,6 +21,7 @@ import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.pojo.TopStoriesObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Diego Fajardo on 25/02/2018.
@@ -32,7 +33,7 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
     private static final String TAG = RvAdapterTopStories.class.getSimpleName();
 
     //Array that will store TopStoriesObject after request
-    private ArrayList<TopStoriesObject> topStoriesObjectArrayList= new ArrayList<>();
+    private List<TopStoriesObject> topStoriesObjectArrayList= new ArrayList<>();
 
     //Context of the activity
     private Context mContext;
@@ -49,7 +50,7 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
         this.mCursor = cursor;
     }
 
-    public void setTopStoriesData(ArrayList<TopStoriesObject> topStoriesObjectArrayList) {
+    public void setTopStoriesData(List<TopStoriesObject> topStoriesObjectArrayList) {
         this.topStoriesObjectArrayList = topStoriesObjectArrayList;
         notifyDataSetChanged();
     }

@@ -21,6 +21,7 @@ import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.pojo.MostPopularObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Diego Fajardo on 25/02/2018.
@@ -32,7 +33,7 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
     private static final String TAG = RvAdapterMostPopular.class.getSimpleName();
 
     //Array that will store TopStoriesObject after request
-    private ArrayList<MostPopularObject> mostPopularObjectArrayList = new ArrayList<MostPopularObject>();
+    private List<MostPopularObject> mostPopularObjectArrayList = new ArrayList<MostPopularObject>();
 
     //Context of the activity
     private Context mContext;
@@ -49,7 +50,7 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
         this.mCursor = cursor;
     }
 
-    public void setMostPopularData(ArrayList<MostPopularObject> mostPopularObjectArrayList) {
+    public void setMostPopularData(List<MostPopularObject> mostPopularObjectArrayList) {
         this.mostPopularObjectArrayList = mostPopularObjectArrayList;
         notifyDataSetChanged();
     }

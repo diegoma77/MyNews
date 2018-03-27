@@ -21,6 +21,7 @@ import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.pojo.BusinessObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Diego Fajardo on 25/02/2018.
@@ -32,7 +33,7 @@ public class RvAdapterBusiness extends RecyclerView.Adapter<RvAdapterBusiness.Vi
     private static final String TAG = RvAdapterBusiness.class.getSimpleName();
 
     //Array that will store TopStoriesObject after request
-    private ArrayList<BusinessObject> businessObjectArrayList = new ArrayList<>();
+    private List<BusinessObject> businessObjectArrayList = new ArrayList<>();
 
     //Context of the activity
     private Context mContext;
@@ -49,7 +50,7 @@ public class RvAdapterBusiness extends RecyclerView.Adapter<RvAdapterBusiness.Vi
         this.mCursor = cursor;
     }
 
-    public void setBusinessData(ArrayList<BusinessObject> businessObjectArrayList) {
+    public void setBusinessData(List<BusinessObject> businessObjectArrayList) {
         this.businessObjectArrayList = businessObjectArrayList;
         notifyDataSetChanged();
     }
