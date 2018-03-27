@@ -65,7 +65,7 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.rv_search_articles);
+        setContentView(R.layout.rv_found_articles);
 
         dbH = new DatabaseHelper(this);
         mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
@@ -76,8 +76,11 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
 
         //Displays home button in toolbar
         final ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
 
         //Changes the color of the Toolbar Overflow ButtonListener to white
         setOverflowButtonColor(toolbar, Color.WHITE);
@@ -117,7 +120,7 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
 
         //The JSON request is done 3 times to get 30 articles (10 per request). It has to be done
         //leaving some time between them in order to avoid ERRORs
-        doItInAnotherThread(
+        sendJSONRequestsInAnotherThread(
                 url_page1,
                 url_page2,
                 url_page3,
@@ -153,7 +156,7 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
     /**
      * This method sends the JSON request using Volley
      */
-    public void sendJSONRequest(final String url) {
+    public void sendJSONRequestToArticleSearchAPI(final String url) {
 
         Log.i(TAG, "SENDING JSON REQUEST");
 
@@ -298,25 +301,25 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
      * Method to send the JSON Request to the API. It makes the calls one after another leaving some space between
      * them in order to avoid ERRORs.
      * */
-    private void doItInAnotherThread (final String url, final String url2, final String url3, final int timeInMillis) {
+    private void sendJSONRequestsInAnotherThread(final String url, final String url2, final String url3, final int timeInMillis) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     //First request
-                    sendJSONRequest(url);
+                    sendJSONRequestToArticleSearchAPI(url);
                     Log.i("Request 1", "Start Sleeping");
                     Thread.sleep(timeInMillis);
                     Log.i("Request 1", "Stop Sleeping");
 
                     //Second request
-                    sendJSONRequest(url2);
+                    sendJSONRequestToArticleSearchAPI(url2);
                     Log.i("Request 2", "2 Start Sleeping");
                     Thread.sleep(timeInMillis);
                     Log.i("Request 2 ", "Stop Sleeping");
 
                     //Third request
-                    sendJSONRequest(url3);
+                    sendJSONRequestToArticleSearchAPI(url3);
                     Log.i("Request 3", "2 Start Sleeping");
                     Thread.sleep(timeInMillis);
                     Log.i("Request 3", "Stop Sleeping");

@@ -88,7 +88,7 @@ public class PageFragmentBusiness extends android.support.v4.app.Fragment {
 
     public void loadBusinessInfo() {
 
-        sendJSONRequest(Url.BusinessUrl.B_FINAL_URL);
+        sendJSONRequestToTopStoriesAPI(Url.BusinessUrl.B_FINAL_URL);
 
     }
 
@@ -116,7 +116,7 @@ public class PageFragmentBusiness extends android.support.v4.app.Fragment {
 
     }
 
-    public void sendJSONRequest (String url){
+    public void sendJSONRequestToTopStoriesAPI(String url){
 
         showProgressBar();
 

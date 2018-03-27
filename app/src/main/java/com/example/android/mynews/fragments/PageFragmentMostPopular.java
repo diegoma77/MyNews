@@ -88,7 +88,7 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
 
     public void loadMostPopularInfo () {
 
-        sendJSONRequest(Url.MostPopularUrl.MP_FINAL_URL);
+        sendJSONRequestToMostPopularAPI(Url.MostPopularUrl.MP_FINAL_URL);
 
     }
 
@@ -116,7 +116,7 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
 
     }
 
-    public void sendJSONRequest (String url){
+    public void sendJSONRequestToMostPopularAPI (String url){
 
         showProgressBar();
         Toast.makeText(getContext(), "Data is loading", Toast.LENGTH_LONG).show();

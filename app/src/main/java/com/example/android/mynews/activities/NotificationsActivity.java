@@ -39,7 +39,6 @@ import java.util.List;
 public class NotificationsActivity extends AppCompatActivity {
 
     private static final String TAG = "NotificationsActivity";
-    private static final String C_TAG = "CursorErrorTag";
 
     //Needed for getApplicationContext() to work
     private Context context;
@@ -74,8 +73,10 @@ public class NotificationsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         dbH = new DatabaseHelper (this);
 
@@ -157,7 +158,9 @@ public class NotificationsActivity extends AppCompatActivity {
 
                     /** Third, we create the alarm manager, which will
                      * call the DisplayNotificationsActivity*/
-                    Toast.makeText(NotificationsActivity.this, "Notification Created", Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(NotificationsActivity.this, getResources().getString(R.string.notification_is_created), Toast.LENGTH_SHORT).show();
+
                     createAlarm();
 
                 }
@@ -351,12 +354,14 @@ public class NotificationsActivity extends AppCompatActivity {
         }
     }
 
-    /** This method creates the alarm for the notification */
+    /** This method creates the alarm
+     * for the notification */
     private void createAlarm () {
+
         //We create an instance of a calendar class to set
         // the time when the notification will appear
         Calendar calendar = Calendar.getInstance();
-
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         calendar.set(Calendar.HOUR_OF_DAY, 10);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
@@ -381,7 +386,8 @@ public class NotificationsActivity extends AppCompatActivity {
 
     }
 
-    /** This method cancels the alarm */
+    /** This method cancels the alarm
+     * for the notification */
     private void cancelAlarm () {
 
         Intent notification_intent = new Intent(context, NotificationReceiver.class);
@@ -393,7 +399,9 @@ public class NotificationsActivity extends AppCompatActivity {
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+        }
 
     }
 

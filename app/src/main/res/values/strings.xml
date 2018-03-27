@@ -30,6 +30,11 @@
     <string name="enable_notifications">Enable Notifications (once per day)"\       "</string>
     <string name="search_button">Search Button</string>
 
+    <!-- NOTIFICATIONS ACTIVITY -->
+
+    <string name="notification_is_created">A notification has been set at 10:00 am</string>
+
+
     <!-- NOTIFICATION -->
 
     <string name="notification_app"> My News </string>
@@ -37,11 +42,9 @@
     <string name="notification_message">Tap to read Articles</string>
     <string name="image_for_mynews">Image for MyNews</string>
 
+    <!-- FOUND ARTICLES LAYOUT -->
 
-
-
-
-
+    <string name="found_articles_title">Found Articles</string>
 
 
     <!-- SEARCH ARTICLES ACTIVITY STRINGS -->
@@ -50,11 +53,7 @@
     <string name="search_articles_toast_end_and_begin_dates"> End Date must be after the Begin Date </string>
     <string name="search_articles_toast_end_and_today_dates"> End Date can\'t be after today </string>
 
-
-
-
-
-
+    
     <!-- ABOUT SECTION STRINGS-->
 
     <string name="developed_by">

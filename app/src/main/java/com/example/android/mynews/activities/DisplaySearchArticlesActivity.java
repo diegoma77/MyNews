@@ -3,7 +3,6 @@ package com.example.android.mynews.activities;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -22,7 +20,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
-import com.example.android.mynews.data.AndroidDatabaseManager;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
@@ -64,7 +61,7 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.rv_search_articles);
+        setContentView(R.layout.rv_found_articles);
 
         dbH = new DatabaseHelper(this);
         mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
@@ -75,8 +72,11 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
         //Displays home button in toolbar
         final ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
 
         //Changes the color of the Toolbar Overflow ButtonListener to white
         setOverflowButtonColor(toolbar, Color.WHITE);
@@ -99,7 +99,7 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
         //The JSON request is done 3 times to get 30 articles (10 per request). It has to be done
         //leaving some time between them in order to avoid ERRORs
-        doItInAnotherThread(
+        sendJSONRequestsInAnotherThread(
                 intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE1),
                 intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE2),
                 intent.getExtras().getString(Keys.PutExtras.INTENT_SA_PAGE3),
@@ -134,7 +134,7 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
     /**
      * This method sends the JSON request using Volley
      */
-    public void sendJSONRequest(final String url) {
+    public void sendJSONRequestToArticleSearchAPI(final String url) {
 
         Log.i(TAG, "SENDING JSON REQUEST");
 
@@ -277,25 +277,25 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
      * Method to send the JSON Request to the API. It makes the calls one after another leaving some space between
      * them in order to avoid ERRORs.
      * */
-    private void doItInAnotherThread (final String url, final String url2, final String url3, final int timeInMillis) {
+    private void sendJSONRequestsInAnotherThread(final String url, final String url2, final String url3, final int timeInMillis) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     //First request
-                    sendJSONRequest(url);
+                    sendJSONRequestToArticleSearchAPI(url);
                     Log.i("Request 1", "Start Sleeping");
                     Thread.sleep(timeInMillis);
                     Log.i("Request 1", "Stop Sleeping");
 
                     //Second request
-                    sendJSONRequest(url2);
+                    sendJSONRequestToArticleSearchAPI(url2);
                     Log.i("Request 2", "2 Start Sleeping");
                     Thread.sleep(timeInMillis);
                     Log.i("Request 2 ", "Stop Sleeping");
 
                     //Third request
-                    sendJSONRequest(url3);
+                    sendJSONRequestToArticleSearchAPI(url3);
                     Log.i("Request 3", "2 Start Sleeping");
                     Thread.sleep(timeInMillis);
                     Log.i("Request 3", "Stop Sleeping");
@@ -307,54 +307,4 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
         }).start();
     }
 
-
 }
-
-/** ASYNCTASK THEORY
- *
-    //First parameter of AsyncTask: execute and doInBackground
-    //Second parameter: publishedProgress
-    //Third parameter: the return type
-    private class MyAsyncTask extends AsyncTask<String,void,String> {
-
-
-        //AsyncTask calls this method on the UI Thread so you can initialize
-        // anything you might want to in the UI thread
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        //Then it calls this method in another thread which is where
-        // your long running task will run
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            //If you want to update some UI with the progress from your long-running task,
-            //you call "publishProgress" here with the progress parameters. This causes
-            //onProgressUpdate to be called on the UI thread with you progress parameters.
-
-            //"publishProgress" can be called all the times you like
-
-            ;sendJSONRequest();
-
-
-            //When the task is complete, you return the result This causes the onPostExecute function
-            //to be called on the UI thread with the result you returned
-            return null;
-        }
-
-
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-        }
-
-        @Override
-        protected void onProgressUpdate(Object[] values) {
-            super.onProgressUpdate(values);
-        }
-    }
-
-
-}
-*/

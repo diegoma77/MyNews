@@ -88,7 +88,7 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
 
     public void loadTopStoriesInfo () {
 
-        sendJSONRequest(Url.TopStoriesUrl.TS_FINAL_URL);
+        sendJSONRequestToTopStoriesAPI(Url.TopStoriesUrl.TS_FINAL_URL);
 
     }
 
@@ -116,7 +116,7 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
 
     }
 
-    public void sendJSONRequest (String url){
+    public void sendJSONRequestToTopStoriesAPI(String url){
 
         showProgressBar();
 

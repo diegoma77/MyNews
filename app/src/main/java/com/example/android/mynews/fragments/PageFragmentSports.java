@@ -88,7 +88,7 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
 
     public void loadSportsInfo() {
 
-        sendJSONRequest(Url.SportsUrl.S_FINAL_URL);
+        sendJSONRequestToTopStoriesAPI(Url.SportsUrl.S_FINAL_URL);
 
     }
 
@@ -116,7 +116,7 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
 
     }
 
-    public void sendJSONRequest (String url){
+    public void sendJSONRequestToTopStoriesAPI(String url){
 
         showProgressBar();
 
