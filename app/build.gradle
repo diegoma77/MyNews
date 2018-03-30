@@ -43,6 +43,6 @@ dependencies {
     //RETROFIT: for
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    //a converter which uses Gson for serialization to and from JSON
+    //A converter which uses Gson for serialization to and from JSON
 
 }
