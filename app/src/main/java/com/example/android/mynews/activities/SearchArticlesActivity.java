@@ -30,13 +30,6 @@ import java.util.List;
 
 public class SearchArticlesActivity extends AppCompatActivity {
 
-    private static final String TAG = "SearchArticlesActivity";
-    private static final String SQ_TAG = "Search Query";
-    private static final String LOF_TAG = "List of sections";
-    private static final String BD_TAG = "Begin Date";
-    private static final String ED_TAG = "End Date";
-    private static final String URL_TAG = "URL Tag";
-
     //List for sections
     private List<String> listOfSections;
 
