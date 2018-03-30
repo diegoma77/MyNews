@@ -231,6 +231,15 @@ public class SearchArticlesActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT)
                             .show();
                 }
+                else if (beginDate.equals("") && endDate.equals("")) {
+
+                    endDate = getNotSetEndDate();
+                    beginDate = getNotSetBeginDate();
+
+                    createIntentForDisplayingSearchArticlesActivity();
+
+                }
+
                 else if (!checkIfEndDateIsAfterBeginDate()) {
                     Toast.makeText(SearchArticlesActivity.this,
                             getResources().getString(R.string.search_articles_toast_end_and_begin_dates),
@@ -499,6 +508,85 @@ public class SearchArticlesActivity extends AppCompatActivity {
             return false;
         }
     }
+
+    /** Next two methods are used to get the dates
+     * when they were not set. The system uses today's date as the endDate
+     * and 5 days ago as the begin date. If today's date is before 6 of January,
+     * then the system gets a month before today as the begin date */
+    private String getNotSetEndDate() {
+
+        Calendar calendar = Calendar.getInstance();
+        //calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+        String selectedYear = year + "";
+        String selectedMonth = "";
+        String selectedDay = "";
+
+        if ((month+1) < 10) {
+            selectedMonth = "0" + (month+1);
+        }
+        else { selectedMonth = (month+1) + ""; }
+
+        if (dayOfMonth < 10) {
+            selectedDay = "0" + (dayOfMonth);
+        }
+        else { selectedDay = dayOfMonth + ""; }
+
+        String endDate = selectedYear + selectedMonth + selectedDay;
+
+        return endDate;
+    }
+
+    private String getNotSetBeginDate() {
+
+        Calendar calendar = Calendar.getInstance();
+        //calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = 0;
+        int year = 0;
+
+        if (dayOfMonth < 6) {
+
+            if ((calendar.get(Calendar.MONTH) - 1) < 0) {
+                month = 12;
+                year = calendar.get(Calendar.YEAR) - 1;
+            }
+            else {
+                month = calendar.get(Calendar.MONTH) + 1;
+                year = calendar.get(Calendar.YEAR);
+            }
+        }
+        else {
+            month = calendar.get(Calendar.MONTH) + 1;
+            year = calendar.get(Calendar.YEAR);
+            dayOfMonth -= 5;
+        }
+
+
+        String selectedYear = year + "";
+        String selectedMonth = "";
+        String selectedDay = "";
+
+        if ((month) < 10) {
+            selectedMonth = "0" + (month);
+        }
+        else {selectedMonth = (month) + ""; }
+
+        if (dayOfMonth < 10) {
+            selectedDay = "0" + (dayOfMonth);
+        }
+        else { selectedDay = dayOfMonth + ""; }
+
+        String beginDate = selectedYear + selectedMonth + selectedDay;
+
+        return beginDate;
+    }
+
 
 
 

@@ -90,7 +90,6 @@ public class SearchArticlesActivityTest {
 
         // TODO: 30/03/2018 Test fails
 
-
         Activity displaySearchArticlesActivity = getInstrumentation()
                 .waitForMonitorWithTimeout(displaySearchArticlesActivityMonitor,
                         5000);
