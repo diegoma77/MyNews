@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.extras.DateHelper;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 
@@ -57,6 +58,9 @@ public class SearchArticlesActivity extends AppCompatActivity {
     private int endMonth;
     private int endDay;
 
+    //DateHelper
+    private DateHelper dH;
+
     //Date Picker Dialog variables
     private android.app.DatePickerDialog.OnDateSetListener mBeginDateSetListener;
     private android.app.DatePickerDialog.OnDateSetListener mEndDateSetListener;
@@ -83,6 +87,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        dH = new DateHelper();
 
         //List
         listOfSections = new ArrayList<>();
@@ -232,9 +238,10 @@ public class SearchArticlesActivity extends AppCompatActivity {
                             .show();
                 } else if (beginDate.equals("") && endDate.equals("")) {
 
-                    endDate = getTodayDateAndConvertToString();
-                    beginDate = getOneMonthAgoDateAndConvertToString();
+                    endDate = dH.getTodayDateAndConvertToString();
+                    beginDate = dH.getOneMonthAgoDateAndConvertToString();
 
+                    //We call the intent to change activity. This method calls the necessary method for building the URL in the next activity
                     createIntentForDisplayingSearchArticlesActivity();
 
                 } else if (!checkIfEndDateIsAfterBeginDate()) {
@@ -248,6 +255,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT)
                             .show();
                 } else {
+
                     //We call the intent to change activity. This method calls the necessary method for building the URL in the next activity
                     createIntentForDisplayingSearchArticlesActivity();
                 }
@@ -513,36 +521,6 @@ public class SearchArticlesActivity extends AppCompatActivity {
             return false;
         }
     }
-
-    /**
-     * Next two methods are used to get the dates
-     * when they were not set. The system uses today's date as the endDate
-     * and one month ago as the begin date. Since calendar dialog allows to
-     * take as end date the 1st of January of 1900 as the soonest date,
-     * there won't be a problem getting one month
-     * before as begin date because NYT API has much older articles
-     */
-    private String getTodayDateAndConvertToString () {
-
-        DateFormat df = new SimpleDateFormat("yyyyMMdd");
-
-        Date today = Calendar.getInstance().getTime();
-
-        return df.format(today);
-    }
-
-    private String getOneMonthAgoDateAndConvertToString () {
-
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -30);
-
-        DateFormat df = new SimpleDateFormat("yyyyMMdd");
-
-        return df.format(cal.getTime());
-
-    }
-
-
 
 }
 

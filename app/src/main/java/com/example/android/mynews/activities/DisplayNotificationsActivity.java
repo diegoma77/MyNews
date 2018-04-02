@@ -22,6 +22,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
+import com.example.android.mynews.extras.DateHelper;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 import com.example.android.mynews.pojo.SearchArticlesObject;
@@ -55,6 +56,9 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
     private DatabaseHelper dbH;
     private Cursor mCursor;
 
+    //DateHelper
+    private DateHelper dH;
+
     //Toolbar variable
     private Toolbar toolbar;
 
@@ -69,6 +73,8 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
 
         dbH = new DatabaseHelper(this);
         mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+
+        dH = new DateHelper();
 
         //Sets the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -106,9 +112,26 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
 
         //Creating the list and saving the articles url
         notificationsArticlesListOfUrls = new ArrayList<>();
-        String url_page1 = getSearchArticlesUrl(getSearchQueryAndAdaptForUrl(), getSectionsAndAdaptForUrl(), sevenDaysAgoDate , todayDate , "1");
-        String url_page2 = getSearchArticlesUrl(getSearchQueryAndAdaptForUrl(), getSectionsAndAdaptForUrl(), sevenDaysAgoDate , todayDate , "2");
-        String url_page3 = getSearchArticlesUrl(getSearchQueryAndAdaptForUrl(), getSectionsAndAdaptForUrl(), sevenDaysAgoDate , todayDate , "3");
+        String url_page1 = getSearchArticlesUrl(
+                getSearchQueryAndAdaptForUrl(),
+                getSectionsAndAdaptForUrl(),
+                dH.getOneMonthAgoDateAndConvertToString(),
+                dH.getTodayDateAndConvertToString(),
+                "1");
+
+        String url_page2 = getSearchArticlesUrl(
+                getSearchQueryAndAdaptForUrl(),
+                getSectionsAndAdaptForUrl(),
+                dH.getOneMonthAgoDateAndConvertToString(),
+                dH.getTodayDateAndConvertToString()
+                , "2");
+
+        String url_page3 = getSearchArticlesUrl(
+                getSearchQueryAndAdaptForUrl(),
+                getSectionsAndAdaptForUrl(),
+                dH.getOneMonthAgoDateAndConvertToString(),
+                dH.getTodayDateAndConvertToString() ,
+                "3");
 
         Log.i("url1", url_page1);
         Log.i("url2", url_page2);
@@ -426,4 +449,5 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
         }
         return sectionsQuery.substring(1);
     }
+
 }
