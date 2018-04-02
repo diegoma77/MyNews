@@ -20,8 +20,11 @@ import com.example.android.mynews.R;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -229,8 +232,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
                             .show();
                 } else if (beginDate.equals("") && endDate.equals("")) {
 
-                    endDate = getNotSetEndDate();
-                    beginDate = getNotSetBeginDate();
+                    endDate = getTodayDateAndConvertToString();
+                    beginDate = getOneMonthAgoDateAndConvertToString();
 
                     createIntentForDisplayingSearchArticlesActivity();
 
@@ -514,84 +517,32 @@ public class SearchArticlesActivity extends AppCompatActivity {
     /**
      * Next two methods are used to get the dates
      * when they were not set. The system uses today's date as the endDate
-     * and 5 days ago as the begin date. If today's date is before 6 of January,
-     * then the system gets a month before today as the begin date
+     * and one month ago as the begin date. Since calendar dialog allows to
+     * take as end date the 1st of January of 1900 as the soonest date,
+     * there won't be a problem getting one month
+     * before as begin date because NYT API has much older articles
      */
-    private String getNotSetEndDate() {
+    private String getTodayDateAndConvertToString () {
 
-        Calendar calendar = Calendar.getInstance();
-        //calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        DateFormat df = new SimpleDateFormat("yyyyMMdd");
 
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        Date today = Calendar.getInstance().getTime();
 
-        String selectedYear = year + "";
-        String selectedMonth = "";
-        String selectedDay = "";
-
-        if ((month + 1) < 10) {
-            selectedMonth = "0" + (month + 1);
-        } else {
-            selectedMonth = (month + 1) + "";
-        }
-
-        if (dayOfMonth < 10) {
-            selectedDay = "0" + (dayOfMonth);
-        } else {
-            selectedDay = dayOfMonth + "";
-        }
-
-        String endDate = selectedYear + selectedMonth + selectedDay;
-
-        return endDate;
+        return df.format(today);
     }
 
-    private String getNotSetBeginDate() {
+    private String getOneMonthAgoDateAndConvertToString () {
 
-        Calendar calendar = Calendar.getInstance();
-        //calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -30);
 
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = 0;
-        int year = 0;
+        DateFormat df = new SimpleDateFormat("yyyyMMdd");
 
-        if (dayOfMonth < 6) {
+        return df.format(cal.getTime());
 
-            if ((calendar.get(Calendar.MONTH) - 1) < 0) {
-                month = 12;
-                year = calendar.get(Calendar.YEAR) - 1;
-            } else {
-                month = calendar.get(Calendar.MONTH) + 1;
-                year = calendar.get(Calendar.YEAR);
-            }
-        } else {
-            month = calendar.get(Calendar.MONTH) + 1;
-            year = calendar.get(Calendar.YEAR);
-            dayOfMonth -= 5;
-        }
-
-
-        String selectedYear = year + "";
-        String selectedMonth = "";
-        String selectedDay = "";
-
-        if ((month) < 10) {
-            selectedMonth = "0" + (month);
-        } else {
-            selectedMonth = (month) + "";
-        }
-
-        if (dayOfMonth < 10) {
-            selectedDay = "0" + (dayOfMonth);
-        } else {
-            selectedDay = dayOfMonth + "";
-        }
-
-        String beginDate = selectedYear + selectedMonth + selectedDay;
-
-        return beginDate;
     }
+
+
 
 }
 
