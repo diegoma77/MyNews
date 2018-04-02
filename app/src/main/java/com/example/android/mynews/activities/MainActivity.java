@@ -4,11 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,8 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.example.android.mynews.data.AndroidDatabaseManager;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
@@ -28,9 +24,9 @@ import com.example.android.mynews.fragments.PageFragmentSports;
 import com.example.android.mynews.fragments.PageFragmentTopStories;
 import com.example.android.mynews.R;
 
-// TODO: 27/03/2018 Check notifications (it is sounding immediately)
-// TODO: 27/03/2018 Might change that, when a notification is sent and the article is seen, if you go back, you go to SearchArticlesActivity (and not to MainActivity)
-// TODO: 27/03/2018 Might change that, sometimes, there are no more articles but anyway, the notification is called
+// TODO: 30/03/2018 The tablet crashes when showing the DF image
+// TODO: 30/03/2018 When a Search is conducted but no articles are found, the app shows an empty screen, change
+// TODO: 27/03/2018 Might change that, sometimes, there are no more articles but even so, the notification is called
 
 public class MainActivity extends AppCompatActivity {
 

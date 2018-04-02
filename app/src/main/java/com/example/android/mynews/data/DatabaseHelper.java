@@ -42,10 +42,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_QUERY_OR_SECTION_TABLE =
             "CREATE TABLE " + DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME
-            + " ("
-            + DatabaseContract.Database.QUERY_OR_SECTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + DatabaseContract.Database.QUERY_OR_SECTION + " TEXT NOT NULL"
-            + ")";
+                    + " ("
+                    + DatabaseContract.Database.QUERY_OR_SECTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + DatabaseContract.Database.QUERY_OR_SECTION + " TEXT NOT NULL"
+                    + ")";
 
     private static final String CREATE_SWITCH_TABLE =
             "CREATE TABLE " + DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME

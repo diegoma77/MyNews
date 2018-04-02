@@ -131,17 +131,19 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 String selectedMonth;
                 String selectedDay;
 
-                selectedYear =  year + "";
+                selectedYear = year + "";
 
-                if ((month+1) < 10) {
-                    selectedMonth = "0" + (month+1);
+                if ((month + 1) < 10) {
+                    selectedMonth = "0" + (month + 1);
+                } else {
+                    selectedMonth = (month + 1) + "";
                 }
-                else { selectedMonth = (month+1) + ""; }
 
                 if (dayOfMonth < 10) {
                     selectedDay = "0" + (dayOfMonth);
+                } else {
+                    selectedDay = dayOfMonth + "";
                 }
-                else { selectedDay = dayOfMonth + ""; }
 
                 String selectedDateForTextView = selectedDay + "/" + selectedMonth + "/" + selectedYear;
                 String selectedDateForUrl = selectedYear + selectedMonth + selectedDay;
@@ -181,17 +183,19 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 String selectedMonth;
                 String selectedDay;
 
-                selectedYear =  year + "";
+                selectedYear = year + "";
 
-                if ((month+1) < 10) {
-                    selectedMonth = "0" + (month+1);
+                if ((month + 1) < 10) {
+                    selectedMonth = "0" + (month + 1);
+                } else {
+                    selectedMonth = (month + 1) + "";
                 }
-                else { selectedMonth = (month+1) + ""; }
 
                 if (dayOfMonth < 10) {
                     selectedDay = "0" + (dayOfMonth);
+                } else {
+                    selectedDay = dayOfMonth + "";
                 }
-                else { selectedDay = dayOfMonth + ""; }
 
                 String selectedDateForTextView = selectedDay + "/" + selectedMonth + "/" + selectedYear;
                 String selectedDateForUrl = selectedYear + selectedMonth + selectedDay;
@@ -223,29 +227,24 @@ public class SearchArticlesActivity extends AppCompatActivity {
                             getResources().getString(R.string.search_articles_toast_choose_one_category),
                             Toast.LENGTH_SHORT)
                             .show();
-                }
-                else if (beginDate.equals("") && endDate.equals("")) {
+                } else if (beginDate.equals("") && endDate.equals("")) {
 
                     endDate = getNotSetEndDate();
                     beginDate = getNotSetBeginDate();
 
                     createIntentForDisplayingSearchArticlesActivity();
 
-                }
-
-                else if (!checkIfEndDateIsAfterBeginDate()) {
+                } else if (!checkIfEndDateIsAfterBeginDate()) {
                     Toast.makeText(SearchArticlesActivity.this,
                             getResources().getString(R.string.search_articles_toast_end_and_begin_dates),
                             Toast.LENGTH_SHORT)
                             .show();
-                }
-                else if (checkIfEndDateIsAfterToday()) {
+                } else if (checkIfEndDateIsAfterToday()) {
                     Toast.makeText(SearchArticlesActivity.this,
                             getResources().getString(R.string.search_articles_toast_end_and_today_dates),
                             Toast.LENGTH_SHORT)
                             .show();
-                }
-                else {
+                } else {
                     //We call the intent to change activity. This method calls the necessary method for building the URL in the next activity
                     createIntentForDisplayingSearchArticlesActivity();
                 }
@@ -264,18 +263,22 @@ public class SearchArticlesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /** This method is used to know
-     * if a checkbox is checked or not*/
+    /**
+     * This method is used to know
+     * if a checkbox is checked or not
+     */
     public void onCheckboxClicked(View view) {
 
         // Is the view now checked?
         boolean checked = ((CheckBox) view).isChecked();
 
         // Check which checkbox was clicked
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.search_checkBox_arts:
                 ///When checked, add a String with the name of the checkbox to the list
-                if (checked) { listOfSections.add(Keys.CheckboxFields.CB_ARTS); }
+                if (checked) {
+                    listOfSections.add(Keys.CheckboxFields.CB_ARTS);
+                }
                 //When unchecked, check if there is an element with the name of the Checkbox in the array
                 //if there is one, remove it from the list
                 else {
@@ -285,40 +288,45 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 break;
 
             case R.id.search_checkBox_business:
-                if (checked) { listOfSections.add(Keys.CheckboxFields.CB_BUSINESS); }
-                else {
+                if (checked) {
+                    listOfSections.add(Keys.CheckboxFields.CB_BUSINESS);
+                } else {
                     if (listOfSections.contains(Keys.CheckboxFields.CB_BUSINESS))
                         listOfSections.remove(listOfSections.indexOf(Keys.CheckboxFields.CB_BUSINESS));
                 }
                 break;
 
             case R.id.search_checkBox_entrepeneurs:
-                if (checked) { listOfSections.add(Keys.CheckboxFields.CB_ENTREPRENEURS); }
-                else {
+                if (checked) {
+                    listOfSections.add(Keys.CheckboxFields.CB_ENTREPRENEURS);
+                } else {
                     if (listOfSections.contains(Keys.CheckboxFields.CB_ENTREPRENEURS))
                         listOfSections.remove(listOfSections.indexOf(Keys.CheckboxFields.CB_ENTREPRENEURS));
                 }
                 break;
 
             case R.id.search_checkBox_politics:
-                if (checked) { listOfSections.add(Keys.CheckboxFields.CB_POLITICS); }
-                else {
+                if (checked) {
+                    listOfSections.add(Keys.CheckboxFields.CB_POLITICS);
+                } else {
                     if (listOfSections.contains(Keys.CheckboxFields.CB_POLITICS))
                         listOfSections.remove(listOfSections.indexOf(Keys.CheckboxFields.CB_POLITICS));
                 }
                 break;
 
             case R.id.search_checkBox_sports:
-                if (checked) { listOfSections.add(Keys.CheckboxFields.CB_SPORTS); }
-                else {
+                if (checked) {
+                    listOfSections.add(Keys.CheckboxFields.CB_SPORTS);
+                } else {
                     if (listOfSections.contains(Keys.CheckboxFields.CB_SPORTS))
                         listOfSections.remove(listOfSections.indexOf(Keys.CheckboxFields.CB_SPORTS));
                 }
                 break;
 
             case R.id.search_checkBox_travel:
-                if (checked) { listOfSections.add(Keys.CheckboxFields.CB_TRAVEL); }
-                else {
+                if (checked) {
+                    listOfSections.add(Keys.CheckboxFields.CB_TRAVEL);
+                } else {
                     if (listOfSections.contains(Keys.CheckboxFields.CB_TRAVEL))
                         listOfSections.remove(listOfSections.indexOf(Keys.CheckboxFields.CB_TRAVEL));
                 }
@@ -329,8 +337,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
     /**
      * This method builds the Url used to send the JSON request
      * using the strings created (modified) by other methods
-     * */
-    public String getSearchArticlesUrl (String searchQuery, String newsSearchQuery, String beginDate, String endDate, String page) {
+     */
+    public String getSearchArticlesUrl(String searchQuery, String newsSearchQuery, String beginDate, String endDate, String page) {
 
         /** Seems that there are faster ways than += to append Strings, like StringBuffer */
 
@@ -377,8 +385,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
      * It starts the process of searching for the articles according to the information
      * needed from the user.
      * Changes spaces for + symbols.
-     * */
-    private String getSearchQueryAndAdaptForUrl () {
+     */
+    private String getSearchQueryAndAdaptForUrl() {
 
         String searchQueryAdaptedForUrl = mTextInputEditText.getText().toString();
 
@@ -394,16 +402,19 @@ public class SearchArticlesActivity extends AppCompatActivity {
      * This method us used to build the news_desk part of the Url.
      * The news_desk part is related to the checkboxes and allows to filter the
      * searches according to the category
-     * */
+     */
     private String getNewDeskValuesAndAdaptForUrl(List<String> listOfSections) {
 
         String temporary_query;
         String news_desk_query = "";
 
-        for (int i = 0; i < listOfSections.size() ; i++) {
+        for (int i = 0; i < listOfSections.size(); i++) {
 
-            if (i==0) { temporary_query = listOfSections.get(i); }
-            else { temporary_query = "+" + listOfSections.get(i); }
+            if (i == 0) {
+                temporary_query = listOfSections.get(i);
+            } else {
+                temporary_query = "+" + listOfSections.get(i);
+            }
 
             Log.i("NewDeskLOF.size()", this.listOfSections.size() + "");
 
@@ -412,10 +423,14 @@ public class SearchArticlesActivity extends AppCompatActivity {
         return news_desk_query;
     }
 
-    /**This method is used to call the Intent to change
+    /**
+     * This method is used to call the Intent to change
      * the Activity displayed (to DisplaySearchArticlesActivity). The intent
-     * carries information about the urls than have to be displayed*/
+     * carries information about the urls than have to be displayed
+     */
     private void createIntentForDisplayingSearchArticlesActivity() {
+
+        // TODO: 02/04/2018 Change SendRequestActivity
 
         Intent intent = new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class);
         intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, getSearchArticlesUrl(
@@ -443,7 +458,9 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
     }
 
-    /** Method to check that the end Date is not after today */
+    /**
+     * Method to check that the end Date is not after today
+     */
     private boolean checkIfEndDateIsAfterToday() {
 
         Calendar cal = Calendar.getInstance();
@@ -454,58 +471,52 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
         if (endYear > year) {
             return true;
-        }
-        else if (endYear == year){
-            if (endMonth > month){
+        } else if (endYear == year) {
+            if (endMonth > month) {
                 return true;
-            }
-            else if (endMonth == month){
+            } else if (endMonth == month) {
                 if (endDay > day) {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
-            }
-            else return false;
+            } else return false;
 
-        }
-        else {
+        } else {
             return false;
         }
     }
 
-    /** Method to check that the end Date is after the Begin Date */
+    /**
+     * Method to check that the end Date is after the Begin Date
+     */
 
     private boolean checkIfEndDateIsAfterBeginDate() {
 
         if (endYear > beginYear) {
             return true;
-        }
-        else if (endYear == beginYear){
-            if (endMonth > beginMonth){
+        } else if (endYear == beginYear) {
+            if (endMonth > beginMonth) {
                 return true;
-            }
-            else if (endMonth == beginMonth){
+            } else if (endMonth == beginMonth) {
                 if (endDay > beginDay) {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
-            }
-            else return false;
+            } else return false;
 
-        }
-        else {
+        } else {
             return false;
         }
     }
 
-    /** Next two methods are used to get the dates
+    /**
+     * Next two methods are used to get the dates
      * when they were not set. The system uses today's date as the endDate
      * and 5 days ago as the begin date. If today's date is before 6 of January,
-     * then the system gets a month before today as the begin date */
+     * then the system gets a month before today as the begin date
+     */
     private String getNotSetEndDate() {
 
         Calendar calendar = Calendar.getInstance();
@@ -519,15 +530,17 @@ public class SearchArticlesActivity extends AppCompatActivity {
         String selectedMonth = "";
         String selectedDay = "";
 
-        if ((month+1) < 10) {
-            selectedMonth = "0" + (month+1);
+        if ((month + 1) < 10) {
+            selectedMonth = "0" + (month + 1);
+        } else {
+            selectedMonth = (month + 1) + "";
         }
-        else { selectedMonth = (month+1) + ""; }
 
         if (dayOfMonth < 10) {
             selectedDay = "0" + (dayOfMonth);
+        } else {
+            selectedDay = dayOfMonth + "";
         }
-        else { selectedDay = dayOfMonth + ""; }
 
         String endDate = selectedYear + selectedMonth + selectedDay;
 
@@ -548,13 +561,11 @@ public class SearchArticlesActivity extends AppCompatActivity {
             if ((calendar.get(Calendar.MONTH) - 1) < 0) {
                 month = 12;
                 year = calendar.get(Calendar.YEAR) - 1;
-            }
-            else {
+            } else {
                 month = calendar.get(Calendar.MONTH) + 1;
                 year = calendar.get(Calendar.YEAR);
             }
-        }
-        else {
+        } else {
             month = calendar.get(Calendar.MONTH) + 1;
             year = calendar.get(Calendar.YEAR);
             dayOfMonth -= 5;
@@ -567,22 +578,20 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
         if ((month) < 10) {
             selectedMonth = "0" + (month);
+        } else {
+            selectedMonth = (month) + "";
         }
-        else {selectedMonth = (month) + ""; }
 
         if (dayOfMonth < 10) {
             selectedDay = "0" + (dayOfMonth);
+        } else {
+            selectedDay = dayOfMonth + "";
         }
-        else { selectedDay = dayOfMonth + ""; }
 
         String beginDate = selectedYear + selectedMonth + selectedDay;
 
         return beginDate;
     }
-
-
-
-
 
 }
 

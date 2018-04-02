@@ -28,7 +28,7 @@
     <string name="date_begin_numbers">01/01/1900</string>
     <string name="date_end_numbers">26/03/2018</string>
     <string name="enable_notifications">Enable Notifications (once per day)"\       "</string>
-    <string name="search_button">Search Button</string>
+    <string name="search_button">Search</string>
 
     <!-- NOTIFICATIONS ACTIVITY -->
 
@@ -45,6 +45,7 @@
     <!-- FOUND ARTICLES LAYOUT -->
 
     <string name="found_articles_title">Found Articles</string>
+    <string name="an_error_has_occurred">An error has occurred…</string>
 
 
     <!-- SEARCH ARTICLES ACTIVITY STRINGS -->
@@ -88,5 +89,6 @@
         the main bar), choose the categories, introduce a search query if you'd like and switch
         the button on. The app will send you a notification every day with new articles.
     </string>
+
 
 </resources>
