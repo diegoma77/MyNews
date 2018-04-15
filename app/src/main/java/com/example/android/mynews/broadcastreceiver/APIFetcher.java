@@ -27,7 +27,7 @@ import java.util.List;
  * Created by Diego Fajardo on 12/04/2018.
  */
 
-public class ApiFetcher {
+public class APIFetcher {
 
     private final String REFERENCE_TO_OBJECT;
 
@@ -36,7 +36,7 @@ public class ApiFetcher {
     private List<MostPopularAPIObject> listOfMostPopularObjects;
     private List<TopStoriesAPIObject> listOfTopStoriesObjects;
 
-    public ApiFetcher(String referenceToObject) {
+    public APIFetcher(String referenceToObject) {
         REFERENCE_TO_OBJECT = referenceToObject;
         listOfUrls = new ArrayList<>();
 
@@ -63,6 +63,10 @@ public class ApiFetcher {
 
     public String getUrl (int position) {
         return listOfUrls.get(position);
+    }
+
+    public int getlistOfUrlsSize () {
+        return listOfUrls.size();
     }
 
     public List<ArticlesAPIObject> getListOfArticlesObjects() {

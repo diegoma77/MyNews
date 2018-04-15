@@ -1,13 +1,18 @@
 package com.example.android.mynews.broadcastreceiver;
 
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.data.DatabaseContract;
+import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.pojo.ArticlesAPIObject;
 
@@ -16,7 +21,7 @@ import java.util.List;
 
 public class TrialActivity extends AppCompatActivity {
 
-    String REFERENCE_TO_OBJECT = Keys.ApiFetcher.ARTICLES_API_REFERENCE;
+    String REFERENCE_TO_API = Keys.ApiFetcher.ARTICLES_API_REFERENCE;
 
     List<ArticlesAPIObject> listOfObjects;
 
@@ -26,28 +31,44 @@ public class TrialActivity extends AppCompatActivity {
     Button button1;
     Button button2;
 
-    ApiFetcher apiFetcher;
+    APIFetcher apiFetcher;
+
+    DatabaseHelper dbH;
+    Cursor mCursor;
+
+    RecyclerView recyclerView;
+    RvAdapterTrial rvAdapterTrial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trial);
 
+        dbH = new DatabaseHelper(this);
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
+
         listOfObjects = new ArrayList<>();
-
-        apiFetcher = new ApiFetcher(
-                REFERENCE_TO_OBJECT);
-
-        apiFetcher.setUrl1("http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=arts+business&begin_date=20180411&end_date=20180413&sort=newest&page=1&api-key=a27a66145d4542d28a719cecee6de859");
-        apiFetcher.setUrl2("http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=arts+business&begin_date=20180411&end_date=20180413&sort=newest&page=1&api-key=a27a66145d4542d28a719cecee6de859");
-        apiFetcher.setUrl3("http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=arts+business&begin_date=20180411&end_date=20180413&sort=newest&page=1&api-key=a27a66145d4542d28a719cecee6de859");
-
 
         button = findViewById(R.id.button_trial);
         tv = findViewById(R.id.tv_trial);
 
-        button1 = findViewById(R.id.button_1);
-        button2 = findViewById(R.id.button_2);
+        apiFetcher = new APIFetcher(
+                REFERENCE_TO_API);
+
+        apiFetcher.addUrl("http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=arts&begin_date=20180411&end_date=20180413&sort=newest&page=1&api-key=a27a66145d4542d28a719cecee6de859");
+        apiFetcher.addUrl("http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=business&begin_date=20180411&end_date=20180413&sort=newest&page=1&api-key=a27a66145d4542d28a719cecee6de859");
+        apiFetcher.addUrl("http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=politics&begin_date=20180411&end_date=20180413&sort=newest&page=1&api-key=a27a66145d4542d28a719cecee6de859");
+
+        recyclerView = findViewById(R.id.recycler_view_trial);
+        recyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(TrialActivity.this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        rvAdapterTrial = new RvAdapterTrial(
+                REFERENCE_TO_API,
+                TrialActivity.this,
+                mCursor);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,16 +88,11 @@ public class TrialActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
 
             try {
-
-                apiFetcher.startJSONRequestArticlesAPI(apiFetcher.getUrl1(), TrialActivity.this);
-                Thread.sleep(2000);
-                publishProgress();
-                apiFetcher.startJSONRequestArticlesAPI(apiFetcher.getUrl2(), TrialActivity.this);
-                Thread.sleep(2000);
-                publishProgress();
-                apiFetcher.startJSONRequestArticlesAPI(apiFetcher.getUrl3(), TrialActivity.this);
-                Thread.sleep(2000);
-                publishProgress();
+                for (int i = 0; i < apiFetcher.getlistOfUrlsSize() ; i++) {
+                    apiFetcher.startJSONRequestArticlesAPI(apiFetcher.getUrl(i), TrialActivity.this);
+                    Thread.sleep(5000);
+                    publishProgress();
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -93,13 +109,13 @@ public class TrialActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            button1.setText(listOfObjects.get(0).getSnippet());
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-            listOfObjects = apiFetcher.getListOfObjects();
+            listOfObjects = apiFetcher.getListOfArticlesObjects();
+            tv.setText(listOfObjects.get(listOfObjects.size()-1).getSnippet());
         }
     }
 }

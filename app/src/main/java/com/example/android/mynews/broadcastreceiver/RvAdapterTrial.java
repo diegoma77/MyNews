@@ -18,6 +18,9 @@ import com.example.android.mynews.activities.WebViewMainActivity;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
+import com.example.android.mynews.pojo.ArticlesAPIObject;
+import com.example.android.mynews.pojo.MostPopularAPIObject;
+import com.example.android.mynews.pojo.TopStoriesAPIObject;
 import com.example.android.mynews.pojo.TopStoriesObject;
 
 import java.util.ArrayList;
@@ -32,8 +35,17 @@ public class RvAdapterTrial extends RecyclerView.Adapter<RvAdapterTrial.ViewHold
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
     private static final String TAG = RvAdapterTrial.class.getSimpleName();
 
-    //Array that will store TopStoriesObject after request
-    private List<TopStoriesObject> topStoriesObjectArrayList= new ArrayList<>();
+    //Array that will store ArticlesAPIObjects after request
+    private List<ArticlesAPIObject> articlesAPIObjectsList;
+
+    //Array that will store MostPopularAPIObjects after request
+    private List<MostPopularAPIObject> mostPopularAPIObjectsList;
+
+    //Array that will store TopStoriesAPIObjects after request
+    private List<TopStoriesAPIObject> topStoriesAPIObjectsList;
+
+    //Reference to API
+    private String referenceToAPI;
 
     //Context of the activity
     private Context mContext;
@@ -45,15 +57,42 @@ public class RvAdapterTrial extends RecyclerView.Adapter<RvAdapterTrial.ViewHold
     private DatabaseHelper dbH;
 
     //Constructor of the RvAdapter
-    public RvAdapterTrial(Context context, Cursor cursor) {
+    public RvAdapterTrial(String referenceToApi, Context context, Cursor cursor) {
+        this.referenceToAPI = referenceToApi;
         this.mContext = context;
         this.mCursor = cursor;
+
+        switch (referenceToApi) {
+            case Keys.ApiFetcher.ARTICLES_API_REFERENCE:
+                articlesAPIObjectsList = new ArrayList<>();
+                break;
+            case Keys.ApiFetcher.MOSTPOPULAR_API_REFERENCE:
+                mostPopularAPIObjectsList = new ArrayList<>();
+                break;
+            case Keys.ApiFetcher.TOPSTORIES_API_REFERENCE:
+                topStoriesAPIObjectsList = new ArrayList<>();
+                break;
+        }
     }
 
-    public void setTopStoriesData(List<TopStoriesObject> topStoriesObjectArrayList) {
-        this.topStoriesObjectArrayList = topStoriesObjectArrayList;
-        notifyDataSetChanged();
+    public void setDataFromArticlesAPI(List<ArticlesAPIObject> list) {
+        if (articlesAPIObjectsList != null) {
+            articlesAPIObjectsList = list;
+        }
     }
+
+    public void setDataFromMostPopularAPI(List<MostPopularAPIObject> list) {
+        if (mostPopularAPIObjectsList != null) {
+            mostPopularAPIObjectsList = list;
+        }
+    }
+
+    public void setDataFromATopStoriesAPI(List<TopStoriesAPIObject> list) {
+        if (topStoriesAPIObjectsList != null) {
+            topStoriesAPIObjectsList = list;
+        }
+    }
+
 
 
     @Override
@@ -78,52 +117,159 @@ public class RvAdapterTrial extends RecyclerView.Adapter<RvAdapterTrial.ViewHold
     @Override
     public void onBindViewHolder(RvAdapterTrial.ViewHolder holder, final int position) {
 
-        if (checkIfArticleUrlIsInTheDatabase(topStoriesObjectArrayList.get(position).getArticleUrl())) {
-            Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
-            holder.title.setTypeface(bold);
-        }
-
-        holder.title.setText(topStoriesObjectArrayList.get(position).getTitle());
-        holder.section.setText("Top Stories < " + topStoriesObjectArrayList.get(position).getSection());
-        holder.update_date.setText(topStoriesObjectArrayList.get(position).getUpdatedDate());
-
-        if (topStoriesObjectArrayList.get(position).getImageThumblarge() == null) {
-            Glide.with(mContext)
-                    .load(R.drawable.nyt)
-                    .into(holder.imageOnLeft);
-        }
-        else {
-            Glide.with(mContext)
-                    .load(topStoriesObjectArrayList.get(position).getImageThumblarge())
-                    .into(holder.imageOnLeft);
-        }
-
         Log.d(TAG, "#" + position);
+
+        switch (referenceToAPI){
+
+            case Keys.ApiFetcher.ARTICLES_API_REFERENCE: {
+                if (checkIfArticleUrlIsInTheDatabase(articlesAPIObjectsList.get(position).getWeb_url())) {
+                    Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
+                    holder.title.setTypeface(bold);
+                }
+
+                holder.title.setText(articlesAPIObjectsList.get(position).getSnippet());
+                holder.section.setText("Top Stories < " + articlesAPIObjectsList.get(position).getNew_desk());
+                holder.update_date.setText(articlesAPIObjectsList.get(position).getPub_date());
+
+                if (articlesAPIObjectsList.get(position).getImage_url() == null) {
+                    Glide.with(mContext)
+                            .load(R.drawable.nyt)
+                            .into(holder.imageOnLeft);
+                }
+                else {
+                    Glide.with(mContext)
+                            .load(articlesAPIObjectsList.get(position).getImage_url())
+                            .into(holder.imageOnLeft);
+                }
+
+                break;
+            }
+
+            case Keys.ApiFetcher.MOSTPOPULAR_API_REFERENCE: {
+                if (checkIfArticleUrlIsInTheDatabase(mostPopularAPIObjectsList.get(position).getArticle_url())) {
+                    Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
+                    holder.title.setTypeface(bold);
+                }
+
+                holder.title.setText(mostPopularAPIObjectsList.get(position).getTitle());
+                holder.section.setText("Top Stories < " + mostPopularAPIObjectsList.get(position).getSection());
+                holder.update_date.setText(mostPopularAPIObjectsList.get(position).getPublished_date());
+
+                if (mostPopularAPIObjectsList.get(position).getImage_thumbnail() == null) {
+                    Glide.with(mContext)
+                            .load(R.drawable.nyt)
+                            .into(holder.imageOnLeft);
+                }
+                else {
+                    Glide.with(mContext)
+                            .load(mostPopularAPIObjectsList.get(position).getImage_thumbnail())
+                            .into(holder.imageOnLeft);
+                }
+
+                break;
+
+            }
+
+            case Keys.ApiFetcher.TOPSTORIES_API_REFERENCE: {
+                if (checkIfArticleUrlIsInTheDatabase(topStoriesAPIObjectsList.get(position).getArticleUrl())) {
+                    Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
+                    holder.title.setTypeface(bold);
+                }
+
+                holder.title.setText(topStoriesAPIObjectsList.get(position).getTitle());
+                holder.section.setText("Top Stories < " + topStoriesAPIObjectsList.get(position).getSection());
+                holder.update_date.setText(topStoriesAPIObjectsList.get(position).getUpdatedDate());
+
+                if (topStoriesAPIObjectsList.get(position).getImageThumblarge() == null) {
+                    Glide.with(mContext)
+                            .load(R.drawable.nyt)
+                            .into(holder.imageOnLeft);
+                }
+                else {
+                    Glide.with(mContext)
+                            .load(topStoriesAPIObjectsList.get(position).getImageThumblarge())
+                            .into(holder.imageOnLeft);
+                }
+
+                break;
+
+            }
+
+        }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("ONCLICK - POSITION","#" + " CLICKED");
+                Log.i("ONCLICK - POSITION", "#" + " CLICKED");
                 Context context = v.getContext();
 
-                //Checks that the article is not yet in the database. If it is, we don't add it.
-                //If it's not, we add it. This way we keep the track of the articles the user has read
-                if (!checkIfArticleUrlIsInTheDatabase(topStoriesObjectArrayList.get(position).getArticleUrl())){
-                    dbH.insertDataToAlreadyReadArticlesTable(topStoriesObjectArrayList.get(position).getArticleUrl());
+                switch (referenceToAPI) {
+
+                    case Keys.ApiFetcher.ARTICLES_API_REFERENCE: {
+
+                        //Checks that the article is not yet in the database. If it is, we don't add it.
+                        // If it's not, we add it. This way we keep the track of the articles the user has read
+                        if (!checkIfArticleUrlIsInTheDatabase(articlesAPIObjectsList.get(position).getWeb_url())) {
+                            dbH.insertDataToAlreadyReadArticlesTable(articlesAPIObjectsList.get(position).getWeb_url());
+                        }
+
+                        Intent intent = new Intent(context, WebViewMainActivity.class);
+                        intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, articlesAPIObjectsList.get(position).getWeb_url());
+                        context.startActivity(intent);
+
+                        break;
+
+                    }
+
+                    case Keys.ApiFetcher.MOSTPOPULAR_API_REFERENCE: {
+
+                        //Checks that the article is not yet in the database. If it is, we don't add it.
+                        // If it's not, we add it. This way we keep the track of the articles the user has read
+                        if (!checkIfArticleUrlIsInTheDatabase(mostPopularAPIObjectsList.get(position).getArticle_url())) {
+                            dbH.insertDataToAlreadyReadArticlesTable(mostPopularAPIObjectsList.get(position).getArticle_url());
+                        }
+
+                        Intent intent = new Intent(context, WebViewMainActivity.class);
+                        intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, mostPopularAPIObjectsList.get(position).getArticle_url());
+                        context.startActivity(intent);
+                    }
+
+                    case Keys.ApiFetcher.TOPSTORIES_API_REFERENCE: {
+
+                        //Checks that the article is not yet in the database. If it is, we don't add it.
+                        // If it's not, we add it. This way we keep the track of the articles the user has read
+                        if (!checkIfArticleUrlIsInTheDatabase(topStoriesAPIObjectsList.get(position).getArticleUrl())) {
+                            dbH.insertDataToAlreadyReadArticlesTable(topStoriesAPIObjectsList.get(position).getArticleUrl());
+                        }
+
+                        Intent intent = new Intent(context, WebViewMainActivity.class);
+                        intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, topStoriesAPIObjectsList.get(position).getArticleUrl());
+                        context.startActivity(intent);
+
+                    }
+
                 }
-
-                Intent intent = new Intent(context, WebViewMainActivity.class);
-                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, topStoriesObjectArrayList.get(position).getArticleUrl());
-                context.startActivity(intent);
-
             }
+
         });
     }
 
+
     @Override
     public int getItemCount() {
-        if (topStoriesObjectArrayList == null) { return 0; };
-        return topStoriesObjectArrayList.size();
+        if (referenceToAPI.equals(Keys.ApiFetcher.ARTICLES_API_REFERENCE)){
+            if (articlesAPIObjectsList == null) { return 0; }
+            return articlesAPIObjectsList.size();
+
+        } else if (referenceToAPI.equals(Keys.ApiFetcher.MOSTPOPULAR_API_REFERENCE)){
+            if (mostPopularAPIObjectsList == null) { return 0; }
+            return mostPopularAPIObjectsList.size();
+
+        } else if (referenceToAPI.equals(Keys.ApiFetcher.TOPSTORIES_API_REFERENCE)){
+            if (topStoriesAPIObjectsList == null) { return 0; }
+            return topStoriesAPIObjectsList.size();
+        }
+        else { return 0; }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -145,14 +291,6 @@ public class RvAdapterTrial extends RecyclerView.Adapter<RvAdapterTrial.ViewHold
 
         }
 
-        public void bindViewHolder (int position) {
-
-            //section.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)));
-            //title.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.TITLE)));
-            //update_date.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.UPDATE_DATE)));
-            //imageOnLeft.setImageResource(R.drawable.rajoy);
-
-        }
     }
 
     /**
