@@ -6,7 +6,7 @@ import com.example.android.mynews.activities.SearchArticlesActivity;
  * Created by Diego Fajardo on 17/03/2018.
  */
 
-public class SearchArticlesObject {
+public class ArticlesAPIObject {
 
     private String web_url = "web_url";
     private String snippet = "snippet";
@@ -14,9 +14,9 @@ public class SearchArticlesObject {
     private String new_desk = "new_desk";
     private String pub_date = "pub_date";
 
-    public SearchArticlesObject () { }
+    public ArticlesAPIObject() { }
 
-    public SearchArticlesObject(String web_url, String snippet, String image_url, String pub_date) {
+    public ArticlesAPIObject(String web_url, String snippet, String image_url, String pub_date) {
         this.web_url = web_url;
         this.snippet = snippet;
         this.image_url = image_url;

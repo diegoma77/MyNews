@@ -18,7 +18,7 @@ import com.example.android.mynews.activities.WebViewMainActivity;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
-import com.example.android.mynews.pojo.MostPopularObject;
+import com.example.android.mynews.pojo.MostPopularAPIObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
     private static final String TAG = RvAdapterMostPopular.class.getSimpleName();
 
     //Array that will store TopStoriesObject after request
-    private List<MostPopularObject> mostPopularObjectArrayList = new ArrayList<MostPopularObject>();
+    private List<MostPopularAPIObject> mostPopularAPIObjectArrayList = new ArrayList<MostPopularAPIObject>();
 
     //Context of the activity
     private Context mContext;
@@ -50,8 +50,8 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
         this.mCursor = cursor;
     }
 
-    public void setMostPopularData(List<MostPopularObject> mostPopularObjectArrayList) {
-        this.mostPopularObjectArrayList = mostPopularObjectArrayList;
+    public void setMostPopularData(List<MostPopularAPIObject> mostPopularAPIObjectArrayList) {
+        this.mostPopularAPIObjectArrayList = mostPopularAPIObjectArrayList;
         notifyDataSetChanged();
     }
 
@@ -78,24 +78,24 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
     @Override
     public void onBindViewHolder(RvAdapterMostPopular.ViewHolder holder, final int position) {
 
-        if (checkIfArticleUrlIsInTheDatabase(mostPopularObjectArrayList.get(position).getArticle_url())) {
+        if (checkIfArticleUrlIsInTheDatabase(mostPopularAPIObjectArrayList.get(position).getArticle_url())) {
             Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
             holder.title.setTypeface(bold);
         }
 
-        MostPopularObject currentMostPopularObject = mostPopularObjectArrayList.get(position);
-        holder.title.setText(currentMostPopularObject.getTitle());
-        holder.section.setText("Most Popular < " + currentMostPopularObject.getSection());
-        holder.published_date.setText(currentMostPopularObject.getPublished_date());
+        MostPopularAPIObject currentMostPopularAPIObject = mostPopularAPIObjectArrayList.get(position);
+        holder.title.setText(currentMostPopularAPIObject.getTitle());
+        holder.section.setText("Most Popular < " + currentMostPopularAPIObject.getSection());
+        holder.published_date.setText(currentMostPopularAPIObject.getPublished_date());
 
-        if (mostPopularObjectArrayList.get(position).getImage_thumbnail() == null) {
+        if (mostPopularAPIObjectArrayList.get(position).getImage_thumbnail() == null) {
             Glide.with(mContext)
                     .load(R.drawable.nyt)
                     .into(holder.imageOnLeft);
         }
         else {
             Glide.with(mContext)
-                    .load(mostPopularObjectArrayList.get(position).getImage_thumbnail())
+                    .load(mostPopularAPIObjectArrayList.get(position).getImage_thumbnail())
                     .into(holder.imageOnLeft);
         }
 
@@ -109,12 +109,12 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
 
                 //Checks that the article is not yet in the database. If it is, we don't add it.
                 //If it's not, we add it. This way we keep the track of the articles the user has read
-                if (!checkIfArticleUrlIsInTheDatabase(mostPopularObjectArrayList.get(position).getArticle_url())){
-                    dbH.insertDataToAlreadyReadArticlesTable(mostPopularObjectArrayList.get(position).getArticle_url());
+                if (!checkIfArticleUrlIsInTheDatabase(mostPopularAPIObjectArrayList.get(position).getArticle_url())){
+                    dbH.insertDataToAlreadyReadArticlesTable(mostPopularAPIObjectArrayList.get(position).getArticle_url());
                 }
 
                 Intent intent = new Intent(context, WebViewMainActivity.class);
-                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, mostPopularObjectArrayList.get(position).getArticle_url());
+                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, mostPopularAPIObjectArrayList.get(position).getArticle_url());
                 context.startActivity(intent);
 
             }
@@ -123,8 +123,8 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
 
     @Override
     public int getItemCount() {
-        if (mostPopularObjectArrayList == null) { return 0; };
-        return mostPopularObjectArrayList.size();
+        if (mostPopularAPIObjectArrayList == null) { return 0; };
+        return mostPopularAPIObjectArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

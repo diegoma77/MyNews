@@ -25,8 +25,6 @@ import com.example.android.mynews.fragments.PageFragmentTopStories;
 import com.example.android.mynews.R;
 
 // TODO: 30/03/2018 The tablet crashes when showing the DF image
-// TODO: 30/03/2018 When a Search is conducted but no articles are found, the app shows an empty screen, change
-// TODO: 27/03/2018 Might change that, sometimes, there are no more articles but even so, the notification is called
 
 public class MainActivity extends AppCompatActivity {
 

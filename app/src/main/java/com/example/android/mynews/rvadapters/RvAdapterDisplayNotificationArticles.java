@@ -18,7 +18,7 @@ import com.example.android.mynews.activities.WebViewSearchActivity;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
-import com.example.android.mynews.pojo.SearchArticlesObject;
+import com.example.android.mynews.pojo.ArticlesAPIObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class RvAdapterDisplayNotificationArticles extends RecyclerView.Adapter<R
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
     private static final String TAG = RvAdapterDisplayNotificationArticles.class.getSimpleName();
 
-    private List<SearchArticlesObject> notificationArticlesList = new ArrayList<>();
+    private List<ArticlesAPIObject> notificationArticlesList = new ArrayList<>();
 
     //Variable used to avoid crashing when WebViewSearchActivity returns to DisplaySearchArticlesActivity
     //We carry these urls to the WebViewSearchActivity so it can bring them back when home back button
@@ -49,7 +49,7 @@ public class RvAdapterDisplayNotificationArticles extends RecyclerView.Adapter<R
     private DatabaseHelper dbH;
 
     public RvAdapterDisplayNotificationArticles(Context context,
-                                                List<SearchArticlesObject> notificationArticlesList,
+                                                List<ArticlesAPIObject> notificationArticlesList,
                                                 Cursor cursor,
                                                 List<String> notificationArticlesListOfUrls) {
         this.mContext = context;

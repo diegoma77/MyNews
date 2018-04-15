@@ -87,6 +87,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeActionContentDescription(R.string.home_button_search_activity_content_description);
 
         dH = new DateHelper();
 
@@ -136,29 +137,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
-                String selectedYear;
-                String selectedMonth;
-                String selectedDay;
-
-                selectedYear = year + "";
-
-                if ((month + 1) < 10) {
-                    selectedMonth = "0" + (month + 1);
-                } else {
-                    selectedMonth = (month + 1) + "";
-                }
-
-                if (dayOfMonth < 10) {
-                    selectedDay = "0" + (dayOfMonth);
-                } else {
-                    selectedDay = dayOfMonth + "";
-                }
-
-                String selectedDateForTextView = selectedDay + "/" + selectedMonth + "/" + selectedYear;
-                String selectedDateForUrl = selectedYear + selectedMonth + selectedDay;
-
-                tv_beginDateTextView.setText(selectedDateForTextView);
-                beginDate = selectedDateForUrl;
+                tv_beginDateTextView.setText(getDateFromDatePicker(year,month,dayOfMonth, true));
+                beginDate = getDateFromDatePicker(year, month, dayOfMonth, false);
 
                 beginYear = year;
                 beginMonth = month + 1;
@@ -188,29 +168,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
-                String selectedYear;
-                String selectedMonth;
-                String selectedDay;
-
-                selectedYear = year + "";
-
-                if ((month + 1) < 10) {
-                    selectedMonth = "0" + (month + 1);
-                } else {
-                    selectedMonth = (month + 1) + "";
-                }
-
-                if (dayOfMonth < 10) {
-                    selectedDay = "0" + (dayOfMonth);
-                } else {
-                    selectedDay = dayOfMonth + "";
-                }
-
-                String selectedDateForTextView = selectedDay + "/" + selectedMonth + "/" + selectedYear;
-                String selectedDateForUrl = selectedYear + selectedMonth + selectedDay;
-
-                tv_endDateTextView.setText(selectedDateForTextView);
-                endDate = selectedDateForUrl;
+                tv_endDateTextView.setText(getDateFromDatePicker(year,month,dayOfMonth, true));
+                endDate = getDateFromDatePicker(year,month,dayOfMonth, false);
 
                 endYear = year;
                 endMonth = month + 1;
@@ -255,7 +214,6 @@ public class SearchArticlesActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT)
                             .show();
                 } else {
-
                     //We call the intent to change activity. This method calls the necessary method for building the URL in the next activity
                     createIntentForDisplayingSearchArticlesActivity();
                 }
@@ -397,7 +355,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
      * needed from the user.
      * Changes spaces for + symbols.
      */
-    private String getSearchQueryAndAdaptForUrl() {
+    public String getSearchQueryAndAdaptForUrl() {
 
         String searchQueryAdaptedForUrl = mTextInputEditText.getText().toString();
 
@@ -414,7 +372,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
      * The news_desk part is related to the checkboxes and allows to filter the
      * searches according to the category
      */
-    private String getNewDeskValuesAndAdaptForUrl(List<String> listOfSections) {
+    public String getNewDeskValuesAndAdaptForUrl(List<String> listOfSections) {
 
         String temporary_query;
         String news_desk_query = "";
@@ -439,26 +397,27 @@ public class SearchArticlesActivity extends AppCompatActivity {
      * the Activity displayed (to DisplaySearchArticlesActivity). The intent
      * carries information about the urls than have to be displayed
      */
-    private void createIntentForDisplayingSearchArticlesActivity() {
-
-        // TODO: 02/04/2018 Change SendRequestActivity
+    public void createIntentForDisplayingSearchArticlesActivity() {
 
         Intent intent = new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class);
-        intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, getSearchArticlesUrl(
+        intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1,
+                getSearchArticlesUrl(
                 getSearchQueryAndAdaptForUrl(),
                 getNewDeskValuesAndAdaptForUrl(listOfSections),
                 beginDate,
                 endDate,
                 Url.ArticleSearchUrl.PAGE_ONE));
 
-        intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE2, getSearchArticlesUrl(
+        intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE2,
+                getSearchArticlesUrl(
                 getSearchQueryAndAdaptForUrl(),
                 getNewDeskValuesAndAdaptForUrl(listOfSections),
                 beginDate,
                 endDate,
                 Url.ArticleSearchUrl.PAGE_TWO));
 
-        intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE3, getSearchArticlesUrl(
+        intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE3,
+                getSearchArticlesUrl(
                 getSearchQueryAndAdaptForUrl(),
                 getNewDeskValuesAndAdaptForUrl(listOfSections),
                 beginDate,
@@ -520,6 +479,36 @@ public class SearchArticlesActivity extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+
+    /** Method to transform the DatePicker date into a String to use it for a URL.
+     * The modifier is used to choose the return type:
+     * True: for the URL
+     * False: for the String for the TextView
+     * */
+    public String getDateFromDatePicker (int year, int month,int dayOfMonth, boolean modifier) {
+
+        String selectedYear;
+        String selectedMonth;
+        String selectedDay;
+
+        selectedYear = year + "";
+
+        if ((month + 1) < 10) {
+            selectedMonth = "0" + (month + 1);
+        } else {
+            selectedMonth = (month + 1) + "";
+        }
+
+        if (dayOfMonth < 10) {
+            selectedDay = "0" + (dayOfMonth);
+        } else {
+            selectedDay = dayOfMonth + "";
+        }
+
+        if (modifier) { return selectedDay + "/" + selectedMonth + "/" + selectedYear; }
+        else { return selectedYear + selectedMonth + selectedDay; }
+
     }
 
 }

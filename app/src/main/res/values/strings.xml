@@ -37,6 +37,8 @@
 
     <!-- NOTIFICATION -->
 
+    <string name="main_notification_channel_name">Notification Channel Name</string>
+
     <string name="notification_app"> My News </string>
     <string name="notification_title">New Articles available!</string>
     <string name="notification_message">Tap to read Articles</string>
@@ -54,7 +56,9 @@
     <string name="search_articles_toast_end_and_begin_dates"> End Date must be after the Begin Date </string>
     <string name="search_articles_toast_end_and_today_dates"> End Date can\'t be after today </string>
 
-    
+    <string name="home_button_search_activity_content_description"> HomeButtonSearchActivity </string>
+
+
     <!-- ABOUT SECTION STRINGS-->
 
     <string name="developed_by">

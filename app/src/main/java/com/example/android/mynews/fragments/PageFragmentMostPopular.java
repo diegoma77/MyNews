@@ -24,7 +24,7 @@ import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
-import com.example.android.mynews.pojo.MostPopularObject;
+import com.example.android.mynews.pojo.MostPopularAPIObject;
 import com.example.android.mynews.rvadapters.RvAdapterMostPopular;
 
 import org.json.JSONArray;
@@ -44,7 +44,7 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
     private static final String TAG = "PageFragmentTopStories";
 
     //Array that will store the TopStoriesObject object to display in the RecyclerView
-    private List<MostPopularObject> mostPopularObjectsArrayList;
+    private List<MostPopularAPIObject> mostPopularAPIObjectsArrayList;
 
     //Variables to store views related to the articles upload
     private TextView mErrorMessageDisplay;
@@ -72,7 +72,7 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
 
         recyclerView.setHasFixedSize(true);
 
-        mostPopularObjectsArrayList = new ArrayList<>();
+        mostPopularAPIObjectsArrayList = new ArrayList<>();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -165,25 +165,25 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
             for (int i = 0; i < results_array.length(); i++) {
 
                 //We create the object that is going to store all the information
-                MostPopularObject mostPopularObject = new MostPopularObject();
+                MostPopularAPIObject mostPopularAPIObject = new MostPopularAPIObject();
 
                 //We get the "i results object"
                 JSONObject resultsObject = results_array.getJSONObject(i);
 
                 //GETS the rest of the data from the dataObject
                 if (resultsObject.getString(Keys.MostPopularKeys.KEY_SECTION) != null) {
-                    mostPopularObject.setSection(resultsObject.getString(Keys.MostPopularKeys.KEY_SECTION));
-                    Log.i("SECTION", mostPopularObject.getSection());
+                    mostPopularAPIObject.setSection(resultsObject.getString(Keys.MostPopularKeys.KEY_SECTION));
+                    Log.i("SECTION", mostPopularAPIObject.getSection());
                 }
 
                 if (resultsObject.getString(Keys.MostPopularKeys.KEY_TITLE) != null) {
-                    mostPopularObject.setTitle(resultsObject.getString(Keys.MostPopularKeys.KEY_TITLE));
-                    Log.i("TITLE", mostPopularObject.getTitle());
+                    mostPopularAPIObject.setTitle(resultsObject.getString(Keys.MostPopularKeys.KEY_TITLE));
+                    Log.i("TITLE", mostPopularAPIObject.getTitle());
                 }
 
                 if (resultsObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL) != null) {
-                    mostPopularObject.setArticle_url(resultsObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL));
-                    Log.i("ARTICLE_URL", mostPopularObject.getArticle_url());
+                    mostPopularAPIObject.setArticle_url(resultsObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL));
+                    Log.i("ARTICLE_URL", mostPopularAPIObject.getArticle_url());
                 }
 
                 if (resultsObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE) != null) {
@@ -193,8 +193,8 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
                     String month = published_date.substring(5,7);
                     String year = published_date.substring(0,4);
                     published_date = day + "/" + month + "/" + year;
-                    mostPopularObject.setPublished_date(published_date);
-                    Log.i("PUBLISHED DATE", mostPopularObject.getPublished_date());
+                    mostPopularAPIObject.setPublished_date(published_date);
+                    Log.i("PUBLISHED DATE", mostPopularAPIObject.getPublished_date());
                 }
 
                 JSONArray media_array = resultsObject.getJSONArray(Keys.MostPopularKeys.KEY_MEDIA);
@@ -206,26 +206,26 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
                 JSONObject media_metadata0 = media_metadata.getJSONObject(0);
 
                 if (media_metadata0.getString(Keys.MostPopularKeys.KEY_IMAGE_URL) != null){
-                    mostPopularObject.setImage_thumbnail(media_metadata0.getString(Keys.MostPopularKeys.KEY_IMAGE_URL));
+                    mostPopularAPIObject.setImage_thumbnail(media_metadata0.getString(Keys.MostPopularKeys.KEY_IMAGE_URL));
                 }
                 //We put the object with the results into the ArrayList topStoriesObjectArrayList;
-                mostPopularObjectsArrayList.add(mostPopularObject);
-                Log.i("MPposition # ", "" + i + " :" + mostPopularObjectsArrayList.get(i).getTitle());
+                mostPopularAPIObjectsArrayList.add(mostPopularAPIObject);
+                Log.i("MPposition # ", "" + i + " :" + mostPopularAPIObjectsArrayList.get(i).getTitle());
 
             }
 
-            for (int i = 0; i < mostPopularObjectsArrayList.size() ; i++) {
+            for (int i = 0; i < mostPopularAPIObjectsArrayList.size() ; i++) {
 
-                Log.i("MPposition # ", "" + i + " :" + mostPopularObjectsArrayList.get(i).getTitle());
+                Log.i("MPposition # ", "" + i + " :" + mostPopularAPIObjectsArrayList.get(i).getTitle());
 
             }
 
-            Log.i("ArrayList.size():", "" + mostPopularObjectsArrayList.size());
+            Log.i("ArrayList.size():", "" + mostPopularAPIObjectsArrayList.size());
 
-            if (mostPopularObjectsArrayList != null) {
+            if (mostPopularAPIObjectsArrayList != null) {
 
-                rvAdapterMostPopular.setMostPopularData(mostPopularObjectsArrayList);
-                Log.i("setMOSTPOPULARData:", "Called(size = " + mostPopularObjectsArrayList.size() + ")");
+                rvAdapterMostPopular.setMostPopularData(mostPopularAPIObjectsArrayList);
+                Log.i("setMOSTPOPULARData:", "Called(size = " + mostPopularAPIObjectsArrayList.size() + ")");
                 showRecyclerView();
 
             }

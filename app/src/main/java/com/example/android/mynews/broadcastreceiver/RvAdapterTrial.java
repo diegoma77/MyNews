@@ -1,4 +1,4 @@
-package com.example.android.mynews.rvadapters;
+package com.example.android.mynews.broadcastreceiver;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,11 +14,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.mynews.R;
-import com.example.android.mynews.activities.WebViewSearchActivity;
+import com.example.android.mynews.activities.WebViewMainActivity;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
-import com.example.android.mynews.pojo.ArticlesAPIObject;
+import com.example.android.mynews.pojo.TopStoriesObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,17 +27,13 @@ import java.util.List;
  * Created by Diego Fajardo on 25/02/2018.
  */
 
-public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapterDisplaySearchArticles.ViewHolder> {
+public class RvAdapterTrial extends RecyclerView.Adapter<RvAdapterTrial.ViewHolder> {
 
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
-    private static final String TAG = RvAdapterDisplaySearchArticles.class.getSimpleName();
+    private static final String TAG = RvAdapterTrial.class.getSimpleName();
 
-    private List<ArticlesAPIObject> searchArticlesList = new ArrayList<>();
-
-    //Variable used to avoid crashing when WebViewSearchActivity returns to DisplaySearchArticlesActivity
-    //We carry these urls to the WebViewSearchActivity so it can bring them back when home back button
-    //or back button are pressed
-    private List<String> searchArticlesListOfUrls;
+    //Array that will store TopStoriesObject after request
+    private List<TopStoriesObject> topStoriesObjectArrayList= new ArrayList<>();
 
     //Context of the activity
     private Context mContext;
@@ -48,14 +44,15 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
     //DatabaseHelper to add an article_url to the database if it hasn't been read
     private DatabaseHelper dbH;
 
-    public RvAdapterDisplaySearchArticles(Context context,
-                                          List<ArticlesAPIObject> searchArticlesList,
-                                          Cursor cursor,
-                                          List<String> searchArticlesListOfUrls) {
+    //Constructor of the RvAdapter
+    public RvAdapterTrial(Context context, Cursor cursor) {
         this.mContext = context;
-        this.searchArticlesList = searchArticlesList;
         this.mCursor = cursor;
-        this.searchArticlesListOfUrls = searchArticlesListOfUrls;
+    }
+
+    public void setTopStoriesData(List<TopStoriesObject> topStoriesObjectArrayList) {
+        this.topStoriesObjectArrayList = topStoriesObjectArrayList;
+        notifyDataSetChanged();
     }
 
 
@@ -79,30 +76,29 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(RvAdapterTrial.ViewHolder holder, final int position) {
 
-        Log.d(TAG, "#" + position);
-
-        if (checkIfArticleUrlIsInTheDatabase(searchArticlesList.get(position).getWeb_url())) {
+        if (checkIfArticleUrlIsInTheDatabase(topStoriesObjectArrayList.get(position).getArticleUrl())) {
             Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
             holder.title.setTypeface(bold);
         }
 
-        holder.title.setText(searchArticlesList.get(position).getSnippet());
-        holder.section.setText(searchArticlesList.get(position).getNew_desk());
-        holder.published_date.setText(searchArticlesList.get(position).getPub_date());
+        holder.title.setText(topStoriesObjectArrayList.get(position).getTitle());
+        holder.section.setText("Top Stories < " + topStoriesObjectArrayList.get(position).getSection());
+        holder.update_date.setText(topStoriesObjectArrayList.get(position).getUpdatedDate());
 
-        if (searchArticlesList.get(position).getImage_url() == null ||
-                searchArticlesList.get(position).getImage_url().equals("")) {
+        if (topStoriesObjectArrayList.get(position).getImageThumblarge() == null) {
             Glide.with(mContext)
                     .load(R.drawable.nyt)
                     .into(holder.imageOnLeft);
         }
         else {
             Glide.with(mContext)
-                    .load(searchArticlesList.get(position).getImage_url())
+                    .load(topStoriesObjectArrayList.get(position).getImageThumblarge())
                     .into(holder.imageOnLeft);
         }
+
+        Log.d(TAG, "#" + position);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,20 +108,12 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
 
                 //Checks that the article is not yet in the database. If it is, we don't add it.
                 //If it's not, we add it. This way we keep the track of the articles the user has read
-                if (!checkIfArticleUrlIsInTheDatabase(searchArticlesList.get(position).getWeb_url())){
-                    dbH.insertDataToAlreadyReadArticlesTable(searchArticlesList.get(position).getWeb_url());
+                if (!checkIfArticleUrlIsInTheDatabase(topStoriesObjectArrayList.get(position).getArticleUrl())){
+                    dbH.insertDataToAlreadyReadArticlesTable(topStoriesObjectArrayList.get(position).getArticleUrl());
                 }
 
-                Intent intent = new Intent(context, WebViewSearchActivity.class);
-
-                //Puts an extra that will be the url that the webView will read
-                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, searchArticlesList.get(position).getWeb_url());
-
-                //Puts 3 extras that will be the urls sent to API when we return with back buttons
-                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, searchArticlesListOfUrls.get(0));
-                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE2, searchArticlesListOfUrls.get(1));
-                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE3, searchArticlesListOfUrls.get(2));
-
+                Intent intent = new Intent(context, WebViewMainActivity.class);
+                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, topStoriesObjectArrayList.get(position).getArticleUrl());
                 context.startActivity(intent);
 
             }
@@ -134,16 +122,16 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
 
     @Override
     public int getItemCount() {
-        if (searchArticlesList == null) { return 0; }
-        return searchArticlesList.size();
+        if (topStoriesObjectArrayList == null) { return 0; };
+        return topStoriesObjectArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private View mView;
+        private final View mView;
         private ImageView imageOnLeft;
         private TextView section;
-        private TextView published_date;
+        private TextView update_date;
         private TextView title;
 
         public ViewHolder(View view) {
@@ -152,7 +140,7 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
             mView = view.findViewById(R.id.list_item_globalLayout);
             imageOnLeft = view.findViewById(R.id.list_item_image_news);
             section = view.findViewById(R.id.list_item_continent);
-            published_date = view.findViewById(R.id.list_item_date);
+            update_date = view.findViewById(R.id.list_item_date);
             title = view.findViewById(R.id.list_item_news_text);
 
         }

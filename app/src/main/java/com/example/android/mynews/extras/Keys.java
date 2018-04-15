@@ -6,6 +6,12 @@ package com.example.android.mynews.extras;
 
 public interface Keys {
 
+    interface ApiFetcher {
+        String ARTICLES_API_REFERENCE = "Articles";
+        String TOPSTORIES_API_REFERENCE = "TopStories";
+        String MOSTPOPULAR_API_REFERENCE = "MostPopular";
+    }
+
     interface PutExtras {
 
         String ARTICLE_URL_SENT = "article_url";
@@ -13,6 +19,18 @@ public interface Keys {
         String INTENT_SA_PAGE2 = "page2";
         String INTENT_SA_PAGE3 = "page3";
 
+    }
+
+    interface TopStoriesAPIKeys {
+
+        String KEY_RESULTS = "results";
+        String KEY_SECTION = "section";
+        String KEY_SUBSECTION = "subsection";
+        String KEY_TITLE = "title";
+        String KEY_ARTICLE_URL = "url";
+        String KEY_UPDATED_DATE = "updated_date";
+        String KEY_MULTIMEDIA = "multimedia";
+        String KEY_IMAGE_URL = "url";
     }
 
     interface TopStoriesKeys {

@@ -6,7 +6,7 @@ import com.example.android.mynews.extras.Keys;
  * Created by Diego Fajardo on 13/03/2018.
  */
 
-public class MostPopularObject {
+public class MostPopularAPIObject {
 
     private String section;
     private String title;
@@ -14,9 +14,9 @@ public class MostPopularObject {
     private String image_thumbnail;
     private String article_url;
 
-    public MostPopularObject () {}
+    public MostPopularAPIObject() {}
 
-    public MostPopularObject(String section, String title, String published_date, String image_thumbnail, String article_url) {
+    public MostPopularAPIObject(String section, String title, String published_date, String image_thumbnail, String article_url) {
         this.section = section;
         this.title = title;
         this.published_date = published_date;
