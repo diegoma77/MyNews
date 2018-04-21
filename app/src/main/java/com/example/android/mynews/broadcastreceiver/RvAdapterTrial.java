@@ -21,7 +21,6 @@ import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.pojo.ArticlesAPIObject;
 import com.example.android.mynews.pojo.MostPopularAPIObject;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
-import com.example.android.mynews.pojo.TopStoriesObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,18 +77,21 @@ public class RvAdapterTrial extends RecyclerView.Adapter<RvAdapterTrial.ViewHold
     public void setDataFromArticlesAPI(List<ArticlesAPIObject> list) {
         if (articlesAPIObjectsList != null) {
             articlesAPIObjectsList = list;
+            notifyDataSetChanged();
         }
     }
 
     public void setDataFromMostPopularAPI(List<MostPopularAPIObject> list) {
         if (mostPopularAPIObjectsList != null) {
             mostPopularAPIObjectsList = list;
+            notifyDataSetChanged();
         }
     }
 
     public void setDataFromATopStoriesAPI(List<TopStoriesAPIObject> list) {
         if (topStoriesAPIObjectsList != null) {
             topStoriesAPIObjectsList = list;
+            notifyDataSetChanged();
         }
     }
 
@@ -253,7 +255,6 @@ public class RvAdapterTrial extends RecyclerView.Adapter<RvAdapterTrial.ViewHold
 
         });
     }
-
 
     @Override
     public int getItemCount() {

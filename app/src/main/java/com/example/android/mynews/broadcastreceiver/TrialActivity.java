@@ -70,6 +70,8 @@ public class TrialActivity extends AppCompatActivity {
                 TrialActivity.this,
                 mCursor);
 
+        recyclerView.setAdapter(rvAdapterTrial);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,23 +117,9 @@ public class TrialActivity extends AppCompatActivity {
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
             listOfObjects = apiFetcher.getListOfArticlesObjects();
+            rvAdapterTrial.setDataFromArticlesAPI(listOfObjects);
             tv.setText(listOfObjects.get(listOfObjects.size()-1).getSnippet());
         }
     }
 }
 
-/**
-
-    @Override
-    protected List<ArticlesAPIObject> doInBackground() {
-
-
-
-        return null;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-    }
-*/

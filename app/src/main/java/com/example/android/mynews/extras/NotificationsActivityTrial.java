@@ -1,4 +1,4 @@
-package com.example.android.mynews.activities;
+package com.example.android.mynews.extras;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -7,9 +7,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -18,23 +21,31 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.activities.MainActivity;
+import com.example.android.mynews.asynctaskloaders.atlHelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.broadcastreceiver.NotificationReceiver;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
-import com.example.android.mynews.extras.Keys;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Diego Fajardo on 26/02/2018.
  */
 
-public class NotificationsActivity extends AppCompatActivity {
+public class NotificationsActivityTrial extends AppCompatActivity {
 
     private static final String TAG = "NotificationsActivity";
 
+    private static final int LOADER_ID = 1;
+
     //Needed for getApplicationContext() to work
     private Context context;
+
+    //List that stores the information of QueryOrSection Table for the activity
+    private List<String> listOfQueryAndSections;
 
     //TextInput
     private TextInputEditText mTextInputEditText;
@@ -59,8 +70,12 @@ public class NotificationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notifications_layout);
 
+        Log.i(TAG, "+++ onCreate: called! +++");
+
         //Needed for getApplicationContext() to work
         context = this;
+
+        // TODO: 21/04/2018 Call in onResume() an AsyncTask to update the list
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.notif_toolbar);
         setSupportActionBar(toolbar);
@@ -86,6 +101,17 @@ public class NotificationsActivity extends AppCompatActivity {
 
         //Switch
         mSwitch = (Switch) findViewById(R.id.notif_switch);
+
+
+
+
+
+
+
+
+
+
+
 
         /** Called the first time the Activity is created (and only this time).
          * Inserts data into the Notifications' Switch table.
@@ -152,7 +178,7 @@ public class NotificationsActivity extends AppCompatActivity {
                     /** Third, we create the alarm manager, which will
                      * call the DisplayNotificationsActivity*/
 
-                    Toast.makeText(NotificationsActivity.this, getResources().getString(R.string.notification_is_created), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NotificationsActivityTrial.this, getResources().getString(R.string.notification_is_created), Toast.LENGTH_SHORT).show();
 
                     createAlarm();
 
@@ -170,11 +196,40 @@ public class NotificationsActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "+++ onResume: called! +++");
+
+        //Instantiation of the list
+        listOfQueryAndSections = new ArrayList<>();
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<List<String>> loader = loaderManager.getLoader(LOADER_ID);
+
+        if (loader == null) {
+            Log.i(TAG, "onResume: loader==null");
+            loaderManager.initLoader(LOADER_ID, null, loaderUpdateList);
+        } else {
+            Log.i(TAG, "onResume: loader!=null");
+            loaderManager.restartLoader(LOADER_ID, null, loaderUpdateList);
+        }
+
+        // TODO: 21/04/2018 Call here an AsyncTask to update the list
+    }
+
     /** Used to update the String put in the TextInput */
     @Override
     protected void onPause() {
-        dbH.updateSearchQueryOrSection(mTextInputEditText.getText().toString().toLowerCase(), 1);
         super.onPause();
+        Log.i(TAG, "+++ onPause: called! +++");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "+++ onDestroy: called! +++");
+
     }
 
     /** Menu listeners */
@@ -182,7 +237,7 @@ public class NotificationsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(NotificationsActivity.this, MainActivity.class);
+                Intent intent = new Intent(NotificationsActivityTrial.this, MainActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -401,5 +456,78 @@ public class NotificationsActivity extends AppCompatActivity {
         }
 
     }
+
+
+
+
+
+    /**********************/
+    /** LOADER CALLBACKS **/
+    /**********************/
+
+    private LoaderManager.LoaderCallbacks<List<String>> loaderUpdateList =
+            new LoaderManager.LoaderCallbacks<List<String>>() {
+
+                @Override
+                public Loader<List<String>> onCreateLoader(int id, Bundle args) {
+                    return AsyncTaskLoaderHelper.;
+                }
+
+                @Override
+                public void onLoadFinished(Loader<List<String>> loader, List<String> data) {
+
+                }
+
+                @Override
+                public void onLoaderReset(Loader<List<String>> loader) {
+
+                }
+            };
+
+
+
+
+               /**
+                @Override
+                public Loader<String> onCreateLoader(int id, Bundle args) {
+                    if (buttonClicked == 1) {
+                        return AsyncTaskLoaderHelper.updateTextOne(MainActivity.this);
+                    } else if (buttonClicked == 2) {
+                        return AsyncTaskLoaderHelper.updateTextTwo(MainActivity.this);
+                    } else {
+                        return null;
+                    }
+                }
+
+                @Override
+                public void onLoadFinished(Loader<List<String>> loader, List<String> data) {
+
+                }
+
+                @Override
+                public void onLoaderReset(Loader<List<String>> loader) {
+
+                }
+
+                @Override
+                public void onLoadFinished(Loader<String> loader, String data) {
+                    Log.i(TAG, "onLoadFinished: called +++");
+                    textView.setText(data);
+                }
+
+                @Override
+                public void onLoaderReset(Loader<String> loader) {
+
+                }
+            };
+*/
+
+
+
+
+
+
+
+
 
 }
