@@ -39,7 +39,9 @@ public class NotificationsActivityTrial extends AppCompatActivity {
 
     private static final String TAG = "NotificationsActivity";
 
-    private static final int LOADER_ID = 1;
+    private static final int LOADER_UPDATE_DATABASE_ID = 1;
+    private static final int LOADER_UPDATE_LIST_ID = 2;
+
 
     //Needed for getApplicationContext() to work
     private Context context;
@@ -75,8 +77,6 @@ public class NotificationsActivityTrial extends AppCompatActivity {
         //Needed for getApplicationContext() to work
         context = this;
 
-        // TODO: 21/04/2018 Call in onResume() an AsyncTask to update the list
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.notif_toolbar);
         setSupportActionBar(toolbar);
 
@@ -101,15 +101,6 @@ public class NotificationsActivityTrial extends AppCompatActivity {
 
         //Switch
         mSwitch = (Switch) findViewById(R.id.notif_switch);
-
-
-
-
-
-
-
-
-
 
 
 
@@ -196,6 +187,8 @@ public class NotificationsActivityTrial extends AppCompatActivity {
         });
     }
 
+    /** We fill the list in onResume() */
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -204,25 +197,19 @@ public class NotificationsActivityTrial extends AppCompatActivity {
         //Instantiation of the list
         listOfQueryAndSections = new ArrayList<>();
 
-        LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<List<String>> loader = loaderManager.getLoader(LOADER_ID);
+        loadUpdateListLoader();
 
-        if (loader == null) {
-            Log.i(TAG, "onResume: loader==null");
-            loaderManager.initLoader(LOADER_ID, null, loaderUpdateList);
-        } else {
-            Log.i(TAG, "onResume: loader!=null");
-            loaderManager.restartLoader(LOADER_ID, null, loaderUpdateList);
-        }
-
-        // TODO: 21/04/2018 Call here an AsyncTask to update the list
     }
 
-    /** Used to update the String put in the TextInput */
+    /** We update the database in
+     * onPause() and onDestroy() */
+
     @Override
     protected void onPause() {
         super.onPause();
         Log.i(TAG, "+++ onPause: called! +++");
+
+        loadUpdateDatabaseLoader();
     }
 
     @Override
@@ -230,7 +217,10 @@ public class NotificationsActivityTrial extends AppCompatActivity {
         super.onDestroy();
         Log.i(TAG, "+++ onDestroy: called! +++");
 
+        loadUpdateDatabaseLoader();
     }
+
+
 
     /** Menu listeners */
     @Override
@@ -438,6 +428,7 @@ public class NotificationsActivityTrial extends AppCompatActivity {
 
     }
 
+    // TODO: 21/04/2018 Use JobScheduler
     /** This method cancels the alarm
      * for the notification */
     private void cancelAlarm () {
@@ -457,25 +448,80 @@ public class NotificationsActivityTrial extends AppCompatActivity {
 
     }
 
+    /*****************************/
+    /** METHODS TO INIT LOADERS **/
+    /*****************************/
 
+    private void loadUpdateListLoader() {
 
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<List<String>> loader = loaderManager.getLoader(LOADER_UPDATE_LIST_ID);
 
+        if (loader == null) {
+            Log.i(TAG, "onResume: loader==null");
+            loaderManager.initLoader(LOADER_UPDATE_LIST_ID, null, loaderUpdateList);
+        } else {
+            Log.i(TAG, "onResume: loader!=null");
+            loaderManager.restartLoader(LOADER_UPDATE_LIST_ID, null, loaderUpdateList);
+        }
+    }
+
+    private void loadUpdateDatabaseLoader() {
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<List<String>> loader = loaderManager.getLoader(LOADER_UPDATE_DATABASE_ID);
+
+        if (loader == null) {
+            Log.i(TAG, "onResume: loader==null");
+            loaderManager.initLoader(LOADER_UPDATE_DATABASE_ID, null, loaderUpdateDatabase);
+        } else {
+            Log.i(TAG, "onResume: loader!=null");
+            loaderManager.restartLoader(LOADER_UPDATE_DATABASE_ID, null, loaderUpdateDatabase);
+        }
+
+    }
 
     /**********************/
     /** LOADER CALLBACKS **/
     /**********************/
+
+    /** The loader callbacks are used to instantiate
+     * AsyncTaskLoaders (which do a specific function:
+     * eg. update the database with the information from the listOfSectionsAndQuery
+     * eg. update the listOfSectionsAndQuery with the information from the database) */
+
+    private LoaderManager.LoaderCallbacks<Boolean> loaderUpdateDatabase =
+            new LoaderManager.LoaderCallbacks<Boolean>() {
+
+                @Override
+                public Loader<Boolean> onCreateLoader(int id, Bundle args) {
+                    return AsyncTaskLoaderHelper.updateDatabase(
+                            NotificationsActivityTrial.this,
+                            listOfQueryAndSections);
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
+
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Boolean> loader) {
+
+                }
+            };
 
     private LoaderManager.LoaderCallbacks<List<String>> loaderUpdateList =
             new LoaderManager.LoaderCallbacks<List<String>>() {
 
                 @Override
                 public Loader<List<String>> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.;
+                    return AsyncTaskLoaderHelper.updateList(NotificationsActivityTrial.this);
                 }
 
                 @Override
                 public void onLoadFinished(Loader<List<String>> loader, List<String> data) {
-
+                    listOfQueryAndSections.addAll(data);
                 }
 
                 @Override
@@ -483,51 +529,5 @@ public class NotificationsActivityTrial extends AppCompatActivity {
 
                 }
             };
-
-
-
-
-               /**
-                @Override
-                public Loader<String> onCreateLoader(int id, Bundle args) {
-                    if (buttonClicked == 1) {
-                        return AsyncTaskLoaderHelper.updateTextOne(MainActivity.this);
-                    } else if (buttonClicked == 2) {
-                        return AsyncTaskLoaderHelper.updateTextTwo(MainActivity.this);
-                    } else {
-                        return null;
-                    }
-                }
-
-                @Override
-                public void onLoadFinished(Loader<List<String>> loader, List<String> data) {
-
-                }
-
-                @Override
-                public void onLoaderReset(Loader<List<String>> loader) {
-
-                }
-
-                @Override
-                public void onLoadFinished(Loader<String> loader, String data) {
-                    Log.i(TAG, "onLoadFinished: called +++");
-                    textView.setText(data);
-                }
-
-                @Override
-                public void onLoaderReset(Loader<String> loader) {
-
-                }
-            };
-*/
-
-
-
-
-
-
-
-
 
 }

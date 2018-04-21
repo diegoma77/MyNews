@@ -13,9 +13,11 @@ import java.util.List;
  * Created by Diego Fajardo on 21/04/2018.
  */
 
+/** This ATL is called when the user reaches the Notifications Activity.
+ * It returns a list to fill the listOfQueryAndSections with the information from the database */
 public class ATLNotifUpdateList extends android.support.v4.content.AsyncTaskLoader<List<String>> {
 
-    DatabaseHelper dbH;
+    private DatabaseHelper dbH;
 
     public ATLNotifUpdateList(Context context) {
         super(context);
@@ -31,26 +33,20 @@ public class ATLNotifUpdateList extends android.support.v4.content.AsyncTaskLoad
     @Override
     public List<String> loadInBackground() {
 
-        /** We create a list with the information from the database (query and section) */
+        /** We create a list */
         List<String> list = new ArrayList<>();
         Cursor mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
 
+        /** We fill the list with the information from the database (query and section) */
         mCursor.moveToFirst();
         for (int i = 0; i < mCursor.getCount(); i++) {
-            list.add(mCursor.getColumnIndex(mCursor.getString(DatabaseContract.Database.QUERY_OR_SECTION)));
-
+            list.add(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)));
+            if (i != mCursor.getCount()) { mCursor.moveToNext(); }
         }
 
-
-
-
-
-        if (list.size() != 0){
-            for (int i = 0; i < list.size(); i++) {
-                dbH.updateSearchQueryOrSection(list.get(i), i+1);
-            }
-            return true;
-        } else return false;
+        if (list.size() != 0) {
+            return list;
+        } else { return null; }
 
     }
 }

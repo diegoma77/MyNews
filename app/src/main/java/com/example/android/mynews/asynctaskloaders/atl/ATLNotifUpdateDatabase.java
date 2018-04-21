@@ -14,9 +14,9 @@ import java.util.List;
  * It updates the database with the information of the listOfQueryAndSections */
 public class ATLNotifUpdateDatabase extends android.support.v4.content.AsyncTaskLoader<Boolean> {
 
-    List<String> list;
+    private List<String> list;
 
-    DatabaseHelper dbH;
+    private DatabaseHelper dbH;
 
     public ATLNotifUpdateDatabase(Context context, List<String> list) {
         super(context);
