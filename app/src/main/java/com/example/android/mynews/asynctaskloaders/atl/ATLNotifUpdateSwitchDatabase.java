@@ -11,17 +11,17 @@ import java.util.List;
  */
 
 /** This ATL is called when the user leaves the Notifications Activity.
- * It updates the database with information from the listOfQueryAndSections */
-public class ATLNotifUpdateDatabase extends android.support.v4.content.AsyncTaskLoader<Boolean> {
-
-    private List<String> list;
+ * It updates the database with the information from the mSwitch variable */
+public class ATLNotifUpdateSwitchDatabase extends android.support.v4.content.AsyncTaskLoader<Boolean> {
 
     private DatabaseHelper dbH;
 
-    public ATLNotifUpdateDatabase(Context context, List<String> list) {
+    private boolean switchState;
+
+    public ATLNotifUpdateSwitchDatabase(Context context, boolean switchState) {
         super(context);
         dbH = new DatabaseHelper(context);
-        this.list = list;
+        this.switchState = switchState;
 
     }
 
@@ -35,13 +35,13 @@ public class ATLNotifUpdateDatabase extends android.support.v4.content.AsyncTask
     public Boolean loadInBackground() {
 
         /** We update the database with the information from the activity (list) */
-        if (list.size() != 0){
-            for (int i = 0; i < list.size(); i++) {
-                dbH.updateSearchQueryOrSection(list.get(i), i+1);
-            }
-            return true;
-        } else return false;
 
+        if (switchState) {
+            dbH.setSwitchOnInDatabase();
+            return true;
+        } else {
+            dbH.setSwitchOffInDatabase();
+            return false;
+        }
     }
 }
-

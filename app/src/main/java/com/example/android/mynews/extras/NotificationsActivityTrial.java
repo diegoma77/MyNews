@@ -39,9 +39,10 @@ public class NotificationsActivityTrial extends AppCompatActivity {
 
     private static final String TAG = "NotificationsActivity";
 
-    private static final int LOADER_UPDATE_DATABASE_ID = 1;
+    private static final int LOADER_UPDATE_DATABASE_QUERYANDSECTIONS_ID = 1;
     private static final int LOADER_UPDATE_LIST_ID = 2;
-
+    private static final int LOADER_UPDATE_DATABASE_SWITCH_ID = 3;
+    private static final int LOADER_UPDATE_SWITCH_ID = 4;
 
     //Needed for getApplicationContext() to work
     private Context context;
@@ -99,8 +100,8 @@ public class NotificationsActivityTrial extends AppCompatActivity {
         cb_sports = (CheckBox) findViewById(R.id.notif_checkBox_sports);
         cb_travel = (CheckBox) findViewById(R.id.notif_checkBox_travel);
 
-        //Switch
-        mSwitch = (Switch) findViewById(R.id.notif_switch);
+        //Switch (got the reference in onResume()
+        //mSwitch = (Switch) findViewById(R.id.notif_switch);
 
 
 
@@ -198,6 +199,11 @@ public class NotificationsActivityTrial extends AppCompatActivity {
         listOfQueryAndSections = new ArrayList<>();
 
         loadUpdateListLoader();
+
+        //We get the reference for mSwitch
+        mSwitch = findViewById(R.id.notif_switch);
+
+        loadUpdateSwitch();
 
     }
 
@@ -459,27 +465,59 @@ public class NotificationsActivityTrial extends AppCompatActivity {
 
         if (loader == null) {
             Log.i(TAG, "onResume: loader==null");
-            loaderManager.initLoader(LOADER_UPDATE_LIST_ID, null, loaderUpdateList);
+            loaderManager.initLoader(LOADER_UPDATE_LIST_ID, null, loaderUpdateListOfQueryAndSections);
         } else {
             Log.i(TAG, "onResume: loader!=null");
-            loaderManager.restartLoader(LOADER_UPDATE_LIST_ID, null, loaderUpdateList);
+            loaderManager.restartLoader(LOADER_UPDATE_LIST_ID, null, loaderUpdateListOfQueryAndSections);
         }
     }
 
     private void loadUpdateDatabaseLoader() {
 
         LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<List<String>> loader = loaderManager.getLoader(LOADER_UPDATE_DATABASE_ID);
+        Loader<List<String>> loader = loaderManager.getLoader(LOADER_UPDATE_DATABASE_QUERYANDSECTIONS_ID);
 
         if (loader == null) {
             Log.i(TAG, "onResume: loader==null");
-            loaderManager.initLoader(LOADER_UPDATE_DATABASE_ID, null, loaderUpdateDatabase);
+            loaderManager.initLoader(LOADER_UPDATE_DATABASE_QUERYANDSECTIONS_ID, null, loaderUpdateQueryAndSectionsTable);
         } else {
             Log.i(TAG, "onResume: loader!=null");
-            loaderManager.restartLoader(LOADER_UPDATE_DATABASE_ID, null, loaderUpdateDatabase);
+            loaderManager.restartLoader(LOADER_UPDATE_DATABASE_QUERYANDSECTIONS_ID, null, loaderUpdateQueryAndSectionsTable);
         }
 
     }
+
+    private void loadUpdateSwitch() {
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<List<String>> loader = loaderManager.getLoader(LOADER_UPDATE_SWITCH_ID);
+
+        if (loader == null) {
+            Log.i(TAG, "onResume: loader==null");
+            loaderManager.initLoader(LOADER_UPDATE_SWITCH_ID, null, loaderUpdateSwitchVariable);
+        } else {
+            Log.i(TAG, "onResume: loader!=null");
+            loaderManager.restartLoader(LOADER_UPDATE_SWITCH_ID, null, loaderUpdateSwitchVariable);
+        }
+
+    }
+
+    private void loadUpdateSwitchDatabase() {
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<List<String>> loader = loaderManager.getLoader(LOADER_UPDATE_DATABASE_SWITCH_ID);
+
+        if (loader == null) {
+            Log.i(TAG, "onResume: loader==null");
+            loaderManager.initLoader(LOADER_UPDATE_DATABASE_SWITCH_ID, null, loaderUpdateSwitchVariable);
+        } else {
+            Log.i(TAG, "onResume: loader!=null");
+            loaderManager.restartLoader(LOADER_UPDATE_DATABASE_SWITCH_ID, null, loaderUpdateSwitchVariable);
+        }
+
+
+    }
+
 
     /**********************/
     /** LOADER CALLBACKS **/
@@ -490,12 +528,12 @@ public class NotificationsActivityTrial extends AppCompatActivity {
      * eg. update the database with the information from the listOfSectionsAndQuery
      * eg. update the listOfSectionsAndQuery with the information from the database) */
 
-    private LoaderManager.LoaderCallbacks<Boolean> loaderUpdateDatabase =
+    private LoaderManager.LoaderCallbacks<Boolean> loaderUpdateQueryAndSectionsTable =
             new LoaderManager.LoaderCallbacks<Boolean>() {
 
                 @Override
                 public Loader<Boolean> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.updateDatabase(
+                    return AsyncTaskLoaderHelper.updateQueryAndSectionsTable(
                             NotificationsActivityTrial.this,
                             listOfQueryAndSections);
                 }
@@ -511,12 +549,12 @@ public class NotificationsActivityTrial extends AppCompatActivity {
                 }
             };
 
-    private LoaderManager.LoaderCallbacks<List<String>> loaderUpdateList =
+    private LoaderManager.LoaderCallbacks<List<String>> loaderUpdateListOfQueryAndSections =
             new LoaderManager.LoaderCallbacks<List<String>>() {
 
                 @Override
                 public Loader<List<String>> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.updateList(NotificationsActivityTrial.this);
+                    return AsyncTaskLoaderHelper.updateListOfQueryAndSections(NotificationsActivityTrial.this);
                 }
 
                 @Override
@@ -530,4 +568,45 @@ public class NotificationsActivityTrial extends AppCompatActivity {
                 }
             };
 
+    private LoaderManager.LoaderCallbacks<Boolean> loaderUpdateSwitchVariable =
+            new LoaderManager.LoaderCallbacks<Boolean>() {
+
+                @Override
+                public Loader<Boolean> onCreateLoader(int id, Bundle args) {
+                    return AsyncTaskLoaderHelper.updateSwitchVariable(NotificationsActivityTrial.this);
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
+                    if (data) {
+                        mSwitch.setChecked(true);
+                    } else {
+                        mSwitch.setChecked(false);
+                    }
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Boolean> loader) {
+
+                }
+            };
+
+    private LoaderManager.LoaderCallbacks<Boolean> loaderUpdateSwitchTable =
+            new LoaderManager.LoaderCallbacks<Boolean>() {
+
+                @Override
+                public Loader<Boolean> onCreateLoader(int id, Bundle args) {
+                    return AsyncTaskLoaderHelper.updateSwitchTable(NotificationsActivityTrial.this, mSwitch.isChecked());
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
+
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Boolean> loader) {
+
+                }
+            };
 }
