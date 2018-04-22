@@ -1,4 +1,4 @@
-package com.example.android.mynews.extras;
+package com.example.android.mynews.extras.helperclasses;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -9,9 +9,9 @@ import java.util.Date;
  * Created by Diego Fajardo on 02/04/2018.
  */
 
+/** This class is used to get dates
+ * and convert them to strings*/
 public class DateHelper {
-
-    /** This class is used to get dates */
 
     /**
      * Next two methods are used to get the dates

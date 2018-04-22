@@ -26,6 +26,7 @@ public class DatabaseContract {
         /** INFORMATION TABLE (for saving the information and pass it to the activity
          * called by the notification */
 
+        // TODO: 22/04/2018 Change name of table to QueryAndSection table
         //TABLE NAME for information to search articles
         public static final String QUERY_OR_SECTION_TABLE_NAME = "query_or_section_table";
 

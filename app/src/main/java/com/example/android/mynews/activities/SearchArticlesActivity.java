@@ -17,15 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.mynews.R;
-import com.example.android.mynews.extras.DateHelper;
+import com.example.android.mynews.extras.helperclasses.DateHelper;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -190,7 +187,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
                         && !cb_politics.isChecked()
                         && !cb_sports.isChecked()
                         && !cb_travel.isChecked()) {
-
+                    
                     Toast.makeText(SearchArticlesActivity.this,
                             getResources().getString(R.string.search_articles_toast_choose_one_category),
                             Toast.LENGTH_SHORT)

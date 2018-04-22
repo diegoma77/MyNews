@@ -22,7 +22,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
-import com.example.android.mynews.extras.DateHelper;
+import com.example.android.mynews.extras.helperclasses.DateHelper;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
 import com.example.android.mynews.pojo.ArticlesAPIObject;

@@ -49,7 +49,7 @@ public class NotificationsActivity extends AppCompatActivity {
     //Needed for getApplicationContext() to work
     private Context context;
 
-    //List of 7 elements that stores the information of QueryOrSection Table for the activity
+    //List of 7 elements that stores the information of QueryAndSection Table for the activity
     //1: for the query
     //2 - 7: for the sections
     private List<String> listOfQueryAndSections;
