@@ -86,8 +86,6 @@ public class SearchArticlesActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeActionContentDescription(R.string.home_button_search_activity_content_description);
 
-        dH = new DateHelper();
-
         //List
         listOfSections = new ArrayList<>();
 
@@ -194,8 +192,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
                             .show();
                 } else if (beginDate.equals("") && endDate.equals("")) {
 
-                    endDate = dH.getTodayDateAndConvertToString();
-                    beginDate = dH.getOneMonthAgoDateAndConvertToString();
+                    endDate = DateHelper.getTodayDateAndConvertToString();
+                    beginDate = DateHelper.getOneMonthAgoDateAndConvertToString();
 
                     //We call the intent to change activity. This method calls the necessary method for building the URL in the next activity
                     createIntentForDisplayingSearchArticlesActivity();

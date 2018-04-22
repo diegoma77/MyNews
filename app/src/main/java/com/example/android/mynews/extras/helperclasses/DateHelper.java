@@ -21,7 +21,7 @@ public class DateHelper {
      * there won't be a problem getting one month
      * before as begin date because NYT API has much older articles
      */
-    public String getTodayDateAndConvertToString () {
+    public static String getTodayDateAndConvertToString () {
 
         DateFormat df = new SimpleDateFormat("yyyyMMdd");
 
@@ -30,7 +30,7 @@ public class DateHelper {
         return df.format(today);
     }
 
-    public String getOneMonthAgoDateAndConvertToString () {
+    public static String getOneMonthAgoDateAndConvertToString () {
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -30);

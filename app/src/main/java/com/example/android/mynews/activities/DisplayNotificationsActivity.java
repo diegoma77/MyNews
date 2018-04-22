@@ -74,8 +74,6 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
         dbH = new DatabaseHelper(this);
         mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
 
-        dH = new DateHelper();
-
         //Sets the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -114,22 +112,22 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
         String url_page1 = getSearchArticlesUrl(
                 getSearchQueryAndAdaptForUrl(),
                 getSectionsAndAdaptForUrl(),
-                dH.getOneMonthAgoDateAndConvertToString(),
-                dH.getTodayDateAndConvertToString(),
+                DateHelper.getOneMonthAgoDateAndConvertToString(),
+                DateHelper.getTodayDateAndConvertToString(),
                 "1");
 
         String url_page2 = getSearchArticlesUrl(
                 getSearchQueryAndAdaptForUrl(),
                 getSectionsAndAdaptForUrl(),
-                dH.getOneMonthAgoDateAndConvertToString(),
-                dH.getTodayDateAndConvertToString()
+                DateHelper.getOneMonthAgoDateAndConvertToString(),
+                DateHelper.getTodayDateAndConvertToString()
                 , "2");
 
         String url_page3 = getSearchArticlesUrl(
                 getSearchQueryAndAdaptForUrl(),
                 getSectionsAndAdaptForUrl(),
-                dH.getOneMonthAgoDateAndConvertToString(),
-                dH.getTodayDateAndConvertToString() ,
+                DateHelper.getOneMonthAgoDateAndConvertToString(),
+                DateHelper.getTodayDateAndConvertToString() ,
                 "3");
 
         Log.i("url1", url_page1);
