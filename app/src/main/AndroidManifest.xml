@@ -26,7 +26,6 @@
             android:exported="true" />
         <activity android:name=".activities.DisplaySearchArticlesActivity" />
         <activity android:name=".activities.HelpActivity" />
-        <activity android:name=".activities.NotificationsActivity" />
         <activity android:name=".activities.SearchArticlesActivity" />
         <activity android:name=".activities.WebViewMainActivity" />
         <activity android:name=".activities.WebViewSearchActivity" />
@@ -43,7 +42,7 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".extras.NotificationsActivityTrial">
+        <activity android:name=".activities.NotificationsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

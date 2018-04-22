@@ -7,23 +7,29 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.broadcastreceiver.NotificationReceiver;
-import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Diego Fajardo on 26/02/2018.
@@ -31,10 +37,22 @@ import java.util.Calendar;
 
 public class NotificationsActivity extends AppCompatActivity {
 
+    // TODO: 22/04/2018 Remove the ListDetector!!!!
+
     private static final String TAG = "NotificationsActivity";
+
+    private static final int LOADER_UPDATE_DATABASE_QUERY_AND_SECTIONS_ID = 1;
+    private static final int LOADER_UPDATE_LIST_ID = 2;
+    private static final int LOADER_UPDATE_DATABASE_SWITCH_ID = 3;
+    private static final int LOADER_UPDATE_SWITCH_ID = 4;
 
     //Needed for getApplicationContext() to work
     private Context context;
+
+    //List of 7 elements that stores the information of QueryOrSection Table for the activity
+    //1: for the query
+    //2 - 7: for the sections
+    private List<String> listOfQueryAndSections;
 
     //TextInput
     private TextInputEditText mTextInputEditText;
@@ -50,6 +68,17 @@ public class NotificationsActivity extends AppCompatActivity {
     private CheckBox cb_sports;
     private CheckBox cb_travel;
 
+
+    // TODO: 22/04/2018 Delete this
+
+    private TextView tv0;
+    private TextView tv1;
+    private TextView tv2;
+    private TextView tv3;
+    private TextView tv4;
+    private TextView tv5;
+    private TextView tv6;
+
     //Database variables
     DatabaseHelper dbH;
     Cursor mCursor;
@@ -59,8 +88,7 @@ public class NotificationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notifications_layout);
 
-        //Needed for getApplicationContext() to work
-        context = this;
+        Log.i(TAG, "+++ onCreate: called! +++");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.notif_toolbar);
         setSupportActionBar(toolbar);
@@ -71,7 +99,24 @@ public class NotificationsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        dbH = new DatabaseHelper (this);
+        // TODO: 22/04/2018 Delete these
+        tv0 = findViewById(R.id.tv0);
+        tv1 = findViewById(R.id.tv1);
+        tv2 = findViewById(R.id.tv2);
+        tv3 = findViewById(R.id.tv3);
+        tv4 = findViewById(R.id.tv4);
+        tv5 = findViewById(R.id.tv5);
+        tv6 = findViewById(R.id.tv6);
+
+        //Needed for getApplicationContext() to work
+        context = this;
+
+        //Instantiation of the list. We add "" just to be sure there is no crash.
+        //The list will be updated immediately thanks to a loader
+        listOfQueryAndSections = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            listOfQueryAndSections.add("");
+        }
 
         //TextInputEditText
         mTextInputEditText = (TextInputEditText) findViewById(R.id.notif_text_input_edit_text);
@@ -84,100 +129,258 @@ public class NotificationsActivity extends AppCompatActivity {
         cb_sports = (CheckBox) findViewById(R.id.notif_checkBox_sports);
         cb_travel = (CheckBox) findViewById(R.id.notif_checkBox_travel);
 
-        //Switch
-        mSwitch = (Switch) findViewById(R.id.notif_switch);
+        //We get the reference for mSwitch and set the switchListener
+        mSwitch = findViewById(R.id.notif_switch);
+        mSwitch.setOnCheckedChangeListener(switchListener);
 
-        /** Called the first time the Activity is created (and only this time).
-         * Inserts data into the Notifications' Switch table.
-         * Sets the switch in the database to false.
-         * Inserts "" strings into all ids in Query or Search table
-         *  */
-        if (dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME)) {
-            dbH.insertDataToSwitchTable(0);
-        }
-        if (dbH.isTableEmpty(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME)){
+        //Instantiation of the DatabaseHelper
+        dbH = new DatabaseHelper (this);
 
-            for (int i = 0; i < 7; i++) {
-                dbH.insertDataToSearchQueryTable("");
-            }
-        }
+        /** We fill the list with the information from the database (Query and Sections table)
+         * and also check or uncheck the switch according to the database */
+        loadLoaderUpdateList(LOADER_UPDATE_LIST_ID);
+        loadLoaderUpdateSwitchVariable(LOADER_UPDATE_SWITCH_ID);
 
-        /** This method updates the user interface according to the information that can be found
-         * in the database.
-         * It shows in the Search Query the last search
-         * */
-        if (!dbH.isTableEmpty(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME)) {
-            mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
-            mCursor.moveToFirst();
-            mTextInputEditText.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)).toUpperCase());
-        }
 
-        /** This method updates the user interface according to the information that can be found
-         * in the database. If the user left any checkBox checked, this information will be at the
-         * the database and this code will update the UI according to the information
-         * */
-        if (!dbH.isTableEmpty(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME)) {
-            checkAllCheckboxesIfInTable();
-        }
-
-        /** This method updates the switch state according to the information in the database. */
-        if (!dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME)) {
-            mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME);
-            mCursor.moveToFirst();
-
-            if (mCursor.getInt(mCursor.getColumnIndex(DatabaseContract.Database.SWITCH_STATE)) == 0) {
-                mSwitch.setChecked(false);
-                disableSwitchIfNeeded();
-            }
-            else {
-                mSwitch.setChecked(true);
-            }
-        }
-
-        /** Switch listener */
-
-        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-
-                    /** First, the state of the switch is updated in the database (ON) */
-                    mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME);
-                    dbH.setSwitchOnInDatabase();
-
-                    /** Second, Search Query table is updated with the information from the Text Input */
-                    dbH.updateSearchQueryOrSection(mTextInputEditText.getText().toString(), 1);
-
-                    /** Third, we create the alarm manager, which will
-                     * call the DisplayNotificationsActivity*/
-
-                    Toast.makeText(NotificationsActivity.this, getResources().getString(R.string.notification_is_created), Toast.LENGTH_SHORT).show();
-
-                    createAlarm();
-
-                }
-
-                else {
-                    //We set the switch to off in the database
-                    dbH.setSwitchOffInDatabase();
-
-                    //We cancel the alarm
-                    cancelAlarm();
-
-                }
-            }
-        });
     }
 
-    /** Used to update the String put in the TextInput */
+    /************************/
+    /** ACTIVITY LIFECYCLE **/
+    /************************/
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "+++ onResume: called! +++");
+
+    }
+
+    /** We update the database in
+     * onPause() and onDestroy() */
     @Override
     protected void onPause() {
-        dbH.updateSearchQueryOrSection(mTextInputEditText.getText().toString().toLowerCase(), 1);
         super.onPause();
+        Log.i(TAG, "+++ onPause: called! +++");
+
+        updateQueryInTheList();
+        loadLoaderUpdateQueryAndSectionsTable(LOADER_UPDATE_DATABASE_QUERY_AND_SECTIONS_ID);
+        loadLoaderUpdateSwitchTable(LOADER_UPDATE_DATABASE_SWITCH_ID);
     }
 
-    /** Menu listeners */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "+++ onDestroy: called! +++");
+
+        updateQueryInTheList();
+        loadLoaderUpdateQueryAndSectionsTable(LOADER_UPDATE_DATABASE_QUERY_AND_SECTIONS_ID);
+        loadLoaderUpdateSwitchTable(LOADER_UPDATE_DATABASE_SWITCH_ID);
+    }
+
+
+    /*******************/
+    /** CLASS METHODS **/
+    /*******************/
+
+    /** Method used to show on the user interface the information of the database (that is
+     * already in the list) */
+    private void updateSearchQueryAndCheckboxes() {
+
+        mTextInputEditText.setText(listOfQueryAndSections.get(0));
+
+        if (listOfQueryAndSections.get(1).equals(Keys.CheckboxFields.CB_ARTS)) {
+            cb_arts.setChecked(true);
+        } else { cb_arts.setChecked(false); }
+
+        if (listOfQueryAndSections.get(2).equals(Keys.CheckboxFields.CB_BUSINESS)) {
+            cb_business.setChecked(true);
+        } else { cb_business.setChecked(false); }
+
+        if (listOfQueryAndSections.get(3).equals(Keys.CheckboxFields.CB_ENTREPRENEURS)) {
+            cb_entrepreneurs.setChecked(true);
+        } else { cb_entrepreneurs.setChecked(false); }
+
+        if (listOfQueryAndSections.get(4).equals(Keys.CheckboxFields.CB_POLITICS)) {
+            cb_politics.setChecked(true);
+        } else { cb_politics.setChecked(false); }
+
+        if (listOfQueryAndSections.get(5).equals(Keys.CheckboxFields.CB_SPORTS)) {
+            cb_sports.setChecked(true);
+        } else { cb_sports.setChecked(false); }
+
+        if (listOfQueryAndSections.get(6).equals(Keys.CheckboxFields.CB_TRAVEL)) {
+            cb_travel.setChecked(true);
+        } else { cb_travel.setChecked(false); }
+
+    }
+
+    /** This method updates the item in the listOfQueryAndSections related
+     * to the quer y*/
+    private void updateQueryInTheList () {
+        listOfQueryAndSections.set(0, mTextInputEditText.getText().toString());
+    }
+
+    /** This method disables the switch to prevent the user to call
+     * the alarm manager if no section has been selected.
+     * It is disabled when the last checked checkbox turns unchecked
+     * */
+    private void enableOrDisableSwitch() {
+
+        if (!cb_arts.isChecked() &&
+                !cb_business.isChecked() &&
+                !cb_entrepreneurs.isChecked() &&
+                !cb_politics.isChecked() &&
+                !cb_sports.isChecked() &&
+                !cb_travel.isChecked()) {
+
+            mSwitch.setChecked(false);
+            mSwitch.setEnabled(false);
+        } else{
+            mSwitch.setEnabled(true);
+        }
+    }
+
+
+    /****************/
+    /** LISTENERS **/
+    /***************/
+
+    /** Switch Listener: updates the query in the list and updates the database. Additionally,
+     * shows a message to the user (alarm set) and creates or cancels the alarm to send the
+     * notification */
+    CompoundButton.OnCheckedChangeListener switchListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            if (isChecked) {
+
+                updateQueryInTheList();
+                loadLoaderUpdateQueryAndSectionsTable(LOADER_UPDATE_DATABASE_QUERY_AND_SECTIONS_ID);
+
+                Toast.makeText(NotificationsActivity.this, getResources().getString(R.string.notification_is_created), Toast.LENGTH_SHORT).show();
+
+                createAlarm();
+
+            } else {
+                //We set the switch to off in the database
+                dbH.setSwitchOffInDatabase();
+
+                //We cancel the alarm
+                cancelAlarm();
+            }
+        }
+    };
+
+    // TODO: 22/04/2018 Delete the listDetector() methods
+    /** This method takes several actions:
+     * 1) updates the element of listOfSections related to the checkbox checked or unchecked
+     * 2) updates the element of listOfSections related to the query (uses the text in the TextInputEditText)
+     * 3) enables or disables switch if needed
+     *
+     * When a checkbox is checked, sets a String in the list at the specific position with the name of the checkbox.
+     * When unchecked, sets "" in the list at the specific position.
+     * */
+    public void onCheckboxClicked(View view) {
+
+        // Is the view now checked?
+        boolean checked = ((CheckBox) view).isChecked();
+
+        // Check which checkbox was clicked
+        switch(view.getId()) {
+            case R.id.notif_checkBox_arts:
+                if (checked) {
+                    listOfQueryAndSections.set(1, Keys.CheckboxFields.CB_ARTS);
+                    updateQueryInTheList();
+                    enableOrDisableSwitch();
+                    listDetector();
+                }
+                else {
+                    listOfQueryAndSections.set(1, "");
+                    updateQueryInTheList();
+                    enableOrDisableSwitch();
+                    listDetector();
+                }
+                break;
+
+            case R.id.notif_checkBox_business:
+                if (checked) {
+                    listOfQueryAndSections.set(2, Keys.CheckboxFields.CB_BUSINESS);
+                    updateQueryInTheList();
+                    enableOrDisableSwitch();
+                    listDetector();
+                }
+                else {
+                    listOfQueryAndSections.set(2, "");
+                    updateQueryInTheList();
+                    enableOrDisableSwitch();
+                    listDetector();
+                }
+                break;
+
+            case R.id.notif_checkBox_entrepeneurs:
+                if (checked) {
+                    listOfQueryAndSections.set(3, Keys.CheckboxFields.CB_ENTREPRENEURS);
+                    updateQueryInTheList();
+                    enableOrDisableSwitch();
+                    listDetector();
+                }
+                else {
+                    listOfQueryAndSections.set(3, "");
+                    updateQueryInTheList();
+                    enableOrDisableSwitch();
+                    listDetector();
+                }
+                break;
+
+            case R.id.notif_checkBox_politics:
+                if (checked) {
+                    listOfQueryAndSections.set(4, Keys.CheckboxFields.CB_POLITICS);
+                    updateQueryInTheList();
+                    enableOrDisableSwitch();
+                    listDetector();
+                }
+                else {
+                    listOfQueryAndSections.set(4, "");
+                    updateQueryInTheList();
+                    enableOrDisableSwitch();
+                    listDetector();
+                }
+                break;
+
+            case R.id.notif_checkBox_sports:
+                if (checked) {
+                    listOfQueryAndSections.set(5, Keys.CheckboxFields.CB_SPORTS);
+                    updateQueryInTheList();
+                    enableOrDisableSwitch();
+                    listDetector();
+                }
+                else {
+                    listOfQueryAndSections.set(5, "");
+                    updateQueryInTheList();
+                    enableOrDisableSwitch();
+                    listDetector();
+                }
+                break;
+
+            case R.id.notif_checkBox_travel:
+                if (checked) {
+                    listOfQueryAndSections.set(6, Keys.CheckboxFields.CB_TRAVEL);
+                    updateQueryInTheList();
+                    enableOrDisableSwitch();
+                    listDetector();
+                }
+                else {
+                    listOfQueryAndSections.set(6, "");
+                    updateQueryInTheList();
+                    enableOrDisableSwitch();
+                    listDetector();
+                }
+                break;
+        }
+    }
+
+    /** Used to add a listener
+     * to the home button*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -189,168 +392,11 @@ public class NotificationsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /** Method to add and delete sections as well as disable the switch if needed.
-     * When a checkbox is checked, add a String with the name of the checkbox to the list if it doesn't exist.
-     * When unchecked, check if there is an element with the name of the checkbox in the array. If there is any,
-     * remove it from the list. Additionally, set the switch to unchecked */
-    public void onCheckboxClicked(View view) {
-
-        // Is the view now checked?
-        boolean checked = ((CheckBox) view).isChecked();
-
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
-
-        // Check which checkbox was clicked
-        switch(view.getId()) {
-            case R.id.notif_checkBox_arts:
-                if (checked) {
-                    dbH.updateSearchQueryOrSection(Keys.CheckboxFields.CB_ARTS, 2);
-                    mSwitch.setEnabled(true);
-                }
-                else {
-                    dbH.updateSearchQueryOrSection("", 2);
-                    disableSwitchIfNeeded();
-                }
-                break;
-
-            case R.id.notif_checkBox_business:
-                if (checked) {
-                    dbH.updateSearchQueryOrSection(Keys.CheckboxFields.CB_BUSINESS, 3);
-                    mSwitch.setEnabled(true);
-                }
-                else {
-                    dbH.updateSearchQueryOrSection("", 3);
-                    disableSwitchIfNeeded();
-                }
-                break;
-
-            case R.id.notif_checkBox_entrepeneurs:
-                if (checked) {
-                    dbH.updateSearchQueryOrSection(Keys.CheckboxFields.CB_ENTREPRENEURS, 4);
-                    mSwitch.setEnabled(true);
-                }
-                else {
-                    dbH.updateSearchQueryOrSection("", 4);
-                    disableSwitchIfNeeded();
-                }
-                break;
-
-            case R.id.notif_checkBox_politics:
-                if (checked) {
-                    dbH.updateSearchQueryOrSection(Keys.CheckboxFields.CB_POLITICS, 5);
-                    mSwitch.setEnabled(true);
-                }
-                else {
-                    dbH.updateSearchQueryOrSection("", 5);
-                    disableSwitchIfNeeded();
-                }
-                break;
-
-            case R.id.notif_checkBox_sports:
-                if (checked) {
-                    dbH.updateSearchQueryOrSection(Keys.CheckboxFields.CB_SPORTS, 6);
-                    mSwitch.setEnabled(true);
-                }
-                else {
-                    dbH.updateSearchQueryOrSection("", 6);
-                    disableSwitchIfNeeded();
-                }
-                break;
-
-            case R.id.notif_checkBox_travel:
-                if (checked) {
-                    dbH.updateSearchQueryOrSection(Keys.CheckboxFields.CB_TRAVEL, 7);
-                    mSwitch.setEnabled(true);
-                }
-                else {
-                    dbH.updateSearchQueryOrSection("", 7);
-                    disableSwitchIfNeeded();
-                }
-                break;
-        }
-    }
-
-    /**
-     * This method is called when the activity is created
-     * to update the UI according to the information
-     * already present in the database. It checks
-     * the checkbox if the section is already in the table
-     * */
-    private void checkAllCheckboxesIfInTable () {
-
-        dbH = new DatabaseHelper(this);
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
-        mCursor.moveToFirst();
-
-        for (int i = 0; i < mCursor.getCount()-1 ; i++) {
-
-            mCursor.moveToNext();
-
-            if (mCursor.getString(
-                    mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION))
-                    .equals(Keys.CheckboxFields.CB_ARTS)) {
-                cb_arts.setChecked(true);
-            }
-
-            if (mCursor.getString(
-                    mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION))
-                    .equals(Keys.CheckboxFields.CB_BUSINESS)) {
-                cb_business.setChecked(true);
-            }
-
-            if (mCursor.getString(
-                    mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION))
-                    .equals(Keys.CheckboxFields.CB_ENTREPRENEURS)) {
-                cb_entrepreneurs.setChecked(true);
-            }
-
-            if (mCursor.getString(
-                    mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION))
-                    .equals(Keys.CheckboxFields.CB_POLITICS)) {
-                cb_politics.setChecked(true);
-            }
-
-            if (mCursor.getString(
-                    mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION))
-                    .equals(Keys.CheckboxFields.CB_SPORTS)) {
-                cb_sports.setChecked(true);
-            }
-
-            if (mCursor.getString(
-                    mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION))
-                    .equals(Keys.CheckboxFields.CB_TRAVEL)) {
-                cb_travel.setChecked(true);
-            }
-        }
-    }
-
-    /** This method disables the switch to prevent the user to call
-     * the alarm manager if no section has been selected.
-     * It is called when the last checked checkbox turns unchecked
-     * */
-    private void disableSwitchIfNeeded () {
-
-        int counter = 0;
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
-        mCursor.moveToFirst();
-
-        for (int i = 0; i < mCursor.getCount()-1 ; i++) {
-            mCursor.moveToNext();
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)).equals("")) {
-                counter++;
-            }
-        }
-        //If counter is 6, then no checkbox is checked and mSwitch must be disabled
-        if (counter == mCursor.getCount()-1) {
-            mSwitch.setChecked(false);
-            mSwitch.setEnabled(false);
-        }
-    }
-
     /** This method creates the alarm
      * for the notification */
     private void createAlarm () {
 
+        // TODO: 21/04/2018 Use JobScheduler
         // TODO: 17/04/2018 Check that when we add one to the day of the month, it is not the last day or
         // it might crash!!!!!
 
@@ -383,6 +429,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
     }
 
+    // TODO: 21/04/2018 Use JobScheduler
     /** This method cancels the alarm
      * for the notification */
     private void cancelAlarm () {
@@ -401,5 +448,201 @@ public class NotificationsActivity extends AppCompatActivity {
         }
 
     }
+
+    // TODO: 22/04/2018 Delete this method
+
+    public void listDetector () {
+        tv0.setText(listOfQueryAndSections.get(0));
+        tv1.setText(listOfQueryAndSections.get(1));
+        tv2.setText(listOfQueryAndSections.get(2));
+        tv3.setText(listOfQueryAndSections.get(3));
+        tv4.setText(listOfQueryAndSections.get(4));
+        tv5.setText(listOfQueryAndSections.get(5));
+        tv6.setText(listOfQueryAndSections.get(6));
+    }
+
+
+    /*****************************/
+    /** METHODS TO INIT LOADERS **/
+    /*****************************/
+
+    /** The loaders use the LoaderCallbacks to call AsyncTaskLoaders
+     * and update variables and/or the database */
+
+    private void loadLoaderUpdateList(int id) {
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<List<String>> loader = loaderManager.getLoader(id);
+
+        if (loader == null) {
+            Log.i(TAG, "loadLoaderUpdateList: ");
+            loaderManager.initLoader(id, null, loaderUpdateListOfQueryAndSections);
+        } else {
+            Log.i(TAG, "loadLoaderUpdateList: ");
+            loaderManager.restartLoader(id, null, loaderUpdateListOfQueryAndSections);
+        }
+    }
+
+    private void loadLoaderUpdateQueryAndSectionsTable(int id) {
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<Boolean> loader = loaderManager.getLoader(id);
+
+        if (loader == null) {
+            Log.i(TAG, "loadLoaderUpdateQueryAndSectionsTable: ");
+            loaderManager.initLoader(id, null, loaderUpdateQueryAndSectionsTable);
+        } else {
+            Log.i(TAG, "loadLoaderUpdateQueryAndSectionsTable: ");
+            loaderManager.restartLoader(id, null, loaderUpdateQueryAndSectionsTable);
+        }
+    }
+
+    private void loadLoaderUpdateSwitchVariable(int id) {
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<Boolean> loader = loaderManager.getLoader(id);
+
+        if (loader == null) {
+            Log.i(TAG, "loadLoaderUpdateSwitchVariable: ");
+            loaderManager.initLoader(id, null, loaderUpdateSwitchVariable);
+        } else {
+            Log.i(TAG, "loadLoaderUpdateSwitchVariable: ");
+            loaderManager.restartLoader(id, null, loaderUpdateSwitchVariable);
+        }
+
+    }
+
+    private void loadLoaderUpdateSwitchTable(int id) {
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<Boolean> loader = loaderManager.getLoader(id);
+
+        if (loader == null) {
+            Log.i(TAG, "loadLoaderUpdateSwitchTable: ");
+            loaderManager.initLoader(id, null, loaderUpdateSwitchTable);
+        } else {
+            Log.i(TAG, "loadLoaderUpdateSwitchTable: ");
+            loaderManager.restartLoader(id, null, loaderUpdateSwitchTable);
+        }
+    }
+
+
+    /**********************/
+    /** LOADER CALLBACKS **/
+    /**********************/
+
+    /** The loader callbacks are used to instantiate
+     * AsyncTaskLoaders (which do a specific function:
+     * eg. update the database with the information from the listOfSectionsAndQuery
+     * eg. update the listOfSectionsAndQuery with the information from the database) */
+
+
+    /** This LoaderCallback
+     * updates the listOfQueryAndSections List
+     * in the Activity using
+     * the information in the database */
+    private LoaderManager.LoaderCallbacks<List<String>> loaderUpdateListOfQueryAndSections =
+            new LoaderManager.LoaderCallbacks<List<String>>() {
+
+                @Override
+                public Loader<List<String>> onCreateLoader(int id, Bundle args) {
+                    return AsyncTaskLoaderHelper.updateListOfQueryAndSections(NotificationsActivity.this);
+                }
+
+                @Override
+                public void onLoadFinished(Loader<List<String>> loader, List<String> data) {
+                    Log.i(TAG, "onLoadFinished: listOfQueryAndSections +++");
+
+                    for (int i = 0; i < data.size(); i++) {
+                        listOfQueryAndSections.set(i, data.get(i));
+                    }
+                    updateSearchQueryAndCheckboxes();
+                    enableOrDisableSwitch();
+                    listDetector();
+
+                    for (int i = 0; i < listOfQueryAndSections.size(); i++) {
+                        Log.i(TAG, "onLoadFinished: " + listOfQueryAndSections.get(i));
+
+                    }
+
+                }
+
+                @Override
+                public void onLoaderReset(Loader<List<String>> loader) {
+
+                }
+            };
+
+    /** This LoaderCallback
+     * updates the QueryAndSectionsTable of the database */
+    private LoaderManager.LoaderCallbacks<Boolean> loaderUpdateQueryAndSectionsTable =
+            new LoaderManager.LoaderCallbacks<Boolean>() {
+
+                @Override
+                public Loader<Boolean> onCreateLoader(int id, Bundle args) {
+                    return AsyncTaskLoaderHelper.updateQueryAndSectionsTable(
+                            NotificationsActivity.this,
+                            listOfQueryAndSections);
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
+
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Boolean> loader) {
+
+                }
+            };
+
+    /** This LoaderCallback
+     * updates the switch table of the database */
+    private LoaderManager.LoaderCallbacks<Boolean> loaderUpdateSwitchTable =
+            new LoaderManager.LoaderCallbacks<Boolean>() {
+
+                @Override
+                public Loader<Boolean> onCreateLoader(int id, Bundle args) {
+                    return AsyncTaskLoaderHelper.updateSwitchTable(
+                            NotificationsActivity.this,
+                            mSwitch.isChecked());
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
+
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Boolean> loader) {
+
+                }
+            };
+
+    /** This LoaderCallback
+     * updates the mSwitch variable in the Activity */
+    private LoaderManager.LoaderCallbacks<Boolean> loaderUpdateSwitchVariable =
+            new LoaderManager.LoaderCallbacks<Boolean>() {
+
+                @Override
+                public Loader<Boolean> onCreateLoader(int id, Bundle args) {
+                    return AsyncTaskLoaderHelper.updateSwitchVariable(NotificationsActivity.this);
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
+                    if (data) {
+                        mSwitch.setChecked(true);
+                    } else {
+                        mSwitch.setChecked(false);
+                    }
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Boolean> loader) {
+
+                }
+            };
+
 
 }

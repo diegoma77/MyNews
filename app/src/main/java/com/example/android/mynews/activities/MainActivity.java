@@ -21,15 +21,12 @@ import android.widget.Toast;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
-import com.example.android.mynews.extras.NotificationsActivityTrial;
 import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
 import com.example.android.mynews.fragments.PageFragmentBusiness;
 import com.example.android.mynews.fragments.PageFragmentMostPopular;
 import com.example.android.mynews.fragments.PageFragmentSports;
 import com.example.android.mynews.fragments.PageFragmentTopStories;
 import com.example.android.mynews.R;
-
-import java.util.List;
 
 // TODO: 30/03/2018 The tablet crashes when showing the DF image
 
@@ -49,14 +46,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbH = new DatabaseHelper(this);
-
         //Sets the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Changes the color of the Toolbar Overflow ButtonListener to white
+        //Changes the color of the Toolbar Overflow Button
+        //Listener to white
         setOverflowButtonColor(toolbar, Color.WHITE);
+
+        //Checking if the tables of the database exist. If they don't,
+        //we create them
+        loadLoaderCreateDatabase(LOADER_DATABASE_CREATION);
+
+        //Instantiation of the DatabaseHelper
+        dbH = new DatabaseHelper(this);
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -67,22 +70,6 @@ public class MainActivity extends AppCompatActivity {
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-        // TODO: 21/04/2018 Do this using an AsyncTaskLoader and in MainActivity
-        /** Called the first time the Activity is created (and only this time).
-         * Inserts data into the Notifications' Switch table.
-         * Sets the switch in the database to false.
-         * Inserts "" strings into all ids in Query or Search table
-         *  */
-        if (dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME)) {
-            dbH.insertDataToSwitchTable(0);
-        }
-        if (dbH.isTableEmpty(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME)){
-
-            for (int i = 0; i < 7; i++) {
-                dbH.insertDataToSearchQueryTable("");
-            }
-        }
 
     }
 
@@ -170,6 +157,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    /*****************************/
+    /** METHODS TO INIT LOADERS **/
+    /*****************************/
+
+    /** The loaders use the LoaderCallbacks to call AsyncTaskLoaders
+     * and check if the tables of the database exist */
 
     private void loadLoaderCreateDatabase(int id) {
 
@@ -185,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // TODO: 22/04/2018 Change the explanation
     /**********************/
     /** LOADER CALLBACKS **/
     /**********************/
