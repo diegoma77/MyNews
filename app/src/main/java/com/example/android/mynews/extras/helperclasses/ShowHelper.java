@@ -15,7 +15,7 @@ import android.widget.TextView;
  * in an easier way */
 public class ShowHelper {
 
-    public void showProgressBar (ProgressBar progressBar,
+    public static void showProgressBar (ProgressBar progressBar,
                                  TextView textViewError,
                                  RecyclerView recyclerView) {
 
@@ -25,7 +25,7 @@ public class ShowHelper {
 
     }
 
-    public void showRecyclerView(ProgressBar progressBar,
+    public static void showRecyclerView(ProgressBar progressBar,
                                  TextView textViewError,
                                  RecyclerView recyclerView) {
 
@@ -35,7 +35,7 @@ public class ShowHelper {
 
     }
 
-    public void showErrorMessage (ProgressBar progressBar,
+    public static void showErrorMessage (ProgressBar progressBar,
                                   TextView textViewError,
                                   RecyclerView recyclerView) {
 

@@ -4,11 +4,15 @@ import android.content.Context;
 import android.support.v4.content.Loader;
 import android.util.Log;
 
+import com.example.android.mynews.asynctaskloaders.atl.ATLFillListWithReadArticles;
+import com.example.android.mynews.asynctaskloaders.atl.ATLInsertArticleInDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.ATLMainActCreateDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.ATLNotifUpdateDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.ATLNotifUpdateList;
 import com.example.android.mynews.asynctaskloaders.atl.ATLNotifUpdateSwitchDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.ATLNotifUpdateSwitchVariable;
+import com.example.android.mynews.asynctaskloaders.atl.ATLTopStoriesAPIRequest;
+import com.example.android.mynews.pojo.TopStoriesAPIObject;
 
 import java.util.List;
 
@@ -23,9 +27,26 @@ public class AsyncTaskLoaderHelper {
 
     private static final String TAG = "AsyncTaskLoaderHelper";
 
-    /** Used in MainActivity to create the databases and fill the tables */
+    /** Used in MainActivity to create
+     * the databases and fill the tables */
     public static Loader<Boolean> createDatabaseIfDoesntExist(Context context) {
         return new ATLMainActCreateDatabase(context);
+    }
+
+    /** Used to fill a list with all
+     * the urls of the articles read */
+    public static Loader<List<String>> getArticlesReadFromDatabase(Context context) {
+        return new ATLFillListWithReadArticles(context);
+    }
+
+    public static Loader<String> insertArticleUrlInDatabase(Context mContext, String url) {
+        return new ATLInsertArticleInDatabase(mContext, url);
+    }
+
+    /** Used to do requests
+     * to TopStories API*/
+    public static Loader<List<TopStoriesAPIObject>> topStoriesAPIRequest(Context context) {
+        return new ATLTopStoriesAPIRequest(context);
     }
 
     /** Used in "onPause" and "onDestroy" in Notifications Activity

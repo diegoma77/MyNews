@@ -34,14 +34,6 @@
             android:label="@string/app_name" />
 
         <receiver android:name=".broadcastreceiver.NotificationReceiver"></receiver>
-        <activity android:name=".broadcastreceiver.TrialActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
         <activity android:name=".activities.NotificationsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

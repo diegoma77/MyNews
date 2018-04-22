@@ -1,4 +1,4 @@
-package com.example.android.mynews.broadcastreceiver;
+package com.example.android.mynews.apirequesters;
 
 import android.content.Context;
 import android.util.Log;
