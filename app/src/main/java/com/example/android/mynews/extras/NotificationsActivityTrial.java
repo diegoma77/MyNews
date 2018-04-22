@@ -37,6 +37,8 @@ import java.util.List;
 
 public class NotificationsActivityTrial extends AppCompatActivity {
 
+    // TODO: 22/04/2018 Remove the ListDetector!!!!
+
     private static final String TAG = "NotificationsActivity";
 
     private static final int LOADER_UPDATE_DATABASE_QUERY_AND_SECTIONS_ID = 1;
@@ -47,7 +49,9 @@ public class NotificationsActivityTrial extends AppCompatActivity {
     //Needed for getApplicationContext() to work
     private Context context;
 
-    //List that stores the information of QueryOrSection Table for the activity
+    //List of 7 elements that stores the information of QueryOrSection Table for the activity
+    //1: for the query
+    //2 - 7: for the sections
     private List<String> listOfQueryAndSections;
 
     //TextInput
@@ -95,7 +99,7 @@ public class NotificationsActivityTrial extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        // TODO: 22/04/2018 Delete this
+        // TODO: 22/04/2018 Delete these
         tv0 = findViewById(R.id.tv0);
         tv1 = findViewById(R.id.tv1);
         tv2 = findViewById(R.id.tv2);
@@ -107,7 +111,8 @@ public class NotificationsActivityTrial extends AppCompatActivity {
         //Needed for getApplicationContext() to work
         context = this;
 
-        //Instantiation of the list
+        //Instantiation of the list. We add "" just to be sure there is no crash.
+        //The list will be updated immediately thanks to a loader
         listOfQueryAndSections = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             listOfQueryAndSections.add("");
@@ -137,52 +142,41 @@ public class NotificationsActivityTrial extends AppCompatActivity {
         loadLoaderUpdateSwitchVariable(LOADER_UPDATE_SWITCH_ID);
 
 
+    }
 
+    /************************/
+    /** ACTIVITY LIFECYCLE **/
+    /************************/
 
-
-
-
-        // TODO: 21/04/2018 Do this using an AsyncTaskLoader and in MainActivity
-        /** Called the first time the Activity is created (and only this time).
-         * Inserts data into the Notifications' Switch table.
-         * Sets the switch in the database to false.
-         * Inserts "" strings into all ids in Query or Search table
-         *  */
-        if (dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME)) {
-            dbH.insertDataToSwitchTable(0);
-        }
-        if (dbH.isTableEmpty(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME)){
-
-            for (int i = 0; i < 7; i++) {
-                dbH.insertDataToSearchQueryTable("");
-            }
-        }
-
-        /** This method updates the user interface according to the information that can be found
-         * in the database.
-         * It shows in the Search Query the last search
-         * */
-        if (!dbH.isTableEmpty(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME)) {
-            mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
-            mCursor.moveToFirst();
-            mTextInputEditText.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)).toUpperCase());
-        }
-
-        /** This method updates the switch state according to the information in the database. */
-        if (!dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME)) {
-            mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME);
-            mCursor.moveToFirst();
-
-            if (mCursor.getInt(mCursor.getColumnIndex(DatabaseContract.Database.SWITCH_STATE)) == 0) {
-                mSwitch.setChecked(false);
-                disableSwitchIfNeeded();
-            }
-            else {
-                mSwitch.setChecked(true);
-            }
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "+++ onResume: called! +++");
 
     }
+
+    /** We update the database in
+     * onPause() and onDestroy() */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, "+++ onPause: called! +++");
+
+        updateQueryInTheList();
+        loadLoaderUpdateQueryAndSectionsTable(LOADER_UPDATE_DATABASE_QUERY_AND_SECTIONS_ID);
+        loadLoaderUpdateSwitchTable(LOADER_UPDATE_DATABASE_SWITCH_ID);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "+++ onDestroy: called! +++");
+
+        updateQueryInTheList();
+        loadLoaderUpdateQueryAndSectionsTable(LOADER_UPDATE_DATABASE_QUERY_AND_SECTIONS_ID);
+        loadLoaderUpdateSwitchTable(LOADER_UPDATE_DATABASE_SWITCH_ID);
+    }
+
 
     /*******************/
     /** CLASS METHODS **/
@@ -230,7 +224,7 @@ public class NotificationsActivityTrial extends AppCompatActivity {
      * the alarm manager if no section has been selected.
      * It is disabled when the last checked checkbox turns unchecked
      * */
-    private void disableSwitchIfNeeded () {
+    private void enableOrDisableSwitch() {
 
         if (!cb_arts.isChecked() &&
                 !cb_business.isChecked() &&
@@ -246,47 +240,14 @@ public class NotificationsActivityTrial extends AppCompatActivity {
         }
     }
 
-    /************************/
-    /** ACTIVITY LIFECYCLE **/
-    /************************/
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.i(TAG, "+++ onResume: called! +++");
-
-    }
-
-    /** We update the database in
-     * onPause() and onDestroy() */
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.i(TAG, "+++ onPause: called! +++");
-
-        updateQueryInTheList();
-        loadLoaderUpdateQueryAndSectionsTable(LOADER_UPDATE_DATABASE_QUERY_AND_SECTIONS_ID);
-        loadLoaderUpdateSwitchTable(LOADER_UPDATE_DATABASE_SWITCH_ID);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "+++ onDestroy: called! +++");
-
-        updateQueryInTheList();
-        loadLoaderUpdateQueryAndSectionsTable(LOADER_UPDATE_DATABASE_QUERY_AND_SECTIONS_ID);
-        loadLoaderUpdateSwitchTable(LOADER_UPDATE_DATABASE_SWITCH_ID);
-    }
-
 
     /****************/
     /** LISTENERS **/
     /***************/
 
-    /** Switch
-     * Listener*/
-
+    /** Switch Listener: updates the query in the list and updates the database. Additionally,
+     * shows a message to the user (alarm set) and creates or cancels the alarm to send the
+     * notification */
     CompoundButton.OnCheckedChangeListener switchListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -310,10 +271,15 @@ public class NotificationsActivityTrial extends AppCompatActivity {
         }
     };
 
-    /** Method to add and delete sections as well as disable the switch if needed.
-     * When a checkbox is checked, add a String with the name of the checkbox to the list if it doesn't exist.
-     * When unchecked, check if there is an element with the name of the checkbox in the array. If there is any,
-     * remove it from the list. Additionally, set the switch to unchecked */
+    // TODO: 22/04/2018 Delete the listDetector() methods
+    /** This method takes several actions:
+     * 1) updates the element of listOfSections related to the checkbox checked or unchecked
+     * 2) updates the element of listOfSections related to the query (uses the text in the TextInputEditText)
+     * 3) enables or disables switch if needed
+     *
+     * When a checkbox is checked, sets a String in the list at the specific position with the name of the checkbox.
+     * When unchecked, sets "" in the list at the specific position.
+     * */
     public void onCheckboxClicked(View view) {
 
         // Is the view now checked?
@@ -325,13 +291,13 @@ public class NotificationsActivityTrial extends AppCompatActivity {
                 if (checked) {
                     listOfQueryAndSections.set(1, Keys.CheckboxFields.CB_ARTS);
                     updateQueryInTheList();
-                    mSwitch.setEnabled(true);
+                    enableOrDisableSwitch();
                     listDetector();
                 }
                 else {
                     listOfQueryAndSections.set(1, "");
                     updateQueryInTheList();
-                    disableSwitchIfNeeded();
+                    enableOrDisableSwitch();
                     listDetector();
                 }
                 break;
@@ -340,13 +306,13 @@ public class NotificationsActivityTrial extends AppCompatActivity {
                 if (checked) {
                     listOfQueryAndSections.set(2, Keys.CheckboxFields.CB_BUSINESS);
                     updateQueryInTheList();
-                    mSwitch.setEnabled(true);
+                    enableOrDisableSwitch();
                     listDetector();
                 }
                 else {
                     listOfQueryAndSections.set(2, "");
                     updateQueryInTheList();
-                    disableSwitchIfNeeded();
+                    enableOrDisableSwitch();
                     listDetector();
                 }
                 break;
@@ -355,13 +321,13 @@ public class NotificationsActivityTrial extends AppCompatActivity {
                 if (checked) {
                     listOfQueryAndSections.set(3, Keys.CheckboxFields.CB_ENTREPRENEURS);
                     updateQueryInTheList();
-                    mSwitch.setEnabled(true);
+                    enableOrDisableSwitch();
                     listDetector();
                 }
                 else {
                     listOfQueryAndSections.set(3, "");
                     updateQueryInTheList();
-                    disableSwitchIfNeeded();
+                    enableOrDisableSwitch();
                     listDetector();
                 }
                 break;
@@ -370,13 +336,13 @@ public class NotificationsActivityTrial extends AppCompatActivity {
                 if (checked) {
                     listOfQueryAndSections.set(4, Keys.CheckboxFields.CB_POLITICS);
                     updateQueryInTheList();
-                    mSwitch.setEnabled(true);
+                    enableOrDisableSwitch();
                     listDetector();
                 }
                 else {
                     listOfQueryAndSections.set(4, "");
                     updateQueryInTheList();
-                    disableSwitchIfNeeded();
+                    enableOrDisableSwitch();
                     listDetector();
                 }
                 break;
@@ -385,13 +351,13 @@ public class NotificationsActivityTrial extends AppCompatActivity {
                 if (checked) {
                     listOfQueryAndSections.set(5, Keys.CheckboxFields.CB_SPORTS);
                     updateQueryInTheList();
-                    mSwitch.setEnabled(true);
+                    enableOrDisableSwitch();
                     listDetector();
                 }
                 else {
                     listOfQueryAndSections.set(5, "");
                     updateQueryInTheList();
-                    disableSwitchIfNeeded();
+                    enableOrDisableSwitch();
                     listDetector();
                 }
                 break;
@@ -400,19 +366,21 @@ public class NotificationsActivityTrial extends AppCompatActivity {
                 if (checked) {
                     listOfQueryAndSections.set(6, Keys.CheckboxFields.CB_TRAVEL);
                     updateQueryInTheList();
-                    mSwitch.setEnabled(true);
+                    enableOrDisableSwitch();
                     listDetector();
                 }
                 else {
                     listOfQueryAndSections.set(6, "");
                     updateQueryInTheList();
-                    disableSwitchIfNeeded();
+                    enableOrDisableSwitch();
                     listDetector();
                 }
                 break;
         }
     }
 
+    /** Used to add a listener
+     * to the home button*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -494,10 +462,12 @@ public class NotificationsActivityTrial extends AppCompatActivity {
     }
 
 
-
     /*****************************/
     /** METHODS TO INIT LOADERS **/
     /*****************************/
+
+    /** The loaders use the LoaderCallbacks to call AsyncTaskLoaders
+     * and update variables and/or the database */
 
     private void loadLoaderUpdateList(int id) {
 
@@ -505,8 +475,10 @@ public class NotificationsActivityTrial extends AppCompatActivity {
         Loader<List<String>> loader = loaderManager.getLoader(id);
 
         if (loader == null) {
+            Log.i(TAG, "loadLoaderUpdateList: ");
             loaderManager.initLoader(id, null, loaderUpdateListOfQueryAndSections);
         } else {
+            Log.i(TAG, "loadLoaderUpdateList: ");
             loaderManager.restartLoader(id, null, loaderUpdateListOfQueryAndSections);
         }
     }
@@ -517,10 +489,10 @@ public class NotificationsActivityTrial extends AppCompatActivity {
         Loader<Boolean> loader = loaderManager.getLoader(id);
 
         if (loader == null) {
-            Log.i(TAG, "onResume: loader==null");
+            Log.i(TAG, "loadLoaderUpdateQueryAndSectionsTable: ");
             loaderManager.initLoader(id, null, loaderUpdateQueryAndSectionsTable);
         } else {
-            Log.i(TAG, "onResume: loader!=null");
+            Log.i(TAG, "loadLoaderUpdateQueryAndSectionsTable: ");
             loaderManager.restartLoader(id, null, loaderUpdateQueryAndSectionsTable);
         }
     }
@@ -531,10 +503,10 @@ public class NotificationsActivityTrial extends AppCompatActivity {
         Loader<Boolean> loader = loaderManager.getLoader(id);
 
         if (loader == null) {
-            Log.i(TAG, "onResume: loader==null");
+            Log.i(TAG, "loadLoaderUpdateSwitchVariable: ");
             loaderManager.initLoader(id, null, loaderUpdateSwitchVariable);
         } else {
-            Log.i(TAG, "onResume: loader!=null");
+            Log.i(TAG, "loadLoaderUpdateSwitchVariable: ");
             loaderManager.restartLoader(id, null, loaderUpdateSwitchVariable);
         }
 
@@ -543,13 +515,13 @@ public class NotificationsActivityTrial extends AppCompatActivity {
     private void loadLoaderUpdateSwitchTable(int id) {
 
         LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<Boolean> loader = loaderManager.getLoader(LOADER_UPDATE_DATABASE_SWITCH_ID);
+        Loader<Boolean> loader = loaderManager.getLoader(id);
 
         if (loader == null) {
-            Log.i(TAG, "onResume: loader==null");
+            Log.i(TAG, "loadLoaderUpdateSwitchTable: ");
             loaderManager.initLoader(id, null, loaderUpdateSwitchTable);
         } else {
-            Log.i(TAG, "onResume: loader!=null");
+            Log.i(TAG, "loadLoaderUpdateSwitchTable: ");
             loaderManager.restartLoader(id, null, loaderUpdateSwitchTable);
         }
     }
@@ -564,6 +536,11 @@ public class NotificationsActivityTrial extends AppCompatActivity {
      * eg. update the database with the information from the listOfSectionsAndQuery
      * eg. update the listOfSectionsAndQuery with the information from the database) */
 
+
+    /** This LoaderCallback
+     * updates the listOfQueryAndSections List
+     * in the Activity using
+     * the information in the database */
     private LoaderManager.LoaderCallbacks<List<String>> loaderUpdateListOfQueryAndSections =
             new LoaderManager.LoaderCallbacks<List<String>>() {
 
@@ -580,7 +557,7 @@ public class NotificationsActivityTrial extends AppCompatActivity {
                         listOfQueryAndSections.set(i, data.get(i));
                     }
                     updateSearchQueryAndCheckboxes();
-                    disableSwitchIfNeeded();
+                    enableOrDisableSwitch();
                     listDetector();
 
                     for (int i = 0; i < listOfQueryAndSections.size(); i++) {
@@ -596,7 +573,8 @@ public class NotificationsActivityTrial extends AppCompatActivity {
                 }
             };
 
-
+    /** This LoaderCallback
+     * updates the QueryAndSectionsTable of the database */
     private LoaderManager.LoaderCallbacks<Boolean> loaderUpdateQueryAndSectionsTable =
             new LoaderManager.LoaderCallbacks<Boolean>() {
 
@@ -618,7 +596,8 @@ public class NotificationsActivityTrial extends AppCompatActivity {
                 }
             };
 
-
+    /** This LoaderCallback
+     * updates the switch table of the database */
     private LoaderManager.LoaderCallbacks<Boolean> loaderUpdateSwitchTable =
             new LoaderManager.LoaderCallbacks<Boolean>() {
 
@@ -640,7 +619,8 @@ public class NotificationsActivityTrial extends AppCompatActivity {
                 }
             };
 
-
+    /** This LoaderCallback
+     * updates the mSwitch variable in the Activity */
     private LoaderManager.LoaderCallbacks<Boolean> loaderUpdateSwitchVariable =
             new LoaderManager.LoaderCallbacks<Boolean>() {
 

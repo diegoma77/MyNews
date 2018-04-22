@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.content.Loader;
 import android.util.Log;
 
+import com.example.android.mynews.asynctaskloaders.atl.ATLMainActCreateDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.ATLNotifUpdateDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.ATLNotifUpdateList;
 import com.example.android.mynews.asynctaskloaders.atl.ATLNotifUpdateSwitchDatabase;
@@ -22,9 +23,13 @@ public class AsyncTaskLoaderHelper {
 
     private static final String TAG = "AsyncTaskLoaderHelper";
 
+    /** Used in MainActivity to create the databases and fill the tables */
+    public static Loader<Boolean> createDatabaseIfDoesntExist(Context context) {
+        return new ATLMainActCreateDatabase(context);
+    }
+
     /** Used in "onPause" and "onDestroy" in Notifications Activity
      * to update the database with the information of NotificationsActivity */
-
     public static Loader<Boolean> updateQueryAndSectionsTable(Context context, List<String> list) {
         Log.i(TAG, "updateQueryAndSectionsTable: +++");
         return new ATLNotifUpdateDatabase(context, list);

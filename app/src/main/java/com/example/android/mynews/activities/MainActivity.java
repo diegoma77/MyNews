@@ -5,18 +5,23 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
+import com.example.android.mynews.extras.NotificationsActivityTrial;
 import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
 import com.example.android.mynews.fragments.PageFragmentBusiness;
 import com.example.android.mynews.fragments.PageFragmentMostPopular;
@@ -24,9 +29,15 @@ import com.example.android.mynews.fragments.PageFragmentSports;
 import com.example.android.mynews.fragments.PageFragmentTopStories;
 import com.example.android.mynews.R;
 
+import java.util.List;
+
 // TODO: 30/03/2018 The tablet crashes when showing the DF image
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
+
+    private static final int LOADER_DATABASE_CREATION = 1;
 
     private DatabaseHelper dbH;
 
@@ -56,6 +67,22 @@ public class MainActivity extends AppCompatActivity {
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        // TODO: 21/04/2018 Do this using an AsyncTaskLoader and in MainActivity
+        /** Called the first time the Activity is created (and only this time).
+         * Inserts data into the Notifications' Switch table.
+         * Sets the switch in the database to false.
+         * Inserts "" strings into all ids in Query or Search table
+         *  */
+        if (dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME)) {
+            dbH.insertDataToSwitchTable(0);
+        }
+        if (dbH.isTableEmpty(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME)){
+
+            for (int i = 0; i < 7; i++) {
+                dbH.insertDataToSearchQueryTable("");
+            }
+        }
 
     }
 
@@ -139,5 +166,54 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+
+
+
+
+    private void loadLoaderCreateDatabase(int id) {
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<Boolean> loader = loaderManager.getLoader(id);
+
+        if (loader == null) {
+            Log.i(TAG, "loadLoaderUpdateSwitchTable: ");
+            loaderManager.initLoader(id, null, loaderCreateDatabase);
+        } else {
+            Log.i(TAG, "loadLoaderUpdateSwitchTable: ");
+            loaderManager.restartLoader(id, null, loaderCreateDatabase);
+        }
+    }
+
+    // TODO: 22/04/2018 Change the explanation
+    /**********************/
+    /** LOADER CALLBACKS **/
+    /**********************/
+
+    /** This LoaderCallback
+     * checks if the tables in the database
+     * exist and, if they don't, it fills them
+     * with the necessary information */
+    private LoaderManager.LoaderCallbacks<Boolean> loaderCreateDatabase =
+            new LoaderManager.LoaderCallbacks<Boolean>() {
+
+                @Override
+                public Loader<Boolean> onCreateLoader(int id, Bundle args) {
+                    return AsyncTaskLoaderHelper.createDatabaseIfDoesntExist(MainActivity.this);
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
+
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Boolean> loader) {
+
+                }
+
+            };
+
+
 
 }
