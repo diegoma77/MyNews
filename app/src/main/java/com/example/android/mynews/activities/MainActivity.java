@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
+import com.example.android.mynews.grouptopstories.PageFragmentTopStoriesTrial;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
@@ -108,10 +109,11 @@ public class MainActivity extends AppCompatActivity {
     //Uses de FragmentPageAdapter to link the PageFragmentTopStories to the ViewPager
     private void setupViewPager(ViewPager viewPager) {
         FragmentPageAdapter fragmentPageAdapter = new FragmentPageAdapter(getSupportFragmentManager());
-        fragmentPageAdapter.addFragment(new PageFragmentTopStories(), getResources().getString(R.string.top_stories_tag));
+        fragmentPageAdapter.addFragment(new PageFragmentTopStoriesTrial(), getResources().getString(R.string.top_stories_tag));
         fragmentPageAdapter.addFragment(new PageFragmentMostPopular(), getResources().getString(R.string.most_popular_tag));
         fragmentPageAdapter.addFragment(new PageFragmentBusiness(), getResources().getString(R.string.business_tag));
         fragmentPageAdapter.addFragment(new PageFragmentSports(), getResources().getString(R.string.sports_tag));
+        fragmentPageAdapter.addFragment(new PageFragmentTopStories(), getResources().getString(R.string.top_stories_tag));
         viewPager.setAdapter(fragmentPageAdapter);
     }
 

@@ -27,6 +27,8 @@ import java.util.List;
 
 public class APITopStoriesRequester {
 
+    // TODO: 23/04/2018 Can be removed
+
     Context context;
 
     //This variable stores the list of urls to do the requests

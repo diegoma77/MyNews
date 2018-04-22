@@ -1,4 +1,4 @@
-package com.example.android.mynews.asynctaskloaders.atl;
+package com.example.android.mynews.asynctaskloaders.atl.atlrequest;
 
 import android.content.Context;
 import android.util.Log;

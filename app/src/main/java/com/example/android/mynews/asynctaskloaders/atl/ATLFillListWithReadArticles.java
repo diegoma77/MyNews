@@ -47,6 +47,7 @@ public class ATLFillListWithReadArticles extends android.support.v4.content.Asyn
                 mCursor.moveToNext();
             }
         }
+
         return list;
     }
 }

@@ -40,6 +40,8 @@ import java.util.List;
 
 public class PageFragmentTopStories extends android.support.v4.app.Fragment {
 
+    // TODO: 23/04/2018 Can be removed
+
     //Logs
     private static final String TAG = "PageFragmentTopStories";
 

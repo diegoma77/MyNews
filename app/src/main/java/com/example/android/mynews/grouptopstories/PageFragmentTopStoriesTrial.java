@@ -1,6 +1,5 @@
-package com.example.android.mynews.broadcastreceiver;
+package com.example.android.mynews.grouptopstories;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -16,11 +15,8 @@ import android.widget.TextView;
 
 import com.example.android.mynews.R;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
-import com.example.android.mynews.data.DatabaseContract;
-import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.helperclasses.ShowHelper;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
-import com.example.android.mynews.rvadapters.RvAdapterTopStories;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +32,13 @@ public class PageFragmentTopStoriesTrial extends android.support.v4.app.Fragment
 
     //Loader ID
     private static final int LOADER_TOP_STORIES_API_REQUEST = 10;
+    private static final int LOADER_READ_ARTICLES_DATABASE = 11;
 
-    //Array that will store the TopStoriesObject object to display in the RecyclerView
+    //List that will store the TopStoriesObject object to display in the RecyclerView
     private List<TopStoriesAPIObject> topStoriesObjectList;
+
+    //List that will store the objects in the database
+    private List<String> listOfUrls;
 
     //Variables to store views related to the articles upload
     private TextView mErrorMessageDisplay;
@@ -58,6 +58,7 @@ public class PageFragmentTopStoriesTrial extends android.support.v4.app.Fragment
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         topStoriesObjectList = new ArrayList<>();
+        listOfUrls = new ArrayList<>();
 
         ShowHelper.showProgressBar(mProgressBar,mErrorMessageDisplay,recyclerView);
 
@@ -65,6 +66,7 @@ public class PageFragmentTopStoriesTrial extends android.support.v4.app.Fragment
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
+        loadLoaderGetReadArticlesFromDatabase(LOADER_READ_ARTICLES_DATABASE);
         loadLoaderTopStoriesAPIRequest(LOADER_TOP_STORIES_API_REQUEST);
 
         return view;
@@ -89,6 +91,19 @@ public class PageFragmentTopStoriesTrial extends android.support.v4.app.Fragment
         }
     }
 
+    private void loadLoaderGetReadArticlesFromDatabase(int id) {
+
+        android.support.v4.app.LoaderManager loaderManager = getActivity().getSupportLoaderManager();
+        Loader<List<String>> loader = loaderManager.getLoader(id);
+
+        if (loader == null) {
+            Log.i(TAG, "loadLoaderGetReadArticlesFromDatabase: ");
+            loaderManager.initLoader(id, null, loaderGetReadArticlesFromDatabase);
+        } else {
+            Log.i(TAG, "loadLoaderGetReadArticlesFromDatabase: ");
+            loaderManager.restartLoader(id, null, loaderGetReadArticlesFromDatabase);
+        }
+    }
 
     /**************************
      *** LOADER CALLBACKS *****
@@ -112,7 +127,10 @@ public class PageFragmentTopStoriesTrial extends android.support.v4.app.Fragment
                         ShowHelper.showRecyclerView(mProgressBar,mErrorMessageDisplay,recyclerView);
                         RvAdapterTopStoriesTrial adapterTopStories = new RvAdapterTopStoriesTrial (
                                 getContext(),
-                                topStoriesObjectList, this);
+                                topStoriesObjectList,
+                                listOfUrls);
+                        recyclerView.setAdapter(adapterTopStories);
+
                     } else {
                         ShowHelper.showErrorMessage(mProgressBar,mErrorMessageDisplay,recyclerView);
                     }
@@ -120,6 +138,25 @@ public class PageFragmentTopStoriesTrial extends android.support.v4.app.Fragment
 
                 @Override
                 public void onLoaderReset(Loader<List<TopStoriesAPIObject>> loader) {
+
+                }
+            };
+
+    private android.support.v4.app.LoaderManager.LoaderCallbacks<List<String>> loaderGetReadArticlesFromDatabase =
+            new android.support.v4.app.LoaderManager.LoaderCallbacks<List<String>>() {
+
+                @Override
+                public Loader<List<String>> onCreateLoader(int id, Bundle args) {
+                    return AsyncTaskLoaderHelper.getArticlesReadFromDatabase(getContext());
+                }
+
+                @Override
+                public void onLoadFinished(Loader<List<String>> loader, List<String> data) {
+                    listOfUrls.addAll(data);
+                }
+
+                @Override
+                public void onLoaderReset(Loader<List<String>> loader) {
 
                 }
             };

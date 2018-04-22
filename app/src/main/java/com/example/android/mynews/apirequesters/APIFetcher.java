@@ -29,6 +29,8 @@ import java.util.List;
 
 public class APIFetcher {
 
+    // TODO: 23/04/2018 Can be removed
+
     private final String REFERENCE_TO_OBJECT;
 
     private List<String> listOfUrls;

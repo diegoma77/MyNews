@@ -7,11 +7,11 @@ import android.util.Log;
 import com.example.android.mynews.asynctaskloaders.atl.ATLFillListWithReadArticles;
 import com.example.android.mynews.asynctaskloaders.atl.ATLInsertArticleInDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.ATLMainActCreateDatabase;
-import com.example.android.mynews.asynctaskloaders.atl.ATLNotifUpdateDatabase;
-import com.example.android.mynews.asynctaskloaders.atl.ATLNotifUpdateList;
-import com.example.android.mynews.asynctaskloaders.atl.ATLNotifUpdateSwitchDatabase;
-import com.example.android.mynews.asynctaskloaders.atl.ATLNotifUpdateSwitchVariable;
-import com.example.android.mynews.asynctaskloaders.atl.ATLTopStoriesAPIRequest;
+import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateDatabase;
+import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateList;
+import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateSwitchDatabase;
+import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateSwitchVariable;
+import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLTopStoriesAPIRequest;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
 
 import java.util.List;
@@ -39,6 +39,9 @@ public class AsyncTaskLoaderHelper {
         return new ATLFillListWithReadArticles(context);
     }
 
+    /** Used to insert an article url in the database when the user clicks
+     * the article in the recycler view. If the article already exists in the database
+     * nothing is added */
     public static Loader<String> insertArticleUrlInDatabase(Context mContext, String url) {
         return new ATLInsertArticleInDatabase(mContext, url);
     }
