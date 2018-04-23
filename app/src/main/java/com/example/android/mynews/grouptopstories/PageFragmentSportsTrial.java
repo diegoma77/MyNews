@@ -25,17 +25,17 @@ import java.util.List;
  * Created by Diego Fajardo on 22/02/2018.
  */
 
-public class PageFragmentTopStoriesTrial extends android.support.v4.app.Fragment {
+public class PageFragmentSportsTrial extends android.support.v4.app.Fragment {
 
     //Logs
-    private static final String TAG = "PageFragmentTopStories";
+    private static final String TAG = "PageFragmentSportsTrial";
 
     //Loader ID
-    private static final int LOADER_TOP_STORIES_API_REQUEST = 10;
-    private static final int LOADER_READ_ARTICLES_DATABASE = 11;
+    private static final int LOADER_TOP_STORIES_API_REQUEST = 60;
+    private static final int LOADER_READ_ARTICLES_DATABASE = 61;
 
     //Flag to specify the request to APITopStoriesRequester
-    private static final int FLAG = 1;
+    private static final int FLAG = 3;
 
     //List that will store the TopStoriesObject object to display in the RecyclerView
     private List<TopStoriesAPIObject> topStoriesObjectList;
@@ -73,7 +73,7 @@ public class PageFragmentTopStoriesTrial extends android.support.v4.app.Fragment
         loadLoaderTopStoriesAPIRequest(LOADER_TOP_STORIES_API_REQUEST);
 
         return view;
-        
+
     }
 
     /**************************
@@ -96,7 +96,7 @@ public class PageFragmentTopStoriesTrial extends android.support.v4.app.Fragment
 
     private void loadLoaderGetReadArticlesFromDatabase(int id) {
 
-        android.support.v4.app.LoaderManager loaderManager = getActivity().getSupportLoaderManager();
+        LoaderManager loaderManager = getActivity().getSupportLoaderManager();
         Loader<List<String>> loader = loaderManager.getLoader(id);
 
         if (loader == null) {
@@ -145,8 +145,8 @@ public class PageFragmentTopStoriesTrial extends android.support.v4.app.Fragment
                 }
             };
 
-    private android.support.v4.app.LoaderManager.LoaderCallbacks<List<String>> loaderGetReadArticlesFromDatabase =
-            new android.support.v4.app.LoaderManager.LoaderCallbacks<List<String>>() {
+    private LoaderManager.LoaderCallbacks<List<String>> loaderGetReadArticlesFromDatabase =
+            new LoaderManager.LoaderCallbacks<List<String>>() {
 
                 @Override
                 public Loader<List<String>> onCreateLoader(int id, Bundle args) {

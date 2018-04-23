@@ -28,6 +28,8 @@ import java.util.List;
 
 public class RvAdapterTopStoriesTrial extends RecyclerView.Adapter<RvAdapterTopStoriesTrial.ViewHolder> {
 
+    // TODO: 23/04/2018 Adapt the RecyclerView to display the required information
+
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
     private static final String TAG = RvAdapterTopStoriesTrial.class.getSimpleName();
 
@@ -42,8 +44,6 @@ public class RvAdapterTopStoriesTrial extends RecyclerView.Adapter<RvAdapterTopS
 
     //Context of the activity
     private Context mContext;
-
-    // TODO: 22/04/2018  Activity, check if it makes the loader to work
 
     //Constructor of the RvAdapter
     public RvAdapterTopStoriesTrial(Context context, List<TopStoriesAPIObject> listOfObjects, List<String> listOfUrls) {

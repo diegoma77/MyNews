@@ -27,8 +27,6 @@ import java.util.List;
 
 public class APITopStoriesRequester {
 
-    // TODO: 23/04/2018 Can be removed
-
     Context context;
 
     //This variable stores the list of urls to do the requests
@@ -143,12 +141,13 @@ public class APITopStoriesRequester {
 
                 Log.i ("MULTIMEDIA_LENGTH", "" + multimedia_array.length());
 
+                //We use index 1 to get the image thumblarge (the API response has 5 image sizes in the same array)
                 JSONObject multimedia_object = multimedia_array.getJSONObject(1);
 
                 if (multimedia_object.getString(Keys.TopStoriesAPIKeys.KEY_IMAGE_URL) != null) {
                     topStoriesObject.setImageThumblarge(
                             multimedia_object.getString(Keys.TopStoriesAPIKeys.KEY_IMAGE_URL));
-                    Log.i("IMAGE_URL_THUMBNAIL", topStoriesObject.getImageThumblarge());
+                    Log.i("IMAGE_URL_THUMBLARGE", topStoriesObject.getImageThumblarge());
                 }
 
                 //CHECKS that the data from the JSON objects is not null
@@ -160,7 +159,7 @@ public class APITopStoriesRequester {
 
                 if (dataObject.getString(Keys.TopStoriesAPIKeys.KEY_SUBSECTION) != null) {
                     topStoriesObject.setSubsection(dataObject.getString(Keys.TopStoriesAPIKeys.KEY_SUBSECTION));
-                    Log.i("SECTION", topStoriesObject.getSubsection());
+                    Log.i("SUBSECTION", topStoriesObject.getSubsection());
                 }
 
                 if (dataObject.getString(Keys.TopStoriesAPIKeys.KEY_TITLE) != null) {
@@ -184,12 +183,13 @@ public class APITopStoriesRequester {
                     Log.i("UPDATE_DATE", topStoriesObject.getUpdatedDate());
                 }
 
+                //We fill the list with the object
                 listOfTopStoriesObjects.add(topStoriesObject);
                 Log.i("TS_ARRAYLIST # ", "" + i + ", " + listOfTopStoriesObjects.get(i).getTitle());
 
             }
 
-            //Loop to see that all objects in the ArrayList are different
+            //Loop for logs
             for (int i = 0; i < listOfTopStoriesObjects.size() ; i++) {
                 Log.i("TS_ARRAY_SUMM_TITLES # ", "" + i + " :" + listOfTopStoriesObjects.get(i).getTitle());
             }

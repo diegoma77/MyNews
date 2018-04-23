@@ -19,11 +19,7 @@ public class TopStoriesAPIObject {
                                String subsection,
                                String title,
                                String updated_date,
-                               String image_url_thumbnail,
                                String image_url_thumblarge,
-                               String image_url_normal,
-                               String image_url_medium,
-                               String image_url_superjumbo,
                                String article_url) {
         this.section = section;
         this.subsection = subsection;

@@ -48,8 +48,8 @@ public class AsyncTaskLoaderHelper {
 
     /** Used to do requests
      * to TopStories API*/
-    public static Loader<List<TopStoriesAPIObject>> topStoriesAPIRequest(Context context) {
-        return new ATLTopStoriesAPIRequest(context);
+    public static Loader<List<TopStoriesAPIObject>> topStoriesAPIRequest(Context context, int flag) {
+        return new ATLTopStoriesAPIRequest(context, flag);
     }
 
     /** Used in "onPause" and "onDestroy" in Notifications Activity

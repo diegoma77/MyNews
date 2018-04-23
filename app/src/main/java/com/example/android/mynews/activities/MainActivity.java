@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
+import com.example.android.mynews.grouptopstories.PageFragmentBusinessTrial;
+import com.example.android.mynews.grouptopstories.PageFragmentSportsTrial;
 import com.example.android.mynews.grouptopstories.PageFragmentTopStoriesTrial;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
@@ -111,9 +113,12 @@ public class MainActivity extends AppCompatActivity {
         FragmentPageAdapter fragmentPageAdapter = new FragmentPageAdapter(getSupportFragmentManager());
         fragmentPageAdapter.addFragment(new PageFragmentTopStoriesTrial(), getResources().getString(R.string.top_stories_tag));
         fragmentPageAdapter.addFragment(new PageFragmentMostPopular(), getResources().getString(R.string.most_popular_tag));
-        fragmentPageAdapter.addFragment(new PageFragmentBusiness(), getResources().getString(R.string.business_tag));
+        fragmentPageAdapter.addFragment(new PageFragmentBusinessTrial(), getResources().getString(R.string.business_tag));
+        fragmentPageAdapter.addFragment(new PageFragmentSportsTrial(), getResources().getString(R.string.sports_tag));
         fragmentPageAdapter.addFragment(new PageFragmentSports(), getResources().getString(R.string.sports_tag));
         fragmentPageAdapter.addFragment(new PageFragmentTopStories(), getResources().getString(R.string.top_stories_tag));
+        fragmentPageAdapter.addFragment(new PageFragmentBusiness(), getResources().getString(R.string.business_tag));
+
         viewPager.setAdapter(fragmentPageAdapter);
     }
 
