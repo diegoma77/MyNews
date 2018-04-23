@@ -1,4 +1,4 @@
-package com.example.android.mynews.groupwaiting;
+package com.example.android.mynews.fragmentstrial;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,8 +18,7 @@ import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelp
 import com.example.android.mynews.extras.helperclasses.ShowHelper;
 import com.example.android.mynews.pojo.MostPopularAPIObject;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
-import com.example.android.mynews.rvadapters.RvAdapterMostPopular;
-import com.example.android.mynews.rvadapterstrial.RvAdapterTopStoriesTrial;
+import com.example.android.mynews.rvadapterstrial.RvAdapterMostPopularTrial;
 
 import java.util.ArrayList;
 import java.util.List;

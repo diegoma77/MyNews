@@ -25,12 +25,8 @@ import com.example.android.mynews.fragmentstrial.PageFragmentTopStoriesTrial;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
-import com.example.android.mynews.fragments.PageFragmentBusiness;
-import com.example.android.mynews.fragments.PageFragmentMostPopular;
-import com.example.android.mynews.fragments.PageFragmentSports;
-import com.example.android.mynews.fragments.PageFragmentTopStories;
 import com.example.android.mynews.R;
-import com.example.android.mynews.groupwaiting.PageFragmentMostPopularTrial;
+import com.example.android.mynews.fragmentstrial.PageFragmentMostPopularTrial;
 
 // TODO: 30/03/2018 The tablet crashes when showing the DF image
 
@@ -116,10 +112,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentPageAdapter.addFragment(new PageFragmentMostPopularTrial(), getResources().getString(R.string.most_popular_tag));
         fragmentPageAdapter.addFragment(new PageFragmentBusinessTrial(), getResources().getString(R.string.business_tag));
         fragmentPageAdapter.addFragment(new PageFragmentSportsTrial(), getResources().getString(R.string.sports_tag));
-        fragmentPageAdapter.addFragment(new PageFragmentSports(), getResources().getString(R.string.sports_tag));
-        fragmentPageAdapter.addFragment(new PageFragmentTopStories(), getResources().getString(R.string.top_stories_tag));
-        fragmentPageAdapter.addFragment(new PageFragmentMostPopular(), getResources().getString(R.string.most_popular_tag));
-        fragmentPageAdapter.addFragment(new PageFragmentBusiness(), getResources().getString(R.string.business_tag));
 
         viewPager.setAdapter(fragmentPageAdapter);
     }
