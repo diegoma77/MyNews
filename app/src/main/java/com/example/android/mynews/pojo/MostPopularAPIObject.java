@@ -40,11 +40,11 @@ public class MostPopularAPIObject {
         this.title = title;
     }
 
-    public String getPublished_date() {
+    public String getPublishedDate() {
         return published_date;
     }
 
-    public void setPublished_date(String published_date) {
+    public void setPublishedDate(String published_date) {
         this.published_date = published_date;
     }
 
@@ -56,7 +56,7 @@ public class MostPopularAPIObject {
         this.image_thumbnail = image_thumbnail;
     }
 
-    public String getArticle_url() {
+    public String getArticleUrl() {
         return article_url;
     }
 

@@ -19,9 +19,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
-import com.example.android.mynews.grouptopstories.PageFragmentBusinessTrial;
-import com.example.android.mynews.grouptopstories.PageFragmentSportsTrial;
-import com.example.android.mynews.grouptopstories.PageFragmentTopStoriesTrial;
+import com.example.android.mynews.fragmentstrial.PageFragmentBusinessTrial;
+import com.example.android.mynews.fragmentstrial.PageFragmentSportsTrial;
+import com.example.android.mynews.fragmentstrial.PageFragmentTopStoriesTrial;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
@@ -30,6 +30,7 @@ import com.example.android.mynews.fragments.PageFragmentMostPopular;
 import com.example.android.mynews.fragments.PageFragmentSports;
 import com.example.android.mynews.fragments.PageFragmentTopStories;
 import com.example.android.mynews.R;
+import com.example.android.mynews.groupwaiting.PageFragmentMostPopularTrial;
 
 // TODO: 30/03/2018 The tablet crashes when showing the DF image
 
@@ -112,11 +113,12 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         FragmentPageAdapter fragmentPageAdapter = new FragmentPageAdapter(getSupportFragmentManager());
         fragmentPageAdapter.addFragment(new PageFragmentTopStoriesTrial(), getResources().getString(R.string.top_stories_tag));
-        fragmentPageAdapter.addFragment(new PageFragmentMostPopular(), getResources().getString(R.string.most_popular_tag));
+        fragmentPageAdapter.addFragment(new PageFragmentMostPopularTrial(), getResources().getString(R.string.most_popular_tag));
         fragmentPageAdapter.addFragment(new PageFragmentBusinessTrial(), getResources().getString(R.string.business_tag));
         fragmentPageAdapter.addFragment(new PageFragmentSportsTrial(), getResources().getString(R.string.sports_tag));
         fragmentPageAdapter.addFragment(new PageFragmentSports(), getResources().getString(R.string.sports_tag));
         fragmentPageAdapter.addFragment(new PageFragmentTopStories(), getResources().getString(R.string.top_stories_tag));
+        fragmentPageAdapter.addFragment(new PageFragmentMostPopular(), getResources().getString(R.string.most_popular_tag));
         fragmentPageAdapter.addFragment(new PageFragmentBusiness(), getResources().getString(R.string.business_tag));
 
         viewPager.setAdapter(fragmentPageAdapter);
@@ -131,6 +133,8 @@ public class MainActivity extends AppCompatActivity {
             toolbar.setOverflowIcon(drawable);
         }
     }
+
+    // TODO: 23/04/2018 Do it in a different thread
 
     private void alertDialogDeleteHistory () {
 
@@ -169,8 +173,8 @@ public class MainActivity extends AppCompatActivity {
     /*****************************/
 
     /** The loaders use the LoaderCallbacks to call AsyncTaskLoaders
-     * and check if the tables of the database exist */
-
+     * and check if the tables of the database exist
+     * */
     private void loadLoaderCreateDatabase(int id) {
 
         LoaderManager loaderManager = getSupportLoaderManager();
@@ -192,7 +196,8 @@ public class MainActivity extends AppCompatActivity {
     /** This LoaderCallback
      * checks if the tables in the database
      * exist and, if they don't, it fills them
-     * with the necessary information */
+     * with the necessary information
+     * */
     private LoaderManager.LoaderCallbacks<Boolean> loaderCreateDatabase =
             new LoaderManager.LoaderCallbacks<Boolean>() {
 
@@ -212,7 +217,5 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             };
-
-
 
 }

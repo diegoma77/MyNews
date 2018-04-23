@@ -1,4 +1,4 @@
-package com.example.android.mynews.grouptopstories;
+package com.example.android.mynews.groupwaiting;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +17,7 @@ import com.example.android.mynews.R;
 import com.example.android.mynews.activities.WebViewMainActivity;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.Keys;
-import com.example.android.mynews.pojo.TopStoriesAPIObject;
+import com.example.android.mynews.pojo.MostPopularAPIObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,18 +26,18 @@ import java.util.List;
  * Created by Diego Fajardo on 25/02/2018.
  */
 
-public class RvAdapterTopStoriesTrial extends RecyclerView.Adapter<RvAdapterTopStoriesTrial.ViewHolder> {
+public class RvAdapterMostPopularTrial extends RecyclerView.Adapter<RvAdapterMostPopularTrial.ViewHolder> {
 
     // TODO: 23/04/2018 Adapt the RecyclerView to display the required information
 
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
-    private static final String TAG = RvAdapterTopStoriesTrial.class.getSimpleName();
+    private static final String TAG = RvAdapterMostPopularTrial.class.getSimpleName();
 
     //Loader ID
     private static final int LOADER_INSERT_ARTICLE_DATABASE = 12;
 
     //Array that will store TopStoriesAPIObjects after request
-    private List<TopStoriesAPIObject> listOfTopStoriesAPIObjects;
+    private List<MostPopularAPIObject> listOfMostPopularAPIObjects;
 
     //List that stores the database urls
     private List<String> listOfArticlesReadInTheDatabase;
@@ -46,10 +46,10 @@ public class RvAdapterTopStoriesTrial extends RecyclerView.Adapter<RvAdapterTopS
     private Context mContext;
 
     //Constructor of the RvAdapter
-    public RvAdapterTopStoriesTrial(Context context, List<TopStoriesAPIObject> listOfObjects, List<String> listOfUrls) {
+    public RvAdapterMostPopularTrial(Context context, List<MostPopularAPIObject> listOfObjects, List<String> listOfUrls) {
         this.mContext = context;
-        this.listOfTopStoriesAPIObjects = new ArrayList<>();
-        this.listOfTopStoriesAPIObjects = listOfObjects;
+        this.listOfMostPopularAPIObjects = new ArrayList<>();
+        this.listOfMostPopularAPIObjects = listOfObjects;
         this.listOfArticlesReadInTheDatabase = new ArrayList<>();
         this.listOfArticlesReadInTheDatabase = listOfUrls;
 
@@ -73,29 +73,29 @@ public class RvAdapterTopStoriesTrial extends RecyclerView.Adapter<RvAdapterTopS
     }
 
     @Override
-    public void onBindViewHolder(RvAdapterTopStoriesTrial.ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
         Log.d(TAG, "#" + position);
 
         Log.i("POSITION: " + position, "listOfArticlesInDatabase = " + listOfArticlesReadInTheDatabase.size());
 
-        if (listOfArticlesReadInTheDatabase.contains(listOfTopStoriesAPIObjects.get(position).getArticleUrl())){
+        if (listOfArticlesReadInTheDatabase.contains(listOfMostPopularAPIObjects.get(position).getArticleUrl())){
             Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
             holder.title.setTypeface(bold);
         }
 
-        holder.title.setText(listOfTopStoriesAPIObjects.get(position).getTitle());
-        holder.section.setText("Top Stories < " + listOfTopStoriesAPIObjects.get(position).getSection());
-        holder.update_date.setText(listOfTopStoriesAPIObjects.get(position).getUpdatedDate());
+        holder.title.setText(listOfMostPopularAPIObjects.get(position).getTitle());
+        holder.section.setText("Top Stories < " + listOfMostPopularAPIObjects.get(position).getSection());
+        holder.update_date.setText(listOfMostPopularAPIObjects.get(position).getPublishedDate());
 
-        if (listOfTopStoriesAPIObjects.get(position).getImageThumblarge() == null) {
+        if (listOfMostPopularAPIObjects.get(position).getImage_thumbnail() == null) {
             Glide.with(mContext)
                     .load(R.drawable.nyt)
                     .into(holder.imageOnLeft);
         }
         else {
             Glide.with(mContext)
-                    .load(listOfTopStoriesAPIObjects.get(position).getImageThumblarge())
+                    .load(listOfMostPopularAPIObjects.get(position).getImage_thumbnail())
                     .into(holder.imageOnLeft);
         }
 
@@ -109,7 +109,7 @@ public class RvAdapterTopStoriesTrial extends RecyclerView.Adapter<RvAdapterTopS
                  * to the database in the next activity (if it is not there yet) */
 
                 Intent intent = new Intent(context, WebViewMainActivity.class);
-                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, listOfTopStoriesAPIObjects.get(position).getArticleUrl());
+                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, listOfMostPopularAPIObjects.get(position).getArticleUrl());
                 context.startActivity(intent);
             }
         });
@@ -117,7 +117,7 @@ public class RvAdapterTopStoriesTrial extends RecyclerView.Adapter<RvAdapterTopS
 
     @Override
     public int getItemCount() {
-        return listOfTopStoriesAPIObjects.size();
+        return listOfMostPopularAPIObjects.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -139,37 +139,6 @@ public class RvAdapterTopStoriesTrial extends RecyclerView.Adapter<RvAdapterTopS
 
         }
 
-    }
-
-    /************************
-     * ASYNC TASK LOADERS ***
-     ************************/
-
-    // TODO: 22/04/2018 Explain better
-    /** Used to insert articles in the database when the user clicks but they
-     * haven't been read yet */
-    private static class ArticleInserter extends AsyncTaskLoader<String> {
-
-        private DatabaseHelper dbH;
-        private String url;
-
-        public ArticleInserter (Context context, String url) {
-            super(context);
-            this.dbH = new DatabaseHelper(context);
-        }
-
-        @Override
-        protected void onStartLoading() {
-            super.onStartLoading();
-            forceLoad();
-        }
-
-        @Override
-        public String loadInBackground() {
-            this.url = url;
-            dbH.insertDataToAlreadyReadArticlesTable(url);
-            return null;
-        }
     }
 
 }

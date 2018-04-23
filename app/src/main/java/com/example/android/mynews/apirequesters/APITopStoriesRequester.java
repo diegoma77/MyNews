@@ -27,6 +27,7 @@ import java.util.List;
 
 public class APITopStoriesRequester {
 
+    //Context
     Context context;
 
     //This variable stores the list of urls to do the requests
@@ -74,8 +75,7 @@ public class APITopStoriesRequester {
      ************************************/
 
     public void startJSONRequestTopStoriesAPI(
-            String url,
-            final Context context) {
+            String url) {
 
         //Creating a request queue
         RequestQueue requestQueue = Volley.newRequestQueue(context);

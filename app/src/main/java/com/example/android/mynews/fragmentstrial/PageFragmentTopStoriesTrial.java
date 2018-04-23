@@ -1,4 +1,4 @@
-package com.example.android.mynews.grouptopstories;
+package com.example.android.mynews.fragmentstrial;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.android.mynews.R;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.extras.helperclasses.ShowHelper;
+import com.example.android.mynews.rvadapterstrial.RvAdapterTopStoriesTrial;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
 
 import java.util.ArrayList;
@@ -25,17 +26,17 @@ import java.util.List;
  * Created by Diego Fajardo on 22/02/2018.
  */
 
-public class PageFragmentBusinessTrial extends android.support.v4.app.Fragment {
+public class PageFragmentTopStoriesTrial extends android.support.v4.app.Fragment {
 
     //Logs
-    private static final String TAG = "PageFragmentBusinessTri";
+    private static final String TAG = "PageFragmentTopStories";
 
     //Loader ID
-    private static final int LOADER_TOP_STORIES_API_REQUEST = 50;
-    private static final int LOADER_READ_ARTICLES_DATABASE = 51;
+    private static final int LOADER_TOP_STORIES_API_REQUEST = 10;
+    private static final int LOADER_READ_ARTICLES_DATABASE = 11;
 
     //Flag to specify the request to APITopStoriesRequester
-    private static final int FLAG = 2;
+    private static final int FLAG = 1;
 
     //List that will store the TopStoriesObject object to display in the RecyclerView
     private List<TopStoriesAPIObject> topStoriesObjectList;
@@ -47,7 +48,7 @@ public class PageFragmentBusinessTrial extends android.support.v4.app.Fragment {
     private TextView mErrorMessageDisplay;
     private ProgressBar mProgressBar;
 
-    //RecyclerView and RecyclerViewAdapter
+    //RecyclerView
     private RecyclerView recyclerView;
 
     @Nullable
@@ -73,7 +74,7 @@ public class PageFragmentBusinessTrial extends android.support.v4.app.Fragment {
         loadLoaderTopStoriesAPIRequest(LOADER_TOP_STORIES_API_REQUEST);
 
         return view;
-
+        
     }
 
     /**************************
@@ -96,7 +97,7 @@ public class PageFragmentBusinessTrial extends android.support.v4.app.Fragment {
 
     private void loadLoaderGetReadArticlesFromDatabase(int id) {
 
-        LoaderManager loaderManager = getActivity().getSupportLoaderManager();
+        android.support.v4.app.LoaderManager loaderManager = getActivity().getSupportLoaderManager();
         Loader<List<String>> loader = loaderManager.getLoader(id);
 
         if (loader == null) {
@@ -145,8 +146,8 @@ public class PageFragmentBusinessTrial extends android.support.v4.app.Fragment {
                 }
             };
 
-    private LoaderManager.LoaderCallbacks<List<String>> loaderGetReadArticlesFromDatabase =
-            new LoaderManager.LoaderCallbacks<List<String>>() {
+    private android.support.v4.app.LoaderManager.LoaderCallbacks<List<String>> loaderGetReadArticlesFromDatabase =
+            new android.support.v4.app.LoaderManager.LoaderCallbacks<List<String>>() {
 
                 @Override
                 public Loader<List<String>> onCreateLoader(int id, Bundle args) {

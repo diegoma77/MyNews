@@ -4,14 +4,18 @@ import android.content.Context;
 import android.support.v4.content.Loader;
 import android.util.Log;
 
-import com.example.android.mynews.asynctaskloaders.atl.ATLFillListWithReadArticles;
-import com.example.android.mynews.asynctaskloaders.atl.ATLInsertArticleInDatabase;
-import com.example.android.mynews.asynctaskloaders.atl.ATLMainActCreateDatabase;
+import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLFillListWithReadArticles;
+import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLInsertArticleInDatabase;
+import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLMainActCreateDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateList;
 import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateSwitchDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateSwitchVariable;
+import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLMostPopularAPIRequest;
+import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLSearchArticlesAPIRequest;
 import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLTopStoriesAPIRequest;
+import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
+import com.example.android.mynews.pojo.MostPopularAPIObject;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
 
 import java.util.List;
@@ -26,6 +30,33 @@ import java.util.List;
 public class AsyncTaskLoaderHelper {
 
     private static final String TAG = "AsyncTaskLoaderHelper";
+
+    /************************
+     * REQUESTS TO API ******
+     ***********************/
+
+    /** Used to do requests
+     * to TopStories API*/
+    public static Loader<List<TopStoriesAPIObject>> topStoriesAPIRequest(Context context, int flag) {
+        return new ATLTopStoriesAPIRequest(context, flag);
+    }
+
+    /** Used to do requests
+     * to MostPopular API*/
+    public static Loader<List<MostPopularAPIObject>> mostPopularAPIRequest(Context context) {
+        return new ATLMostPopularAPIRequest(context);
+    }
+
+    /** Used to do requests
+     * to ArticlesSearch API*/
+    public static Loader<List<ArticlesSearchAPIObject>> articlesSearchAPIRequest(Context context) {
+        return new ATLSearchArticlesAPIRequest(context);
+    }
+
+
+    /*****************************
+     * DATABASE METHODS GENERAL **
+     ****************************/
 
     /** Used in MainActivity to create
      * the databases and fill the tables */
@@ -46,11 +77,10 @@ public class AsyncTaskLoaderHelper {
         return new ATLInsertArticleInDatabase(mContext, url);
     }
 
-    /** Used to do requests
-     * to TopStories API*/
-    public static Loader<List<TopStoriesAPIObject>> topStoriesAPIRequest(Context context, int flag) {
-        return new ATLTopStoriesAPIRequest(context, flag);
-    }
+
+    /***************************************
+     * USED IN NOTIFICATIONS ACTIVITY ******
+     ***************************************/
 
     /** Used in "onPause" and "onDestroy" in Notifications Activity
      * to update the database with the information of NotificationsActivity */

@@ -12,7 +12,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
-import com.example.android.mynews.pojo.ArticlesAPIObject;
+import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 import com.example.android.mynews.pojo.MostPopularAPIObject;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
 
@@ -34,7 +34,7 @@ public class APIFetcher {
     private final String REFERENCE_TO_OBJECT;
 
     private List<String> listOfUrls;
-    private List<ArticlesAPIObject> listOfArticlesObjects;
+    private List<ArticlesSearchAPIObject> listOfArticlesObjects;
     private List<MostPopularAPIObject> listOfMostPopularObjects;
     private List<TopStoriesAPIObject> listOfTopStoriesObjects;
 
@@ -71,7 +71,7 @@ public class APIFetcher {
         return listOfUrls.size();
     }
 
-    public List<ArticlesAPIObject> getListOfArticlesObjects() {
+    public List<ArticlesSearchAPIObject> getListOfArticlesObjects() {
         if (REFERENCE_TO_OBJECT.equals(Keys.ApiFetcher.ARTICLES_API_REFERENCE)) {
             return listOfArticlesObjects;
         }
@@ -168,20 +168,20 @@ public class APIFetcher {
             for (int i = 0; i < docs_array.length(); i++) {
 
                 //We create the object that is going to store all the information
-                ArticlesAPIObject articlesAPIObject = new ArticlesAPIObject();
+                ArticlesSearchAPIObject articlesSearchAPIObject = new ArticlesSearchAPIObject();
 
                 //We GET the "i results" object
                 JSONObject docsObject = docs_array.getJSONObject(i);
 
                 //We GET the data from the dataObject
                 if (docsObject.getString(Keys.SearchArticles.KEY_WEB_URL) != null) {
-                    articlesAPIObject.setWeb_url(docsObject.getString(Keys.SearchArticles.KEY_WEB_URL));
-                    Log.i("WEB_URL", articlesAPIObject.getWeb_url());
+                    articlesSearchAPIObject.setWeb_url(docsObject.getString(Keys.SearchArticles.KEY_WEB_URL));
+                    Log.i("WEB_URL", articlesSearchAPIObject.getWeb_url());
                 }
 
                 if (docsObject.getString(Keys.SearchArticles.KEY_SNIPPET) != null) {
-                    articlesAPIObject.setSnippet(docsObject.getString(Keys.SearchArticles.KEY_SNIPPET));
-                    Log.i("SNIPPET", articlesAPIObject.getSnippet());
+                    articlesSearchAPIObject.setSnippet(docsObject.getString(Keys.SearchArticles.KEY_SNIPPET));
+                    Log.i("SNIPPET", articlesSearchAPIObject.getSnippet());
                 }
 
                 JSONArray multimedia_array = docsObject.getJSONArray(Keys.SearchArticles.KEY_MULTIMEDIA);
@@ -190,11 +190,11 @@ public class APIFetcher {
                     JSONObject multimedia_object = multimedia_array.getJSONObject(2);
 
                     if (multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL) != null) {
-                        articlesAPIObject.setImage_url(Url.ArticleSearchUrl.IMAGE_URL_BASE + multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL));
-                        Log.i("IMAGE_URL", articlesAPIObject.getImage_url());
+                        articlesSearchAPIObject.setImage_url(Url.ArticleSearchUrl.IMAGE_URL_BASE + multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL));
+                        Log.i("IMAGE_URL", articlesSearchAPIObject.getImage_url());
                     }
                 } else {
-                    articlesAPIObject.setImage_url("");
+                    articlesSearchAPIObject.setImage_url("");
                     Log.i("IMAGE_URL", "ARRAY.size() = 0");
                 }
 
@@ -205,21 +205,21 @@ public class APIFetcher {
                     String month = pub_date.substring(5, 7);
                     String year = pub_date.substring(0, 4);
                     pub_date = day + "/" + month + "/" + year;
-                    articlesAPIObject.setPub_date(pub_date);
-                    Log.i("PUB_DATE", articlesAPIObject.getPub_date());
+                    articlesSearchAPIObject.setPub_date(pub_date);
+                    Log.i("PUB_DATE", articlesSearchAPIObject.getPub_date());
                 }
 
                 if (docsObject.getString(Keys.SearchArticles.KEY_NEW_DESK) != null) {
                     if (docsObject.getString(Keys.SearchArticles.KEY_NEW_DESK).equals("None")) {
-                        articlesAPIObject.setNew_desk("General");
+                        articlesSearchAPIObject.setNew_desk("General");
                     } else {
-                        articlesAPIObject.setNew_desk(docsObject.getString(Keys.SearchArticles.KEY_NEW_DESK));
+                        articlesSearchAPIObject.setNew_desk(docsObject.getString(Keys.SearchArticles.KEY_NEW_DESK));
                     }
-                    Log.i("NEW_DESK", articlesAPIObject.getNew_desk());
+                    Log.i("NEW_DESK", articlesSearchAPIObject.getNew_desk());
                 }
 
                 //We put the object with the results into the ArrayList articlesAPIObjectList;
-                listOfArticlesObjects.add(articlesAPIObject);
+                listOfArticlesObjects.add(articlesSearchAPIObject);
                 Log.i("position # ", "" + i + " :" + listOfArticlesObjects.get(i).getSnippet());
 
             }
@@ -271,7 +271,7 @@ public class APIFetcher {
 
                 if (resultsObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL) != null) {
                     mostPopularAPIObject.setArticle_url(resultsObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL));
-                    Log.i("ARTICLE_URL", mostPopularAPIObject.getArticle_url());
+                    Log.i("ARTICLE_URL", mostPopularAPIObject.getArticleUrl());
                 }
 
                 if (resultsObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE) != null) {
@@ -281,8 +281,8 @@ public class APIFetcher {
                     String month = published_date.substring(5,7);
                     String year = published_date.substring(0,4);
                     published_date = day + "/" + month + "/" + year;
-                    mostPopularAPIObject.setPublished_date(published_date);
-                    Log.i("PUBLISHED DATE", mostPopularAPIObject.getPublished_date());
+                    mostPopularAPIObject.setPublishedDate(published_date);
+                    Log.i("PUBLISHED DATE", mostPopularAPIObject.getPublishedDate());
                 }
 
                 JSONArray media_array = resultsObject.getJSONArray(Keys.MostPopularKeys.KEY_MEDIA);

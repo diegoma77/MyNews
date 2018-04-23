@@ -1,4 +1,4 @@
-package com.example.android.mynews.grouptopstories;
+package com.example.android.mynews.fragmentstrial;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.android.mynews.R;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.extras.helperclasses.ShowHelper;
+import com.example.android.mynews.rvadapterstrial.RvAdapterTopStoriesTrial;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
 
 import java.util.ArrayList;
@@ -25,17 +26,17 @@ import java.util.List;
  * Created by Diego Fajardo on 22/02/2018.
  */
 
-public class PageFragmentSportsTrial extends android.support.v4.app.Fragment {
+public class PageFragmentBusinessTrial extends android.support.v4.app.Fragment {
 
     //Logs
-    private static final String TAG = "PageFragmentSportsTrial";
+    private static final String TAG = "PageFragmentBusinessTri";
 
     //Loader ID
-    private static final int LOADER_TOP_STORIES_API_REQUEST = 60;
-    private static final int LOADER_READ_ARTICLES_DATABASE = 61;
+    private static final int LOADER_TOP_STORIES_API_REQUEST = 50;
+    private static final int LOADER_READ_ARTICLES_DATABASE = 51;
 
     //Flag to specify the request to APITopStoriesRequester
-    private static final int FLAG = 3;
+    private static final int FLAG = 2;
 
     //List that will store the TopStoriesObject object to display in the RecyclerView
     private List<TopStoriesAPIObject> topStoriesObjectList;
@@ -47,7 +48,7 @@ public class PageFragmentSportsTrial extends android.support.v4.app.Fragment {
     private TextView mErrorMessageDisplay;
     private ProgressBar mProgressBar;
 
-    //RecyclerView and RecyclerViewAdapter
+    //RecyclerView
     private RecyclerView recyclerView;
 
     @Nullable

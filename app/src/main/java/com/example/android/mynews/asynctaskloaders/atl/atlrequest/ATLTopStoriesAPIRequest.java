@@ -20,9 +20,6 @@ import java.util.List;
  * information in a recycler view */
 public class ATLTopStoriesAPIRequest extends android.support.v4.content.AsyncTaskLoader <List<TopStoriesAPIObject>>{
 
-    // TODO: 23/04/2018 I should pass a flag here to differentiate between the different urls
-    // TODO: so I will make different calls for Business and Sports using the same ATL
-
     private static final String TAG = "ATLTopStoriesAPIRequest";
 
     //1.Top Stories
@@ -50,11 +47,11 @@ public class ATLTopStoriesAPIRequest extends android.support.v4.content.AsyncTas
 
         /** The flag allows us to differentiate the url used to do the request */
         if (flag == 1) {
-            requester.startJSONRequestTopStoriesAPI(Url.TopStoriesUrl.TS_FINAL_URL, getContext());
+            requester.startJSONRequestTopStoriesAPI(Url.TopStoriesUrl.TS_FINAL_URL);
         } else if (flag == 2) {
-            requester.startJSONRequestTopStoriesAPI(Url.BusinessUrl.B_FINAL_URL, getContext());
+            requester.startJSONRequestTopStoriesAPI(Url.BusinessUrl.B_FINAL_URL);
         } else if (flag == 3) {
-            requester.startJSONRequestTopStoriesAPI(Url.SportsUrl.S_FINAL_URL, getContext());
+            requester.startJSONRequestTopStoriesAPI(Url.SportsUrl.S_FINAL_URL);
         }
 
         try {

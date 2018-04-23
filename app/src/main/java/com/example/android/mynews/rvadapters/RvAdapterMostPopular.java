@@ -78,7 +78,7 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
     @Override
     public void onBindViewHolder(RvAdapterMostPopular.ViewHolder holder, final int position) {
 
-        if (checkIfArticleUrlIsInTheDatabase(mostPopularAPIObjectArrayList.get(position).getArticle_url())) {
+        if (checkIfArticleUrlIsInTheDatabase(mostPopularAPIObjectArrayList.get(position).getArticleUrl())) {
             Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
             holder.title.setTypeface(bold);
         }
@@ -86,7 +86,7 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
         MostPopularAPIObject currentMostPopularAPIObject = mostPopularAPIObjectArrayList.get(position);
         holder.title.setText(currentMostPopularAPIObject.getTitle());
         holder.section.setText("Most Popular < " + currentMostPopularAPIObject.getSection());
-        holder.published_date.setText(currentMostPopularAPIObject.getPublished_date());
+        holder.published_date.setText(currentMostPopularAPIObject.getPublishedDate());
 
         if (mostPopularAPIObjectArrayList.get(position).getImage_thumbnail() == null) {
             Glide.with(mContext)
@@ -109,12 +109,12 @@ public class RvAdapterMostPopular extends RecyclerView.Adapter<RvAdapterMostPopu
 
                 //Checks that the article is not yet in the database. If it is, we don't add it.
                 //If it's not, we add it. This way we keep the track of the articles the user has read
-                if (!checkIfArticleUrlIsInTheDatabase(mostPopularAPIObjectArrayList.get(position).getArticle_url())){
-                    dbH.insertDataToAlreadyReadArticlesTable(mostPopularAPIObjectArrayList.get(position).getArticle_url());
+                if (!checkIfArticleUrlIsInTheDatabase(mostPopularAPIObjectArrayList.get(position).getArticleUrl())){
+                    dbH.insertDataToAlreadyReadArticlesTable(mostPopularAPIObjectArrayList.get(position).getArticleUrl());
                 }
 
                 Intent intent = new Intent(context, WebViewMainActivity.class);
-                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, mostPopularAPIObjectArrayList.get(position).getArticle_url());
+                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, mostPopularAPIObjectArrayList.get(position).getArticleUrl());
                 context.startActivity(intent);
 
             }

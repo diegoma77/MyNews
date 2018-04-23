@@ -183,7 +183,7 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
 
                 if (resultsObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL) != null) {
                     mostPopularAPIObject.setArticle_url(resultsObject.getString(Keys.MostPopularKeys.KEY_ARTICLE_URL));
-                    Log.i("ARTICLE_URL", mostPopularAPIObject.getArticle_url());
+                    Log.i("ARTICLE_URL", mostPopularAPIObject.getArticleUrl());
                 }
 
                 if (resultsObject.getString(Keys.MostPopularKeys.KEY_PUBLISHED_DATE) != null) {
@@ -193,8 +193,8 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
                     String month = published_date.substring(5,7);
                     String year = published_date.substring(0,4);
                     published_date = day + "/" + month + "/" + year;
-                    mostPopularAPIObject.setPublished_date(published_date);
-                    Log.i("PUBLISHED DATE", mostPopularAPIObject.getPublished_date());
+                    mostPopularAPIObject.setPublishedDate(published_date);
+                    Log.i("PUBLISHED DATE", mostPopularAPIObject.getPublishedDate());
                 }
 
                 JSONArray media_array = resultsObject.getJSONArray(Keys.MostPopularKeys.KEY_MEDIA);

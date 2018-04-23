@@ -25,7 +25,7 @@ import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.helperclasses.DateHelper;
 import com.example.android.mynews.extras.Keys;
 import com.example.android.mynews.extras.Url;
-import com.example.android.mynews.pojo.ArticlesAPIObject;
+import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 import com.example.android.mynews.rvadapters.RvAdapterDisplaySearchArticles;
 
 import org.json.JSONArray;
@@ -47,7 +47,7 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
     private static final String TAG = "DisplaySearchArticlesAc";
 
     //List that will store the JSON Response objects
-    private List<ArticlesAPIObject> notificationsArticlesObjectList;
+    private List<ArticlesSearchAPIObject> notificationsArticlesObjectList;
 
     //List to store the urls for searching the articles
     private List<String> notificationsArticlesListOfUrls;
@@ -240,20 +240,20 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
             for (int i = 0; i < docs_array.length(); i++) {
 
                 //We create the object that is going to store all the information
-                ArticlesAPIObject articlesAPIObject = new ArticlesAPIObject();
+                ArticlesSearchAPIObject articlesSearchAPIObject = new ArticlesSearchAPIObject();
 
                 //We GET the "i results" object
                 JSONObject docsObject = docs_array.getJSONObject(i);
 
                 //We GET the data from the dataObject
                 if (docsObject.getString(Keys.SearchArticles.KEY_WEB_URL) != null) {
-                    articlesAPIObject.setWeb_url(docsObject.getString(Keys.SearchArticles.KEY_WEB_URL));
-                    Log.i("WEB_URL", articlesAPIObject.getWeb_url());
+                    articlesSearchAPIObject.setWeb_url(docsObject.getString(Keys.SearchArticles.KEY_WEB_URL));
+                    Log.i("WEB_URL", articlesSearchAPIObject.getWeb_url());
                 }
 
                 if (docsObject.getString(Keys.SearchArticles.KEY_SNIPPET) != null) {
-                    articlesAPIObject.setSnippet(docsObject.getString(Keys.SearchArticles.KEY_SNIPPET));
-                    Log.i("SNIPPET", articlesAPIObject.getSnippet());
+                    articlesSearchAPIObject.setSnippet(docsObject.getString(Keys.SearchArticles.KEY_SNIPPET));
+                    Log.i("SNIPPET", articlesSearchAPIObject.getSnippet());
                 }
 
                 JSONArray multimedia_array = docsObject.getJSONArray(Keys.SearchArticles.KEY_MULTIMEDIA);
@@ -262,11 +262,11 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
                     JSONObject multimedia_object = multimedia_array.getJSONObject(2);
 
                     if (multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL) != null) {
-                        articlesAPIObject.setImage_url(Url.ArticleSearchUrl.IMAGE_URL_BASE + multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL));
-                        Log.i("IMAGE_URL", articlesAPIObject.getImage_url());
+                        articlesSearchAPIObject.setImage_url(Url.ArticleSearchUrl.IMAGE_URL_BASE + multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL));
+                        Log.i("IMAGE_URL", articlesSearchAPIObject.getImage_url());
                     }
                 } else {
-                    articlesAPIObject.setImage_url("");
+                    articlesSearchAPIObject.setImage_url("");
                     Log.i("IMAGE_URL", "ARRAY.size() = 0");
                 }
 
@@ -277,20 +277,20 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
                     String month = pub_date.substring(5,7);
                     String year = pub_date.substring(0,4);
                     pub_date = day + "/" + month + "/" + year;
-                    articlesAPIObject.setPub_date(pub_date);
-                    Log.i("PUB_DATE", articlesAPIObject.getPub_date());
+                    articlesSearchAPIObject.setPub_date(pub_date);
+                    Log.i("PUB_DATE", articlesSearchAPIObject.getPub_date());
                 }
 
                 if (docsObject.getString(Keys.SearchArticles.KEY_NEW_DESK) != null) {
                     if (docsObject.getString(Keys.SearchArticles.KEY_NEW_DESK).equals("None")) {
-                        articlesAPIObject.setNew_desk("General");
+                        articlesSearchAPIObject.setNew_desk("General");
                     }
-                    else { articlesAPIObject.setNew_desk(docsObject.getString(Keys.SearchArticles.KEY_NEW_DESK)); }
-                    Log.i("NEW_DESK", articlesAPIObject.getNew_desk());
+                    else { articlesSearchAPIObject.setNew_desk(docsObject.getString(Keys.SearchArticles.KEY_NEW_DESK)); }
+                    Log.i("NEW_DESK", articlesSearchAPIObject.getNew_desk());
                 }
 
                 //We put the object with the results into the ArrayList notificationsArticlesObjectList;
-                notificationsArticlesObjectList.add(articlesAPIObject);
+                notificationsArticlesObjectList.add(articlesSearchAPIObject);
                 Log.i("NAposition # ", "" + i + " :" + notificationsArticlesObjectList.get(i).getSnippet());
 
             }
