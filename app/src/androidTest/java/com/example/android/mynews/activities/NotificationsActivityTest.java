@@ -89,7 +89,7 @@ public class NotificationsActivityTest {
 
         dbH = new DatabaseHelper(mActivity);
         mCursorQueryOrSection = dbH.getAllDataFromTableName(
-                DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+                DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME);
         mCursorSwitch = dbH.getAllDataFromTableName(
                 DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME);
 

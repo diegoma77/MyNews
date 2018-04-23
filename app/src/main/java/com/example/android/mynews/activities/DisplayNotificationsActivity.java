@@ -72,7 +72,7 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
         setContentView(R.layout.rv_found_articles);
 
         dbH = new DatabaseHelper(this);
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME);
 
         //Sets the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -407,7 +407,7 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
      * */
     private String getSearchQueryAndAdaptForUrl () {
 
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME);
         mCursor.moveToFirst();
 
         String searchQueryAdaptedForUrl = mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION));
@@ -427,7 +427,7 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
      * */
     private String getSectionsAndAdaptForUrl() {
 
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME);
         mCursor.moveToFirst();
         mCursor.moveToNext();
 

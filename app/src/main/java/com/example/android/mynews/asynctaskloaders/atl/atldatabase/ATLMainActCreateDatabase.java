@@ -30,7 +30,7 @@ public class ATLMainActCreateDatabase extends android.support.v4.content.AsyncTa
     @Override
     public Boolean loadInBackground() {
 
-        if (dbH.isTableEmpty(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME)){
+        if (dbH.isTableEmpty(DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME)){
             for (int i = 0; i < 7; i++) {
                 dbH.insertDataToSearchQueryTable("");
             }

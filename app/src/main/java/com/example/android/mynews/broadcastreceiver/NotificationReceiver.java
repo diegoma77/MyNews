@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -14,6 +16,8 @@ import android.util.Log;
 import com.example.android.mynews.R;
 import com.example.android.mynews.activities.DisplayNotificationsActivity;
 import com.example.android.mynews.activities.DisplaySearchArticlesActivity;
+import com.example.android.mynews.data.DatabaseContract;
+import com.example.android.mynews.data.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +36,16 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     private static final String NOTIFICATION_CHANNEL_ID = "notification_channel";
 
+    private DatabaseHelper dbH;
+    private Cursor mCursor;
+
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        dbH = new DatabaseHelper(context);
+        // TODO: 23/04/2018 Change this cursor so it'll grab info from the Notifications Articles Table
+        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
+
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(
                 Context.NOTIFICATION_SERVICE);

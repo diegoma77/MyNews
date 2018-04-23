@@ -68,7 +68,6 @@ public class NotificationsActivity extends AppCompatActivity {
     private CheckBox cb_sports;
     private CheckBox cb_travel;
 
-
     // TODO: 22/04/2018 Delete this
 
     private TextView tv0;

@@ -38,7 +38,7 @@ public class ATLNotifUpdateList extends android.support.v4.content.AsyncTaskLoad
 
         /** We create a list */
         List<String> list = new ArrayList<>();
-        Cursor mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+        Cursor mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME);
 
         /** We fill the list with the information from the database (query and section) */
         mCursor.moveToFirst();

@@ -32,7 +32,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    //TABLE CREATION STATEMENTS
+    /******************************
+     * TABLE CREATION STATEMENTS **
+     ******************************/
+
     private static final String CREATE_ARTICLES_READ_TABLE =
             "CREATE TABLE " + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME
                     + " ("
@@ -41,7 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + ")";
 
     private static final String CREATE_QUERY_OR_SECTION_TABLE =
-            "CREATE TABLE " + DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME
+            "CREATE TABLE " + DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME
                     + " ("
                     + DatabaseContract.Database.QUERY_OR_SECTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + DatabaseContract.Database.QUERY_OR_SECTION + " TEXT NOT NULL"
@@ -54,8 +57,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + DatabaseContract.Database.SWITCH_STATE + " FLAG INTEGER DEFAULT 0"
                     + ")";
 
+    // TODO: 23/04/2018 Delete if needed
+    /************
+     * NEW STUFF
+     */
 
-    //CREATING the tables
+    private static final String CREATE_ARTICLES_FOR_NOTIFICATION_TABLE =
+            "CREATE TABLE " + DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME
+                    + "( "
+                    + DatabaseContract.Database.NOTIF_ARTICLES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + DatabaseContract.Database.WEB_URL + " TEXT NOT NULL"
+                    + DatabaseContract.Database.SNIPPET + " TEXT NOT NULL"
+                    + DatabaseContract.Database.IMAGE_URL + " TEXT NOT NULL"
+                    + DatabaseContract.Database.NEW_DESK + " TEXT NOT NULL"
+                    + ")";
+
+
+    /******************************
+     * CREATING THE TABLES ********
+     *****************************/
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
@@ -63,22 +84,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_ARTICLES_READ_TABLE);
         sqLiteDatabase.execSQL(CREATE_QUERY_OR_SECTION_TABLE);
         sqLiteDatabase.execSQL(CREATE_SWITCH_TABLE);
+        sqLiteDatabase.execSQL(CREATE_ARTICLES_FOR_NOTIFICATION_TABLE);
 
     }
 
-    //UPGRADING the tables
+    /******************************
+     * UPGRADING THE  TABLES ******
+     *****************************/
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         //On upgrade drop older versions
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME);
 
         //Create new table
         onCreate(db);
 
     }
+
+    /******************************
+     * HELPER METHODS *************
+     ******************************/
 
     /**
      * METHOD FOR INSERTING data in Search Queries' Table
@@ -91,7 +121,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(DatabaseContract.Database.QUERY_OR_SECTION, queryOrSection);
 
         long result = db.insert(
-                DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME,
+                DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME,
                 null,
                 contentValues);
 
@@ -105,7 +135,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    /** Updates the Query or Section in the database  */
+    /** Updates the Query or Section in the database
+     * */
     public void updateSearchQueryOrSection(String queryOrSection, int position) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -113,14 +144,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseContract.Database.QUERY_OR_SECTION, queryOrSection);
 
-        db.update(DatabaseContract.Database.QUERY_OR_SECTION_TABLE_NAME,
+        db.update(DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME,
                 contentValues,
                 DatabaseContract.Database.QUERY_OR_SECTION_ID + "=?",
                 new String[] { "" + position });
     }
 
-    /**
-     * METHOD FOR INSERTING data in Already Read Articles' Table
+    /** METHOD FOR INSERTING data in Already Read Articles' Table
      * */
     public boolean insertDataToAlreadyReadArticlesTable(String article_url) {
 
@@ -144,8 +174,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    /**
-     * METHOD FOR INSERTING data in Notifications Switch Table
+    /** METHOD FOR INSERTING data in Notifications Switch Table
      * */
     public boolean insertDataToSwitchTable(int state) {
 
@@ -169,7 +198,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    /** Sets the state of the switch in the database to true */
+    /** Sets the state of the switch in the database to true
+     * */
     public void setSwitchOnInDatabase() {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -183,7 +213,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[] { "1" });
     }
 
-    /** Sets the state of the switch in the database to false */
+    /** Sets the state of the switch in the database to false
+     * */
     public void setSwitchOffInDatabase() {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -234,8 +265,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    //METHOD USED TO CHECK if a table is empty)
-    //Used to avoid the app to insert data when it doesn't have to
+    /** METHOD USED TO CHECK if a table is empty)
+     * Used to avoid the app to insert data
+     * when it doesn't have to
+     * */
     public boolean isTableEmpty(String table_name) {
 
         boolean flag;
