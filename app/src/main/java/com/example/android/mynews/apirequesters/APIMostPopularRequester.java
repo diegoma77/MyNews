@@ -9,7 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.android.mynews.extras.Keys;
+import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.extras.helperclasses.ToastHelper;
 import com.example.android.mynews.pojo.MostPopularAPIObject;
 
@@ -75,8 +75,7 @@ public class APIMostPopularRequester {
      * METHODS TO DO THE API REQUEST ****
      ************************************/
 
-    public void startJSONRequestMostPopularAPI(
-            String url) {
+    public void startJSONRequestMostPopularAPI(String url) {
 
         //Creating a request queue
         RequestQueue requestQueue = Volley.newRequestQueue(context);

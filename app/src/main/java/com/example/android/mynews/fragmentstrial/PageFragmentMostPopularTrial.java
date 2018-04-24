@@ -38,8 +38,8 @@ public class PageFragmentMostPopularTrial extends android.support.v4.app.Fragmen
     private static final int LOADER_MOST_POPULAR_API_REQUEST = 55;
     private static final int LOADER_READ_ARTICLES_DATABASE = 15;
 
-    //List that will store the objects in the database
-    private List<String> listOfUrls;
+    //List that will store the urls of the read articles in the database
+    private List<String> listOfReadArticlesUrls;
 
     //Variables to store views related to the articles upload
     private TextView mErrorMessageDisplay;
@@ -59,7 +59,7 @@ public class PageFragmentMostPopularTrial extends android.support.v4.app.Fragmen
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         mostPopularObjectsList = new ArrayList<>();
-        listOfUrls = new ArrayList<>();
+        listOfReadArticlesUrls = new ArrayList<>();
 
         ShowHelper.showProgressBar(mProgressBar,mErrorMessageDisplay,recyclerView);
 
@@ -129,7 +129,7 @@ public class PageFragmentMostPopularTrial extends android.support.v4.app.Fragmen
                         RvAdapterMostPopularTrial adapterTopStories = new RvAdapterMostPopularTrial (
                                 getContext(),
                                 mostPopularObjectsList,
-                                listOfUrls);
+                                listOfReadArticlesUrls);
                         recyclerView.setAdapter(adapterTopStories);
 
                     } else {
@@ -153,7 +153,7 @@ public class PageFragmentMostPopularTrial extends android.support.v4.app.Fragmen
 
                 @Override
                 public void onLoadFinished(Loader<List<String>> loader, List<String> data) {
-                    listOfUrls.addAll(data);
+                    listOfReadArticlesUrls.addAll(data);
                 }
 
                 @Override

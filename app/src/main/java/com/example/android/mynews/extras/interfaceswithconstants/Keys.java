@@ -1,4 +1,4 @@
-package com.example.android.mynews.extras;
+package com.example.android.mynews.extras.interfaceswithconstants;
 
 /**
  * Created by Diego Fajardo on 12/03/2018.
@@ -15,6 +15,7 @@ public interface Keys {
     interface PutExtras {
 
         String ARTICLE_URL_SENT = "article_url";
+        String LIST_OF_API_OBJECTS = "list_of_api_objects";
         String INTENT_SA_PAGE1 = "page1";
         String INTENT_SA_PAGE2 = "page2";
         String INTENT_SA_PAGE3 = "page3";

@@ -3,7 +3,6 @@ package com.example.android.mynews.rvadapterstrial;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,8 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.android.mynews.R;
 import com.example.android.mynews.activities.WebViewMainActivity;
-import com.example.android.mynews.data.DatabaseHelper;
-import com.example.android.mynews.extras.Keys;
+import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
 
 import java.util.ArrayList;
@@ -105,7 +103,7 @@ public class RvAdapterTopStoriesTrial extends RecyclerView.Adapter<RvAdapterTopS
                 Log.i("ONCLICK - POSITION", "#" + " CLICKED");
                 Context context = v.getContext();
 
-                /** Since we cannot call there "getSupportLoaderManager()", we will add the url
+                /** Since we cannot call here "getSupportLoaderManager()", we will add the url
                  * to the database in the next activity (if it is not there yet) */
 
                 Intent intent = new Intent(context, WebViewMainActivity.class);
@@ -117,6 +115,7 @@ public class RvAdapterTopStoriesTrial extends RecyclerView.Adapter<RvAdapterTopS
 
     @Override
     public int getItemCount() {
+        if (listOfTopStoriesAPIObjects == null) { return 0; }
         return listOfTopStoriesAPIObjects.size();
     }
 

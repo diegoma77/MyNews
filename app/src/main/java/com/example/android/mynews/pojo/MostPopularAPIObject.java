@@ -1,7 +1,5 @@
 package com.example.android.mynews.pojo;
 
-import com.example.android.mynews.extras.Keys;
-
 /**
  * Created by Diego Fajardo on 13/03/2018.
  */

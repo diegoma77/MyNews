@@ -4,11 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.android.mynews.apirequesters.APITopStoriesRequester;
-import com.example.android.mynews.extras.Keys;
-import com.example.android.mynews.extras.Url;
+import com.example.android.mynews.extras.interfaceswithconstants.Url;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

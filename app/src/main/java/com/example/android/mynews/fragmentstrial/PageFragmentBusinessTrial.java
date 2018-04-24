@@ -41,8 +41,8 @@ public class PageFragmentBusinessTrial extends android.support.v4.app.Fragment {
     //List that will store the TopStoriesObject object to display in the RecyclerView
     private List<TopStoriesAPIObject> topStoriesObjectList;
 
-    //List that will store the objects in the database
-    private List<String> listOfUrls;
+    //List that will store the urls of the read articles in the database
+    private List<String> listOfReadArticlesUrls;
 
     //Variables to store views related to the articles upload
     private TextView mErrorMessageDisplay;
@@ -62,7 +62,7 @@ public class PageFragmentBusinessTrial extends android.support.v4.app.Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         topStoriesObjectList = new ArrayList<>();
-        listOfUrls = new ArrayList<>();
+        listOfReadArticlesUrls = new ArrayList<>();
 
         ShowHelper.showProgressBar(mProgressBar,mErrorMessageDisplay,recyclerView);
 
@@ -132,7 +132,7 @@ public class PageFragmentBusinessTrial extends android.support.v4.app.Fragment {
                         RvAdapterTopStoriesTrial adapterTopStories = new RvAdapterTopStoriesTrial (
                                 getContext(),
                                 topStoriesObjectList,
-                                listOfUrls);
+                                listOfReadArticlesUrls);
                         recyclerView.setAdapter(adapterTopStories);
 
                     } else {
@@ -156,7 +156,7 @@ public class PageFragmentBusinessTrial extends android.support.v4.app.Fragment {
 
                 @Override
                 public void onLoadFinished(Loader<List<String>> loader, List<String> data) {
-                    listOfUrls.addAll(data);
+                    listOfReadArticlesUrls.addAll(data);
                 }
 
                 @Override

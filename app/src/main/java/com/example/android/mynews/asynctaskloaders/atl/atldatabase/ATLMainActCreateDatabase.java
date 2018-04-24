@@ -1,6 +1,7 @@
 package com.example.android.mynews.asynctaskloaders.atl.atldatabase;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
@@ -13,6 +14,8 @@ import com.example.android.mynews.data.DatabaseHelper;
  * It creates the database and fills the tables with the necessary
  * information if needed */
 public class ATLMainActCreateDatabase extends android.support.v4.content.AsyncTaskLoader<Boolean> {
+
+    private static final String TAG = "ATLMainActCreateDatabas";
 
     private DatabaseHelper dbH;
 
@@ -30,12 +33,14 @@ public class ATLMainActCreateDatabase extends android.support.v4.content.AsyncTa
     @Override
     public Boolean loadInBackground() {
 
+        Log.i(TAG, "loadInBackground: before Query ");
         if (dbH.isTableEmpty(DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME)){
             for (int i = 0; i < 7; i++) {
                 dbH.insertDataToSearchQueryTable("");
             }
         }
 
+        Log.i(TAG, "loadInBackground: before switch");
         if (dbH.isTableEmpty(DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME)) {
             dbH.insertDataToSwitchTable(0);
         }

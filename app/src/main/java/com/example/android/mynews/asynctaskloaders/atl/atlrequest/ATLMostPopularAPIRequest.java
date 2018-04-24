@@ -4,8 +4,7 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 import com.example.android.mynews.apirequesters.APIMostPopularRequester;
-import com.example.android.mynews.apirequesters.APITopStoriesRequester;
-import com.example.android.mynews.extras.Url;
+import com.example.android.mynews.extras.interfaceswithconstants.Url;
 import com.example.android.mynews.pojo.MostPopularAPIObject;
 
 import java.util.List;
@@ -14,8 +13,12 @@ import java.util.List;
  * Created by Diego Fajardo on 23/04/2018.
  */
 
-public class ATLMostPopularAPIRequest extends AsyncTaskLoader  <List<MostPopularAPIObject>>{
 
+/** This ATL is called when the user launches the Main Activity.
+ * It returns a listOfMostPopularAPI Objects that are used to display
+ * information in a recycler view */
+
+public class ATLMostPopularAPIRequest extends AsyncTaskLoader  <List<MostPopularAPIObject>>{
 
     public ATLMostPopularAPIRequest(Context context) {
         super(context);

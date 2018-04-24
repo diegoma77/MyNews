@@ -1,4 +1,4 @@
-package com.example.android.mynews.activities;
+package com.example.android.mynews.groupwaiting;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,22 +25,26 @@ import java.util.List;
  * Created by Diego Fajardo on 14/03/2018.
  */
 
-public class WebViewMainActivity extends AppCompatActivity {
+public class WebViewSearchActivityTrial extends AppCompatActivity {
 
-    //Tag
-    private static final String TAG = "WebViewMainActivity";
+    private static final String TAG = "WebViewSearchActivityTr";
 
     //Loader ID
+    private static final int LOADER_LOAD_URL = 84;
     private static final int LOADER_INSERT_URL_DATABASE = 20;
 
     //WebView
     private WebView mWebView;
 
-    //Variable that store the urk that will be loaded by the WebView
+    //Variable that store the url that will be loaded by the WebView
     private String article_url;
 
     //Progress Bar
     private ProgressBar progressBar;
+
+    // TODO: 24/04/2018 Define
+    Intent intent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +58,10 @@ public class WebViewMainActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        intent = getIntent();
+
         //We get the progress bar
         progressBar = (ProgressBar) findViewById(R.id.webView_progressBar);
-
-        //We get the url that will be displayed by the WebView and store it
-        Intent intent = getIntent();
-        article_url = intent.getStringExtra(Keys.PutExtras.ARTICLE_URL_SENT);
 
         //We insert the article in the database if needed
         loadLoaderInsertArticleUrlInDatabase(LOADER_INSERT_URL_DATABASE);
@@ -68,16 +70,18 @@ public class WebViewMainActivity extends AppCompatActivity {
         mWebView = (WebView) findViewById(R.id.webView);
         mWebView.setWebViewClient(new MyWebClient());
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.loadUrl(article_url);
+        //We load the url in the Loader Callback
+        loadLoaderDisplayListFromBackground(LOADER_LOAD_URL);
+
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
 
-                Intent intent = new Intent(WebViewMainActivity.this, MainActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(WebViewSearchActivityTrial.this, DisplaySearchArticlesActivityTrial.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -86,13 +90,13 @@ public class WebViewMainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        Intent intent = new Intent(WebViewMainActivity.this, MainActivity.class);
-        startActivity(intent);
-
+        startActivity(new Intent(WebViewSearchActivityTrial.this, DisplaySearchArticlesActivityTrial.class));
         super.onBackPressed();
     }
 
-    // TODO: 23/04/2018 Describe
+    /**
+     * Loading the website
+     */
     public class MyWebClient extends WebViewClient {
 
         @Override
@@ -114,13 +118,29 @@ public class WebViewMainActivity extends AppCompatActivity {
 
     }
 
-    /*****************
-     * LOADER ********
-     *****************/
+    /**************************
+     *** LOADERS **************
+     **************************/
+
+    private void loadLoaderDisplayListFromBackground(int id) {
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<Intent> loader = loaderManager.getLoader(id);
+
+        if (loader == null) {
+            Log.i(TAG, "loadLoaderUpdateList: ");
+            loaderManager.initLoader(id, null, displayListFromBackground);
+        } else {
+            Log.i(TAG, "loadLoaderUpdateList: ");
+            loaderManager.restartLoader(id, null, displayListFromBackground);
+        }
+
+    }
 
     /** Used to insert the article url
      * in the database if needed
      * */
+
     private void loadLoaderInsertArticleUrlInDatabase(int id) {
 
         android.support.v4.app.LoaderManager loaderManager = getSupportLoaderManager();
@@ -135,9 +155,36 @@ public class WebViewMainActivity extends AppCompatActivity {
         }
     }
 
-    /*************************
-     * LOADER CALLBACKS ******
-     *************************/
+
+    /**************************
+     *** LOADER CALLBACKS *****
+     **************************/
+
+    private LoaderManager.LoaderCallbacks<Intent> displayListFromBackground =
+            new LoaderManager.LoaderCallbacks<Intent>() {
+
+                @Override
+                public Loader<Intent> onCreateLoader(int id, Bundle args) {
+                    Log.i(TAG, "onCreateLoader: called! +++");
+                    return AsyncTaskLoaderHelper.sendIntentAndBringBack(WebViewSearchActivityTrial.this, intent);
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Intent> loader, Intent intent) {
+                    //We get the url that will be displayed by the WebView and store it
+                    article_url = intent.getStringExtra(Keys.PutExtras.ARTICLE_URL_SENT);
+
+                    //We load the url
+                    mWebView.loadUrl(article_url);
+
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Intent> loader) {
+
+                }
+
+            };
 
     /** Used to insert the article url
      * in the database if needed
@@ -148,6 +195,7 @@ public class WebViewMainActivity extends AppCompatActivity {
                 @Override
                 public Loader<String> onCreateLoader(int id, Bundle args) {
                     Log.i(TAG, "onCreateLoader: called! +++");
+                    article_url = intent.getStringExtra(Keys.PutExtras.ARTICLE_URL_SENT);
                     return AsyncTaskLoaderHelper.insertArticleUrlInDatabase(getApplicationContext(), article_url);
                 }
 
@@ -161,11 +209,4 @@ public class WebViewMainActivity extends AppCompatActivity {
 
                 }
             };
-
-
-
-
-
-
-
 }

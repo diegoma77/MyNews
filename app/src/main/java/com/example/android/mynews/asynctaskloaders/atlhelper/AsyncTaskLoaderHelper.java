@@ -1,9 +1,13 @@
 package com.example.android.mynews.asynctaskloaders.atlhelper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.Loader;
 import android.util.Log;
 
+import com.example.android.mynews.asynctaskloaders.atl.ATLDoNothing;
+import com.example.android.mynews.asynctaskloaders.atl.ATLFillListWithArticlesForSearchArticles;
+import com.example.android.mynews.asynctaskloaders.atl.atlwebview.ATLSendIntentBack;
 import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLFillListWithReadArticles;
 import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLInsertArticleInDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLMainActCreateDatabase;
@@ -12,7 +16,7 @@ import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateLi
 import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateSwitchDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateSwitchVariable;
 import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLMostPopularAPIRequest;
-import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLSearchArticlesAPIRequest;
+import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLSearchArticlesAPIRequestAndFillArticlesForSearchArticlesTable;
 import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLTopStoriesAPIRequest;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 import com.example.android.mynews.pojo.MostPopularAPIObject;
@@ -30,6 +34,12 @@ import java.util.List;
 public class AsyncTaskLoaderHelper {
 
     private static final String TAG = "AsyncTaskLoaderHelper";
+
+    /** Used to do sth in the background
+     * but only on the Loader Callback*/
+    public static Loader<Void> doNothing(Context context) {
+        return new ATLDoNothing(context);
+    }
 
     /************************
      * REQUESTS TO API ******
@@ -49,14 +59,21 @@ public class AsyncTaskLoaderHelper {
 
     /** Used to do requests
      * to ArticlesSearch API*/
-    public static Loader<List<ArticlesSearchAPIObject>> articlesSearchAPIRequest(Context context) {
-        return new ATLSearchArticlesAPIRequest(context);
+    public static Loader<List<ArticlesSearchAPIObject>> articlesSearchAPIRequest(Context context, List <String> listOfUrls) {
+        return new ATLSearchArticlesAPIRequestAndFillArticlesForSearchArticlesTable(context, listOfUrls);
     }
 
 
     /*****************************
-     * DATABASE METHODS GENERAL **
+     * DATABASE METHODS, GENERAL **
      ****************************/
+
+    /** Used to get an ArticlesSearchAPI objects list
+     * from the Database  */
+    public static Loader<List<ArticlesSearchAPIObject>> getListFromDatabaseArticlesForSearchArticles(Context context){
+        return new ATLFillListWithArticlesForSearchArticles(context);
+    }
+
 
     /** Used in MainActivity to create
      * the databases and fill the tables */
@@ -73,8 +90,17 @@ public class AsyncTaskLoaderHelper {
     /** Used to insert an article url in the database when the user clicks
      * the article in the recycler view. If the article already exists in the database
      * nothing is added */
-    public static Loader<String> insertArticleUrlInDatabase(Context mContext, String url) {
-        return new ATLInsertArticleInDatabase(mContext, url);
+    public static Loader<String> insertArticleUrlInDatabase(Context context, String url) {
+        return new ATLInsertArticleInDatabase(context, url);
+    }
+
+
+    /*****************************
+     * USED IN WEBVIEW **
+     ****************************/
+
+    public static Loader<Intent> sendIntentAndBringBack(Context context, Intent intent) {
+        return new ATLSendIntentBack(context, intent);
     }
 
 
@@ -105,6 +131,7 @@ public class AsyncTaskLoaderHelper {
         Log.i(TAG, "updateSwitchVariable: +++");
         return new ATLNotifUpdateSwitchVariable(context);
     }
+
 
 }
 

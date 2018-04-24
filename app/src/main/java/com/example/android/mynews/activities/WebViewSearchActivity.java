@@ -14,7 +14,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.example.android.mynews.R;
-import com.example.android.mynews.extras.Keys;
+import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 
 /**
  * Created by Diego Fajardo on 14/03/2018.

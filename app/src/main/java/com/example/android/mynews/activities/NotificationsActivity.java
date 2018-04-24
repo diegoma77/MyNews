@@ -25,7 +25,7 @@ import com.example.android.mynews.R;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.broadcastreceiver.NotificationReceiver;
 import com.example.android.mynews.data.DatabaseHelper;
-import com.example.android.mynews.extras.Keys;
+import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -1,8 +1,10 @@
-package com.example.android.mynews.activities;
+package com.example.android.mynews.groupwaiting;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,10 +19,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.activities.DisplaySearchArticlesActivity;
+import com.example.android.mynews.activities.MainActivity;
+import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
+import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.helperclasses.DateHelper;
+import com.example.android.mynews.extras.helperclasses.ToastHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.extras.interfaceswithconstants.Url;
+import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -29,7 +38,12 @@ import java.util.List;
  * Created by Diego Fajardo on 25/02/2018.
  */
 
-public class SearchArticlesActivity extends AppCompatActivity {
+public class SearchArticlesActivityTrial extends AppCompatActivity {
+
+    private static final String TAG = "SearchArticlesActivityT";
+
+    //Loader ID
+    private static final int LOADER_ARTICLES_SEARCH_API_REQUEST = 33;
 
     //List for sections
     private List<String> listOfSections;
@@ -121,7 +135,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
                 android.app.DatePickerDialog dialog = new android.app.DatePickerDialog(
-                        SearchArticlesActivity.this,
+                        SearchArticlesActivityTrial.this,
                         mBeginDateSetListener,
                         year, month, day);
                 dialog.show();
@@ -152,7 +166,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
                 android.app.DatePickerDialog dialog = new android.app.DatePickerDialog(
-                        SearchArticlesActivity.this,
+                        SearchArticlesActivityTrial.this,
                         mEndDateSetListener,
                         year, month, day);
                 dialog.show();
@@ -186,7 +200,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
                         && !cb_sports.isChecked()
                         && !cb_travel.isChecked()) {
                     
-                    Toast.makeText(SearchArticlesActivity.this,
+                    Toast.makeText(SearchArticlesActivityTrial.this,
                             getResources().getString(R.string.search_articles_toast_choose_one_category),
                             Toast.LENGTH_SHORT)
                             .show();
@@ -196,21 +210,23 @@ public class SearchArticlesActivity extends AppCompatActivity {
                     beginDate = DateHelper.getOneMonthAgoDateAndConvertToString();
 
                     //We call the intent to change activity. This method calls the necessary method for building the URL in the next activity
-                    createIntentForDisplayingSearchArticlesActivity();
+                    loadLoaderArticlesSearchAPIRequest(LOADER_ARTICLES_SEARCH_API_REQUEST);
 
                 } else if (!checkIfEndDateIsAfterBeginDate()) {
-                    Toast.makeText(SearchArticlesActivity.this,
+                    Toast.makeText(SearchArticlesActivityTrial.this,
                             getResources().getString(R.string.search_articles_toast_end_and_begin_dates),
                             Toast.LENGTH_SHORT)
                             .show();
                 } else if (checkIfEndDateIsAfterToday()) {
-                    Toast.makeText(SearchArticlesActivity.this,
+                    Toast.makeText(SearchArticlesActivityTrial.this,
                             getResources().getString(R.string.search_articles_toast_end_and_today_dates),
                             Toast.LENGTH_SHORT)
                             .show();
                 } else {
+
+                    // TODO: 24/04/2018 Call what is needed to start activity in other way
                     //We call the intent to change activity. This method calls the necessary method for building the URL in the next activity
-                    createIntentForDisplayingSearchArticlesActivity();
+                    loadLoaderArticlesSearchAPIRequest(LOADER_ARTICLES_SEARCH_API_REQUEST);
                 }
             }
         });
@@ -220,7 +236,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(SearchArticlesActivity.this, MainActivity.class);
+                Intent intent = new Intent(SearchArticlesActivityTrial.this, MainActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -394,7 +410,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
      */
     public void createIntentForDisplayingSearchArticlesActivity() {
 
-        Intent intent = new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class);
+        Intent intent = new Intent(SearchArticlesActivityTrial.this, DisplaySearchArticlesActivity.class);
         intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1,
                 getSearchArticlesUrl(
                 getSearchQueryAndAdaptForUrl(),
@@ -505,6 +521,102 @@ public class SearchArticlesActivity extends AppCompatActivity {
         else { return selectedYear + selectedMonth + selectedDay; }
 
     }
+
+    /** Method used to create the Lists of urls that will be used
+     * by the loaders to do the API requests
+     */
+    private List<String> createListOfUrls() {
+
+        List <String> listOfUrls = new ArrayList<>();
+
+        listOfUrls.add(getSearchArticlesUrl(
+                getSearchQueryAndAdaptForUrl(),
+                getNewDeskValuesAndAdaptForUrl(listOfSections),
+                beginDate,
+                endDate,
+                Url.ArticleSearchUrl.PAGE_ONE));
+
+        listOfUrls.add(getSearchArticlesUrl(
+                getSearchQueryAndAdaptForUrl(),
+                getNewDeskValuesAndAdaptForUrl(listOfSections),
+                beginDate,
+                endDate,
+                Url.ArticleSearchUrl.PAGE_TWO));
+
+        listOfUrls.add(getSearchArticlesUrl(
+                getSearchQueryAndAdaptForUrl(),
+                getNewDeskValuesAndAdaptForUrl(listOfSections),
+                beginDate,
+                endDate,
+                Url.ArticleSearchUrl.PAGE_THREE));
+
+        return listOfUrls;
+
+    }
+
+    /** Method that shows the progress information
+     */
+    private void showProgressInfo() {
+
+        LinearLayout layout = findViewById(R.id.progress_info);
+        layout.setVisibility(View.VISIBLE);
+
+    }
+
+
+    /**************************
+     *** LOADERS **************
+     **************************/
+
+    private void loadLoaderArticlesSearchAPIRequest(int id) {
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<List<ArticlesSearchAPIObject>> loader = loaderManager.getLoader(id);
+
+        if (loader == null) {
+            Log.i(TAG, "loadLoaderUpdateList: ");
+            loaderManager.initLoader(id, null, loaderArticlesSearchAPIRequest);
+        } else {
+            Log.i(TAG, "loadLoaderUpdateList: ");
+            loaderManager.restartLoader(id, null, loaderArticlesSearchAPIRequest);
+        }
+    }
+
+    /**************************
+     *** LOADER CALLBACKS *****
+     **************************/
+
+    private LoaderManager.LoaderCallbacks<List<ArticlesSearchAPIObject>> loaderArticlesSearchAPIRequest =
+            new LoaderManager.LoaderCallbacks<List<ArticlesSearchAPIObject>>() {
+
+                @Override
+                public Loader<List<ArticlesSearchAPIObject>> onCreateLoader(int id, Bundle args) {
+                    Log.i(TAG, "onCreateLoader: called! +++");
+
+                    showProgressInfo();
+
+                    return AsyncTaskLoaderHelper.articlesSearchAPIRequest(SearchArticlesActivityTrial.this, createListOfUrls());
+                }
+
+                @Override
+                public void onLoadFinished(Loader<List<ArticlesSearchAPIObject>> loader, List<ArticlesSearchAPIObject> data) {
+                    Log.i(TAG, "onLoadFinished: called! +++");
+
+                    if (data.size() != 0) {
+
+                        Intent intent = new Intent(SearchArticlesActivityTrial.this, DisplaySearchArticlesActivityTrial.class);
+                        startActivity(intent);
+
+                    } else {
+                        ToastHelper.toastShort(SearchArticlesActivityTrial.this, "No articles were found");
+                    }
+                }
+
+                @Override
+                public void onLoaderReset(Loader<List<ArticlesSearchAPIObject>> loader) {
+
+                }
+            };
 
 }
 

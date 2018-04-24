@@ -51,15 +51,28 @@ public class DatabaseContract {
          * ****/
 
         //TABLE NAME for Notifications Activity
-        public static final String ARTICLES_FOR_NOTIFICATION_TABLE_NAME = "switch_table";
+        public static final String ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME = "articles_for_search_articles";
+
+        //TABLE COLUMNS
+        public static final String SA_ARTICLES_ID = "id";
+        public static final String SA_WEB_URL = "web_url";
+        public static final String SA_SNIPPET = "snippet";
+        public static final String SA_IMAGE_URL = "image_url";
+        public static final String SA_NEW_DESK = "new_desk";
+        public static final String SA_PUB_DATE = "pub_date";
+
+        //TABLE NAME for Notifications Activity
+        public static final String ARTICLES_FOR_NOTIFICATION_TABLE_NAME = "articles_for_notifications";
 
         //TABLE COLUMNS
         public static final String NOTIF_ARTICLES_ID = "id";
-        public static final String WEB_URL = "web_url";
-        public static final String SNIPPET = "snippet";
-        public static final String IMAGE_URL = "image_url";
-        public static final String NEW_DESK = "new_desk";
-        public static final String PUB_DATE = "pub_date";
+        public static final String NOTIF_WEB_URL = "web_url";
+        public static final String NOTIF_SNIPPET = "snippet";
+        public static final String NOTIF_IMAGE_URL = "image_url";
+        public static final String NOTIF_NEW_DESK = "new_desk";
+        public static final String NOTIF_PUB_DATE = "pub_date";
+
+
 
     }
 

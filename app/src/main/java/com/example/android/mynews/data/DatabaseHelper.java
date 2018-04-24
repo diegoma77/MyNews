@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
+
 import java.util.ArrayList;
 
 /**
@@ -39,21 +41,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_ARTICLES_READ_TABLE =
             "CREATE TABLE " + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME
                     + " ("
-                    + DatabaseContract.Database.ARTICLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + DatabaseContract.Database.ARTICLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + DatabaseContract.Database.ARTICLE_URL + " TEXT NOT NULL"
                     + ")";
 
     private static final String CREATE_QUERY_OR_SECTION_TABLE =
             "CREATE TABLE " + DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME
                     + " ("
-                    + DatabaseContract.Database.QUERY_OR_SECTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + DatabaseContract.Database.QUERY_OR_SECTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + DatabaseContract.Database.QUERY_OR_SECTION + " TEXT NOT NULL"
                     + ")";
 
     private static final String CREATE_SWITCH_TABLE =
             "CREATE TABLE " + DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME
                     + " ("
-                    + DatabaseContract.Database.SWITCH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + DatabaseContract.Database.SWITCH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + DatabaseContract.Database.SWITCH_STATE + " FLAG INTEGER DEFAULT 0"
                     + ")";
 
@@ -62,14 +64,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * NEW STUFF
      */
 
+    private static final String CREATE_ARTICLES_FOR_SEARCH_ARTICLES_TABLE =
+            "CREATE TABLE " + DatabaseContract.Database.ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME
+                    + "( "
+                    + DatabaseContract.Database.SA_ARTICLES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + DatabaseContract.Database.SA_WEB_URL + " TEXT NOT NULL, "
+                    + DatabaseContract.Database.SA_SNIPPET + " TEXT NOT NULL, "
+                    + DatabaseContract.Database.SA_IMAGE_URL + " TEXT NOT NULL, "
+                    + DatabaseContract.Database.SA_NEW_DESK + " TEXT NOT NULL, "
+                    + DatabaseContract.Database.SA_PUB_DATE + " TEXT NOT NULL"
+                    + ")";
+
     private static final String CREATE_ARTICLES_FOR_NOTIFICATION_TABLE =
             "CREATE TABLE " + DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME
                     + "( "
-                    + DatabaseContract.Database.NOTIF_ARTICLES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + DatabaseContract.Database.WEB_URL + " TEXT NOT NULL"
-                    + DatabaseContract.Database.SNIPPET + " TEXT NOT NULL"
-                    + DatabaseContract.Database.IMAGE_URL + " TEXT NOT NULL"
-                    + DatabaseContract.Database.NEW_DESK + " TEXT NOT NULL"
+                    + DatabaseContract.Database.NOTIF_ARTICLES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + DatabaseContract.Database.NOTIF_WEB_URL + " TEXT NOT NULL, "
+                    + DatabaseContract.Database.NOTIF_SNIPPET + " TEXT NOT NULL, "
+                    + DatabaseContract.Database.NOTIF_IMAGE_URL + " TEXT NOT NULL, "
+                    + DatabaseContract.Database.NOTIF_NEW_DESK + " TEXT NOT NULL, "
+                    + DatabaseContract.Database.NOTIF_PUB_DATE + " TEXT NOT NULL"
                     + ")";
 
 
@@ -84,6 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_ARTICLES_READ_TABLE);
         sqLiteDatabase.execSQL(CREATE_QUERY_OR_SECTION_TABLE);
         sqLiteDatabase.execSQL(CREATE_SWITCH_TABLE);
+        sqLiteDatabase.execSQL(CREATE_ARTICLES_FOR_SEARCH_ARTICLES_TABLE);
         sqLiteDatabase.execSQL(CREATE_ARTICLES_FOR_NOTIFICATION_TABLE);
 
     }
@@ -99,6 +114,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME);
 
         //Create new table
@@ -109,6 +125,62 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /******************************
      * HELPER METHODS *************
      ******************************/
+
+    /** METHOD FOR INSERTING data in Articles For Search Articles Table
+     * */
+    public boolean insertDataToArticlesForSearchArticlesTable (ArticlesSearchAPIObject object) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseContract.Database.SA_WEB_URL, object.getWebUrl());
+        contentValues.put(DatabaseContract.Database.SA_SNIPPET, object.getSnippet());
+        contentValues.put(DatabaseContract.Database.SA_IMAGE_URL, object.getImageUrl());
+        contentValues.put(DatabaseContract.Database.SA_NEW_DESK, object.getNewDesk());
+        contentValues.put(DatabaseContract.Database.SA_PUB_DATE, object.getPubDate());
+
+        long result = db.insert(
+                DatabaseContract.Database.ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME,
+                null,
+                contentValues);
+
+        db.close();
+
+        if (result == -1) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    /** METHOD FOR INSERTING data in Articles For Notifications Table
+     * */
+    public boolean insertDataToArticlesForNotificationsTable (ArticlesSearchAPIObject object) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseContract.Database.SA_WEB_URL, object.getWebUrl());
+        contentValues.put(DatabaseContract.Database.SA_SNIPPET, object.getSnippet());
+        contentValues.put(DatabaseContract.Database.SA_IMAGE_URL, object.getImageUrl());
+        contentValues.put(DatabaseContract.Database.SA_NEW_DESK, object.getNewDesk());
+        contentValues.put(DatabaseContract.Database.SA_PUB_DATE, object.getPubDate());
+
+        long result = db.insert(
+                DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME,
+                null,
+                contentValues);
+
+        db.close();
+
+        if (result == -1) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 
     /**
      * METHOD FOR INSERTING data in Search Queries' Table

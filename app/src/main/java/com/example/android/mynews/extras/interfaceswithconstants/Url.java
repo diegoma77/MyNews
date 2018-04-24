@@ -1,4 +1,4 @@
-package com.example.android.mynews.extras;
+package com.example.android.mynews.extras.interfaceswithconstants;
 
 /**
  * Created by Diego Fajardo on 15/03/2018.

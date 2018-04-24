@@ -22,8 +22,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
-import com.example.android.mynews.extras.Keys;
-import com.example.android.mynews.extras.Url;
+import com.example.android.mynews.extras.interfaceswithconstants.Keys;
+import com.example.android.mynews.extras.interfaceswithconstants.Url;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 import com.example.android.mynews.rvadapters.RvAdapterDisplaySearchArticles;
 
@@ -204,8 +204,8 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
                 //We GET the data from the dataObject
                 if (docsObject.getString(Keys.SearchArticles.KEY_WEB_URL) != null) {
-                    articlesSearchAPIObject.setWeb_url(docsObject.getString(Keys.SearchArticles.KEY_WEB_URL));
-                    Log.i("WEB_URL", articlesSearchAPIObject.getWeb_url());
+                    articlesSearchAPIObject.setWebUrl(docsObject.getString(Keys.SearchArticles.KEY_WEB_URL));
+                    Log.i("WEB_URL", articlesSearchAPIObject.getWebUrl());
                 }
 
                 if (docsObject.getString(Keys.SearchArticles.KEY_SNIPPET) != null) {
@@ -219,11 +219,11 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
                     JSONObject multimedia_object = multimedia_array.getJSONObject(2);
 
                     if (multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL) != null) {
-                        articlesSearchAPIObject.setImage_url(Url.ArticleSearchUrl.IMAGE_URL_BASE + multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL));
-                        Log.i("IMAGE_URL", articlesSearchAPIObject.getImage_url());
+                        articlesSearchAPIObject.setImageUrl(Url.ArticleSearchUrl.IMAGE_URL_BASE + multimedia_object.getString(Keys.SearchArticles.KEY_IMAGE_URL));
+                        Log.i("IMAGE_URL", articlesSearchAPIObject.getImageUrl());
                     }
                 } else {
-                    articlesSearchAPIObject.setImage_url("");
+                    articlesSearchAPIObject.setImageUrl("");
                     Log.i("IMAGE_URL", "ARRAY.size() = 0");
                 }
 
@@ -234,16 +234,16 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
                     String month = pub_date.substring(5,7);
                     String year = pub_date.substring(0,4);
                     pub_date = day + "/" + month + "/" + year;
-                    articlesSearchAPIObject.setPub_date(pub_date);
-                    Log.i("PUB_DATE", articlesSearchAPIObject.getPub_date());
+                    articlesSearchAPIObject.setPubDate(pub_date);
+                    Log.i("PUB_DATE", articlesSearchAPIObject.getPubDate());
                 }
 
                 if (docsObject.getString(Keys.SearchArticles.KEY_NEW_DESK) != null) {
                     if (docsObject.getString(Keys.SearchArticles.KEY_NEW_DESK).equals("None")) {
-                        articlesSearchAPIObject.setNew_desk("General");
+                        articlesSearchAPIObject.setNewDesk("General");
                     }
-                    else { articlesSearchAPIObject.setNew_desk(docsObject.getString(Keys.SearchArticles.KEY_NEW_DESK)); }
-                    Log.i("NEW_DESK", articlesSearchAPIObject.getNew_desk());
+                    else { articlesSearchAPIObject.setNewDesk(docsObject.getString(Keys.SearchArticles.KEY_NEW_DESK)); }
+                    Log.i("NEW_DESK", articlesSearchAPIObject.getNewDesk());
                 }
 
                 //We put the object with the results into the ArrayList articlesSearchAPIObjectList;

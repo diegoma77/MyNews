@@ -1,34 +1,34 @@
 package com.example.android.mynews.pojo;
 
-import com.example.android.mynews.activities.SearchArticlesActivity;
+import java.io.Serializable;
 
 /**
  * Created by Diego Fajardo on 17/03/2018.
  */
 
-public class ArticlesSearchAPIObject {
+public class ArticlesSearchAPIObject implements Serializable {
 
-    private String web_url = "web_url";
+    private String webUrl = "webUrl";
     private String snippet = "snippet";
-    private String image_url = "url";
-    private String new_desk = "new_desk";
-    private String pub_date = "pub_date";
+    private String imageUrl = "url";
+    private String newDesk = "newDesk";
+    private String pubDate = "pubDate";
 
     public ArticlesSearchAPIObject() { }
 
-    public ArticlesSearchAPIObject(String web_url, String snippet, String image_url, String pub_date) {
-        this.web_url = web_url;
+    public ArticlesSearchAPIObject(String webUrl, String snippet, String imageUrl, String pubDate) {
+        this.webUrl = webUrl;
         this.snippet = snippet;
-        this.image_url = image_url;
-        this.pub_date = pub_date;
+        this.imageUrl = imageUrl;
+        this.pubDate = pubDate;
     }
 
-    public String getWeb_url() {
-        return web_url;
+    public String getWebUrl() {
+        return webUrl;
     }
 
-    public void setWeb_url(String web_url) {
-        this.web_url = web_url;
+    public void setWebUrl(String webUrl) {
+        this.webUrl = webUrl;
     }
 
     public String getSnippet() {
@@ -39,27 +39,27 @@ public class ArticlesSearchAPIObject {
         this.snippet = snippet;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public String getNew_desk() {
-        return new_desk;
+    public String getNewDesk() {
+        return newDesk;
     }
 
-    public void setNew_desk(String new_desk) {
-        this.new_desk = new_desk;
+    public void setNewDesk(String newDesk) {
+        this.newDesk = newDesk;
     }
 
-    public String getPub_date() {
-        return pub_date;
+    public String getPubDate() {
+        return pubDate;
     }
 
-    public void setPub_date(String pub_date) {
-        this.pub_date = pub_date;
+    public void setPubDate(String pubDate) {
+        this.pubDate = pubDate;
     }
 }

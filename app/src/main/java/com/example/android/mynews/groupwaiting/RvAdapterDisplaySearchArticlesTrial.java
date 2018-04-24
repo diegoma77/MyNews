@@ -1,4 +1,4 @@
-package com.example.android.mynews.rvadapterstrial;
+package com.example.android.mynews.groupwaiting;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,8 +15,9 @@ import com.bumptech.glide.Glide;
 import com.example.android.mynews.R;
 import com.example.android.mynews.activities.WebViewMainActivity;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
-import com.example.android.mynews.pojo.MostPopularAPIObject;
+import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,18 +25,17 @@ import java.util.List;
  * Created by Diego Fajardo on 25/02/2018.
  */
 
-public class RvAdapterMostPopularTrial extends RecyclerView.Adapter<RvAdapterMostPopularTrial.ViewHolder> {
-
-    // TODO: 23/04/2018 Adapt the RecyclerView to display the required information
+public class RvAdapterDisplaySearchArticlesTrial extends RecyclerView.Adapter<RvAdapterDisplaySearchArticlesTrial.ViewHolder> {
 
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
-    private static final String TAG = RvAdapterMostPopularTrial.class.getSimpleName();
+    private static final String TAG = RvAdapterDisplaySearchArticlesTrial.class.getSimpleName();
 
     //Loader ID
-    private static final int LOADER_INSERT_ARTICLE_DATABASE = 12;
+    private static final int LOADER_INSERT_ARTICLE_DATABASE = 99;
 
-    //Array that will store TopStoriesAPIObjects after request
-    private List<MostPopularAPIObject> listOfMostPopularAPIObjects;
+    // TODO: 24/04/2018 Remember to carry this to the next activity
+    //List of Search articles
+    private List<ArticlesSearchAPIObject> listOfArticlesSearchAPIObjects = new ArrayList<>();
 
     //List that stores the database urls
     private List<String> listOfArticlesReadInTheDatabase;
@@ -44,10 +44,10 @@ public class RvAdapterMostPopularTrial extends RecyclerView.Adapter<RvAdapterMos
     private Context mContext;
 
     //Constructor of the RvAdapter
-    public RvAdapterMostPopularTrial(Context context, List<MostPopularAPIObject> listOfObjects, List<String> listOfUrls) {
+    public RvAdapterDisplaySearchArticlesTrial(Context context, List<ArticlesSearchAPIObject> listOfObjects, List<String> listOfUrls) {
         this.mContext = context;
-        this.listOfMostPopularAPIObjects = new ArrayList<>();
-        this.listOfMostPopularAPIObjects = listOfObjects;
+        this.listOfArticlesSearchAPIObjects = new ArrayList<>();
+        this.listOfArticlesSearchAPIObjects = listOfObjects;
         this.listOfArticlesReadInTheDatabase = new ArrayList<>();
         this.listOfArticlesReadInTheDatabase = listOfUrls;
 
@@ -65,66 +65,71 @@ public class RvAdapterMostPopularTrial extends RecyclerView.Adapter<RvAdapterMos
                 viewGroup,
                 shouldAttachToParentImmediately);
 
-        ViewHolder viewHolder = new ViewHolder(view);
+        RvAdapterDisplaySearchArticlesTrial.ViewHolder viewHolder = new RvAdapterDisplaySearchArticlesTrial.ViewHolder(view);
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         Log.d(TAG, "#" + position);
 
         Log.i("POSITION: " + position, "listOfArticlesInDatabase = " + listOfArticlesReadInTheDatabase.size());
 
-        if (listOfArticlesReadInTheDatabase.contains(listOfMostPopularAPIObjects.get(position).getArticleUrl())){
+        if (listOfArticlesReadInTheDatabase.contains(listOfArticlesSearchAPIObjects.get(position).getWebUrl())){
             Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
             holder.title.setTypeface(bold);
         }
 
-        holder.title.setText(listOfMostPopularAPIObjects.get(position).getTitle());
-        holder.section.setText("Top Stories < " + listOfMostPopularAPIObjects.get(position).getSection());
-        holder.update_date.setText(listOfMostPopularAPIObjects.get(position).getPublishedDate());
+        holder.title.setText(listOfArticlesSearchAPIObjects.get(position).getSnippet());
+        holder.section.setText("Top Stories < " + listOfArticlesSearchAPIObjects.get(position).getNewDesk());
+        holder.published_date.setText(listOfArticlesSearchAPIObjects.get(position).getPubDate());
 
-        if (listOfMostPopularAPIObjects.get(position).getImage_thumbnail() == null) {
+        if (listOfArticlesSearchAPIObjects.get(position).getImageUrl() == null) {
             Glide.with(mContext)
                     .load(R.drawable.nyt)
                     .into(holder.imageOnLeft);
         }
         else {
             Glide.with(mContext)
-                    .load(listOfMostPopularAPIObjects.get(position).getImage_thumbnail())
+                    .load(listOfArticlesSearchAPIObjects.get(position).getImageUrl())
                     .into(holder.imageOnLeft);
         }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Log.i("ONCLICK - POSITION", "#" + " CLICKED");
                 Context context = v.getContext();
 
                 /** Since we cannot call here "getSupportLoaderManager()", we will add the url
                  * to the database in the next activity (if it is not there yet) */
 
-                Intent intent = new Intent(context, WebViewMainActivity.class);
-                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, listOfMostPopularAPIObjects.get(position).getArticleUrl());
+                Intent intent = new Intent(context, WebViewSearchActivityTrial.class);
+
+                /** We pass the webUrl that the next activity has to load and show
+                 * in the webView */
+                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, listOfArticlesSearchAPIObjects.get(position).getWebUrl());
                 context.startActivity(intent);
+
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        if (listOfMostPopularAPIObjects == null) { return 0; }
-        return listOfMostPopularAPIObjects.size();
+        if (listOfArticlesSearchAPIObjects == null) { return 0; }
+        return listOfArticlesSearchAPIObjects.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final View mView;
+        private View mView;
         private ImageView imageOnLeft;
         private TextView section;
-        private TextView update_date;
+        private TextView published_date;
         private TextView title;
 
         public ViewHolder(View view) {
@@ -133,7 +138,7 @@ public class RvAdapterMostPopularTrial extends RecyclerView.Adapter<RvAdapterMos
             mView = view.findViewById(R.id.list_item_globalLayout);
             imageOnLeft = view.findViewById(R.id.list_item_image_news);
             section = view.findViewById(R.id.list_item_continent);
-            update_date = view.findViewById(R.id.list_item_date);
+            published_date = view.findViewById(R.id.list_item_date);
             title = view.findViewById(R.id.list_item_news_text);
 
         }

@@ -17,7 +17,7 @@ import com.example.android.mynews.R;
 import com.example.android.mynews.activities.WebViewSearchActivity;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
-import com.example.android.mynews.extras.Keys;
+import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 
 import java.util.ArrayList;
@@ -83,24 +83,24 @@ public class RvAdapterDisplayNotificationArticles extends RecyclerView.Adapter<R
 
         Log.d(TAG, "#" + position);
 
-        if (checkIfArticleUrlIsInTheDatabase(notificationArticlesList.get(position).getWeb_url())) {
+        if (checkIfArticleUrlIsInTheDatabase(notificationArticlesList.get(position).getWebUrl())) {
             Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
             holder.title.setTypeface(bold);
         }
 
         holder.title.setText(notificationArticlesList.get(position).getSnippet());
-        holder.section.setText(notificationArticlesList.get(position).getNew_desk());
-        holder.published_date.setText(notificationArticlesList.get(position).getPub_date());
+        holder.section.setText(notificationArticlesList.get(position).getNewDesk());
+        holder.published_date.setText(notificationArticlesList.get(position).getPubDate());
 
-        if (notificationArticlesList.get(position).getImage_url() == null ||
-                notificationArticlesList.get(position).getImage_url().equals("")) {
+        if (notificationArticlesList.get(position).getImageUrl() == null ||
+                notificationArticlesList.get(position).getImageUrl().equals("")) {
             Glide.with(mContext)
                     .load(R.drawable.nyt)
                     .into(holder.imageOnLeft);
         }
         else {
             Glide.with(mContext)
-                    .load(notificationArticlesList.get(position).getImage_url())
+                    .load(notificationArticlesList.get(position).getImageUrl())
                     .into(holder.imageOnLeft);
         }
 
@@ -113,14 +113,14 @@ public class RvAdapterDisplayNotificationArticles extends RecyclerView.Adapter<R
 
                 //Checks that the article is not yet in the database. If it is, we don't add it.
                 //If it's not, we add it. This way we keep the track of the articles the user has read
-                if (!checkIfArticleUrlIsInTheDatabase(notificationArticlesList.get(position).getWeb_url())){
-                    dbH.insertDataToAlreadyReadArticlesTable(notificationArticlesList.get(position).getWeb_url());
+                if (!checkIfArticleUrlIsInTheDatabase(notificationArticlesList.get(position).getWebUrl())){
+                    dbH.insertDataToAlreadyReadArticlesTable(notificationArticlesList.get(position).getWebUrl());
                 }
 
                 Intent intent = new Intent(context, WebViewSearchActivity.class);
 
                 //Puts an extra that will be the url that the webView will read
-                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, notificationArticlesList.get(position).getWeb_url());
+                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, notificationArticlesList.get(position).getWebUrl());
 
                 //Puts 3 extras that will be the urls sent to API when we return with back buttons
                 intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, notificationArticlesListOfUrls.get(0));

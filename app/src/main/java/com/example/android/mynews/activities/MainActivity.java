@@ -27,8 +27,12 @@ import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
 import com.example.android.mynews.R;
 import com.example.android.mynews.fragmentstrial.PageFragmentMostPopularTrial;
+import com.example.android.mynews.groupwaiting.DisplaySearchArticlesActivityTrial;
+import com.example.android.mynews.groupwaiting.SearchArticlesActivityTrial;
 
 // TODO: 30/03/2018 The tablet crashes when showing the DF image
+// TODO: 24/04/2018 Pay attention to loader IDs
+// TODO: 24/04/2018 Add button in notifications to see the articles displayed by notifications
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.menu_search_button:
-                Intent intent1 = new Intent(MainActivity.this, SearchArticlesActivity.class);
+                // TODO: 24/04/2018 Changes SearchArticlesActivity to SAActivityTrial
+                Intent intent1 = new Intent(MainActivity.this, SearchArticlesActivityTrial.class);
                 startActivity(intent1);
                 break;
             case R.id.menu_notifications_button:
@@ -98,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity (new Intent(MainActivity.this, HelpActivity.class));
                 break;
             case R.id.menu_about_button:
-                startActivity (new Intent(MainActivity.this, AboutActivity.class));
+                startActivity (new Intent(MainActivity.this, DisplaySearchArticlesActivityTrial.class));
                 break;
 
         }

@@ -2,7 +2,6 @@ package com.example.android.mynews.apirequesters;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -10,7 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.android.mynews.extras.Keys;
+import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.extras.helperclasses.ToastHelper;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
 
@@ -74,8 +73,7 @@ public class APITopStoriesRequester {
      * METHODS TO DO THE API REQUEST ****
      ************************************/
 
-    public void startJSONRequestTopStoriesAPI(
-            String url) {
+    public void startJSONRequestTopStoriesAPI(String url) {
 
         //Creating a request queue
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -199,9 +197,5 @@ public class APITopStoriesRequester {
         }
 
     }
-
-
-
-
 
 }
