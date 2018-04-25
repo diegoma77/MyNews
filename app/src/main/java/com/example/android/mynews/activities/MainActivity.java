@@ -163,8 +163,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     /*****************************/
     /** METHODS TO INIT LOADERS **/
     /*****************************/
@@ -185,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
             loaderManager.restartLoader(id, null, loaderCreateDatabase);
         }
     }
+
 
     /**********************/
     /** LOADER CALLBACKS **/
