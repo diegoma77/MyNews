@@ -1,6 +1,14 @@
 package com.example.android.mynews;
 
+import android.util.Log;
+
+import com.example.android.mynews.groupwaiting.SearchArticlesActivityTrial;
+
 import org.junit.Test;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
 
 import static org.junit.Assert.*;
 
@@ -11,9 +19,32 @@ import static org.junit.Assert.*;
  */
 public class ExampleUnitTest {
 
+    @Test
+    public void checkIfDateIsAfterToday() throws Exception {
+
+        LocalDate date = LocalDate.of(2014, 3, 18);
+        LocalDate today = LocalDate.now( );
+
+        Boolean isToday = date.isBefore(today);
+
+        assertTrue(isToday);
+        assertFalse(!isToday);
+        assertTrue(date.toString().equals("2014-03-18"));
+
+    }
 
     @Test
-    public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+    public void checkCalendarComparison() throws Exception {
+
+        Calendar calendarA = Calendar.getInstance();
+        Calendar calendarNow = Calendar.getInstance();
+
+        calendarA.set(2014,3,12);
+
+        long a = calendarA.getTimeInMillis();
+        long nowMillis = calendarNow.getTimeInMillis();
+
+        assertTrue(nowMillis > a);
     }
+
 }
