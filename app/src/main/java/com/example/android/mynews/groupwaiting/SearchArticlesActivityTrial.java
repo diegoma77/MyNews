@@ -245,28 +245,6 @@ public class SearchArticlesActivityTrial extends AppCompatActivity {
                         SearchArticlesActivityTrial.this,
                         getResources().getString(R.string.search_articles_toast_choose_one_category));
 
-                /** If beginDate and endDate haven't been modified,
-                 * the system gets today's date as endDate and
-                 * 30 days ago as beginDate
-                 * */
-            } else if (calendarBeginDate == Calendar.getInstance() && calendarEndDate == Calendar.getInstance()) {
-
-                calendarBeginDate.add(Calendar.DATE, -30);
-
-                SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
-
-                if (calendarBeginDate != null){
-                    beginDate = sdf.format(calendarEndDate.getTime());
-                }
-
-                if (calendarEndDate != null){
-                    endDate = sdf.format(calendarEndDate.getTime());
-                }
-
-                //We start the API Request
-                loadLoaderArticlesSearchAPIRequest(LOADER_ARTICLES_SEARCH_API_REQUEST);
-
-
                 /** The endDate must be
                  * after beginDate
                  * */
@@ -294,6 +272,9 @@ public class SearchArticlesActivityTrial extends AppCompatActivity {
                  * the API Request
                  * */
             } else {
+
+                Log.i(TAG, "onClick last else beginDate: " + beginDate);
+                Log.i(TAG, "onClick last else endDate: " + endDate);
 
                 //We start the API Request
                 loadLoaderArticlesSearchAPIRequest(LOADER_ARTICLES_SEARCH_API_REQUEST);
