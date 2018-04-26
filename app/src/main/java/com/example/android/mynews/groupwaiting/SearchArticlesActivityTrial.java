@@ -16,22 +16,17 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.mynews.R;
-import com.example.android.mynews.activities.DisplaySearchArticlesActivity;
 import com.example.android.mynews.activities.MainActivity;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
-import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.helperclasses.DateHelper;
 import com.example.android.mynews.extras.helperclasses.ToastHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.extras.interfaceswithconstants.Url;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;

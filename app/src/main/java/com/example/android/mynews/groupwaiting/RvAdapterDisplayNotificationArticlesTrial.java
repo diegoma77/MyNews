@@ -2,7 +2,6 @@ package com.example.android.mynews.groupwaiting;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,11 +13,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.mynews.R;
-import com.example.android.mynews.activities.WebViewSearchActivity;
-import com.example.android.mynews.data.DatabaseContract;
-import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
+import com.example.android.mynews.rvadapters.RvAdapterDisplayNotificationArticles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,39 +27,32 @@ import java.util.List;
 public class RvAdapterDisplayNotificationArticlesTrial extends RecyclerView.Adapter<RvAdapterDisplayNotificationArticlesTrial.ViewHolder> {
 
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
-    private static final String TAG = RvAdapterDisplayNotificationArticlesTrial.class.getSimpleName();
+    private static final String TAG = "RvAdapterDisplayNotific";
 
-    private List<ArticlesSearchAPIObject> notificationArticlesList = new ArrayList<>();
+    //Loader ID
+    private static final int LOADER_INSERT_ARTICLE_DATABASE = 99;
 
-    //Variable used to avoid crashing when WebViewSearchActivity returns to DisplaySearchArticlesActivity
-    //We carry these urls to the WebViewSearchActivity so it can bring them back when home back button
-    //or back button are pressed
-    private List<String> notificationArticlesListOfUrls;
+    //List of Search articles
+    private List<ArticlesSearchAPIObject> listOfArticlesSearchAPIObjects = new ArrayList<>();
+
+    //List that stores the database urls
+    private List<String> listOfArticlesReadInTheDatabase;
 
     //Context of the activity
     private Context mContext;
 
-    //Cursor to check if an article is in the database
-    private Cursor mCursor;
-
-    //DatabaseHelper to add an article_url to the database if it hasn't been read
-    private DatabaseHelper dbH;
-
-    public RvAdapterDisplayNotificationArticlesTrial(Context context,
-                                                     List<ArticlesSearchAPIObject> notificationArticlesList,
-                                                     Cursor cursor,
-                                                     List<String> notificationArticlesListOfUrls) {
+    //Constructor of the RvAdapter
+    public RvAdapterDisplayNotificationArticlesTrial(Context context, List<ArticlesSearchAPIObject> listOfObjects, List<String> listOfUrls) {
         this.mContext = context;
-        this.notificationArticlesList = notificationArticlesList;
-        this.mCursor = cursor;
-        this.notificationArticlesListOfUrls = notificationArticlesListOfUrls;
+        this.listOfArticlesSearchAPIObjects = new ArrayList<>();
+        this.listOfArticlesSearchAPIObjects = listOfObjects;
+        this.listOfArticlesReadInTheDatabase = new ArrayList<>();
+        this.listOfArticlesReadInTheDatabase = listOfUrls;
+
     }
 
-
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-
-        dbH = new DatabaseHelper(mContext);
+    public RvAdapterDisplayNotificationArticlesTrial.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
         Context context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.list_item_fragment;
@@ -73,60 +63,53 @@ public class RvAdapterDisplayNotificationArticlesTrial extends RecyclerView.Adap
                 viewGroup,
                 shouldAttachToParentImmediately);
 
-        ViewHolder viewHolder = new ViewHolder(view);
+        RvAdapterDisplayNotificationArticlesTrial.ViewHolder viewHolder = new RvAdapterDisplayNotificationArticlesTrial.ViewHolder(view);
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RvAdapterDisplayNotificationArticlesTrial.ViewHolder holder, final int position) {
 
         Log.d(TAG, "#" + position);
 
-        if (checkIfArticleUrlIsInTheDatabase(notificationArticlesList.get(position).getWebUrl())) {
+        Log.i("POSITION: " + position, "listOfArticlesInDatabase = " + listOfArticlesReadInTheDatabase.size());
+
+        if (listOfArticlesReadInTheDatabase.contains(listOfArticlesSearchAPIObjects.get(position).getWebUrl())){
             Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
             holder.title.setTypeface(bold);
         }
 
-        holder.title.setText(notificationArticlesList.get(position).getSnippet());
-        holder.section.setText(notificationArticlesList.get(position).getNewDesk());
-        holder.published_date.setText(notificationArticlesList.get(position).getPubDate());
+        holder.title.setText(listOfArticlesSearchAPIObjects.get(position).getSnippet());
+        holder.section.setText("Top Stories < " + listOfArticlesSearchAPIObjects.get(position).getNewDesk());
+        holder.published_date.setText(listOfArticlesSearchAPIObjects.get(position).getPubDate());
 
-        if (notificationArticlesList.get(position).getImageUrl() == null ||
-                notificationArticlesList.get(position).getImageUrl().equals("")) {
+        if (listOfArticlesSearchAPIObjects.get(position).getImageUrl() == null) {
             Glide.with(mContext)
                     .load(R.drawable.nyt)
                     .into(holder.imageOnLeft);
         }
         else {
             Glide.with(mContext)
-                    .load(notificationArticlesList.get(position).getImageUrl())
+                    .load(listOfArticlesSearchAPIObjects.get(position).getImageUrl())
                     .into(holder.imageOnLeft);
         }
-
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("ONCLICK - POSITION","#" + " CLICKED");
+
+                Log.i("ONCLICK - POSITION", "#" + " CLICKED");
                 Context context = v.getContext();
 
-                //Checks that the article is not yet in the database. If it is, we don't add it.
-                //If it's not, we add it. This way we keep the track of the articles the user has read
-                if (!checkIfArticleUrlIsInTheDatabase(notificationArticlesList.get(position).getWebUrl())){
-                    dbH.insertDataToAlreadyReadArticlesTable(notificationArticlesList.get(position).getWebUrl());
-                }
+                /** Since we cannot call here "getSupportLoaderManager()", we will add the url
+                 * to the database in the next activity (if it is not there yet) */
 
-                Intent intent = new Intent(context, WebViewSearchActivity.class);
+                Intent intent = new Intent(context, WebViewSearchActivityTrial.class);
 
-                //Puts an extra that will be the url that the webView will read
-                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, notificationArticlesList.get(position).getWebUrl());
-
-                //Puts 3 extras that will be the urls sent to API when we return with back buttons
-                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, notificationArticlesListOfUrls.get(0));
-                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE2, notificationArticlesListOfUrls.get(1));
-                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE3, notificationArticlesListOfUrls.get(2));
-
+                /** We pass the webUrl that the next activity has to load and show
+                 * in the webView */
+                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, listOfArticlesSearchAPIObjects.get(position).getWebUrl());
                 context.startActivity(intent);
 
             }
@@ -135,8 +118,8 @@ public class RvAdapterDisplayNotificationArticlesTrial extends RecyclerView.Adap
 
     @Override
     public int getItemCount() {
-        if (notificationArticlesList == null) { return 0; }
-        return notificationArticlesList.size();
+        if (listOfArticlesSearchAPIObjects == null) { return 0; }
+        return listOfArticlesSearchAPIObjects.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -158,33 +141,6 @@ public class RvAdapterDisplayNotificationArticlesTrial extends RecyclerView.Adap
 
         }
 
-        public void bindViewHolder (int position) {
-
-            //section.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SECTION)));
-            //title.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.TITLE)));
-            //update_date.setText(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.UPDATE_DATE)));
-            //imageOnLeft.setImageResource(R.drawable.rajoy);
-
-        }
-    }
-
-    /**
-     * Checks if the article is in the database.
-     * It's used to check if an article has already been read or not.
-     * */
-    private boolean checkIfArticleUrlIsInTheDatabase(String web_url) {
-
-        int counter = 0;
-
-        for (int i = 0; i < mCursor.getCount() ; i++) {
-            mCursor.moveToPosition(i);
-            if (mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.ARTICLE_URL)).equals(web_url)){
-                counter++;
-            }
-        }
-
-        if (counter != 0) return true;
-        else return false;
     }
 
 }

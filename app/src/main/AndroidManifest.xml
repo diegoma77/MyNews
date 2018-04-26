@@ -21,10 +21,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.AboutActivity" />
-        <activity
-            android:name=".activities.DisplayNotificationsActivity"
-            android:exported="true" />
-        <activity android:name=".activities.DisplaySearchArticlesActivity" />
         <activity android:name=".activities.HelpActivity" />
         <activity android:name=".activities.SearchArticlesActivity" />
         <activity android:name=".activities.WebViewMainActivity" />

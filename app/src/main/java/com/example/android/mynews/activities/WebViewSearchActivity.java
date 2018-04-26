@@ -15,10 +15,13 @@ import android.widget.ProgressBar;
 
 import com.example.android.mynews.R;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
+import com.example.android.mynews.groupwaiting.DisplaySearchArticlesActivityTrial;
 
 /**
  * Created by Diego Fajardo on 14/03/2018.
  */
+
+// TODO: 26/04/2018 Modify!
 
 public class WebViewSearchActivity extends AppCompatActivity {
 
@@ -80,7 +83,7 @@ public class WebViewSearchActivity extends AppCompatActivity {
             case android.R.id.home:
 
                 //The intent carries the urls needed to display articles in DisplaySearchArticlesActivity
-                Intent intent = new Intent(WebViewSearchActivity.this, DisplaySearchArticlesActivity.class);
+                Intent intent = new Intent(WebViewSearchActivity.this, DisplaySearchArticlesActivityTrial.class);
                 intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, url1);
                 intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE2, url2);
                 intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE3, url3);
@@ -94,7 +97,7 @@ public class WebViewSearchActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         //The intent carries the urls needed to display articles in DisplaySearchArticlesActivity
-        Intent intent = new Intent(WebViewSearchActivity.this, DisplaySearchArticlesActivity.class);
+        Intent intent = new Intent(WebViewSearchActivity.this, DisplaySearchArticlesActivityTrial.class);
         intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, url1);
         intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE2, url2);
         intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE3, url3);

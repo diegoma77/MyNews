@@ -13,11 +13,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.mynews.R;
-import com.example.android.mynews.activities.WebViewMainActivity;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +31,6 @@ public class RvAdapterDisplaySearchArticlesTrial extends RecyclerView.Adapter<Rv
     //Loader ID
     private static final int LOADER_INSERT_ARTICLE_DATABASE = 99;
 
-    // TODO: 24/04/2018 Remember to carry this to the next activity
     //List of Search articles
     private List<ArticlesSearchAPIObject> listOfArticlesSearchAPIObjects = new ArrayList<>();
 
@@ -86,16 +83,16 @@ public class RvAdapterDisplaySearchArticlesTrial extends RecyclerView.Adapter<Rv
         holder.section.setText("Top Stories < " + listOfArticlesSearchAPIObjects.get(position).getNewDesk());
         holder.published_date.setText(listOfArticlesSearchAPIObjects.get(position).getPubDate());
 
+        Glide.with(mContext)
+                .load(listOfArticlesSearchAPIObjects.get(position).getImageUrl())
+                .into(holder.imageOnLeft);
+
         if (listOfArticlesSearchAPIObjects.get(position).getImageUrl() == null) {
             Glide.with(mContext)
                     .load(R.drawable.nyt)
                     .into(holder.imageOnLeft);
         }
-        else {
-            Glide.with(mContext)
-                    .load(listOfArticlesSearchAPIObjects.get(position).getImageUrl())
-                    .into(holder.imageOnLeft);
-        }
+
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

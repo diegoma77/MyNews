@@ -14,10 +14,10 @@ import android.support.v4.app.NotificationCompat;
 import com.evernote.android.job.DailyJob;
 import com.evernote.android.job.JobRequest;
 import com.example.android.mynews.R;
-import com.example.android.mynews.activities.DisplayNotificationsActivity;
 import com.example.android.mynews.apirequesters.APISearchArticlesRequester;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
+import com.example.android.mynews.groupwaiting.DisplayNotificationsActivityTrial;
 
 import java.util.concurrent.TimeUnit;
 
@@ -126,7 +126,7 @@ public class NotificationDailyJob extends DailyJob {
     private PendingIntent contentIntent (Context context) {
 
         //When the user clicks the notification the app will be redirected to the activity
-        Intent intent = new Intent(context, DisplayNotificationsActivity.class);
+        Intent intent = new Intent(context, DisplayNotificationsActivityTrial.class);
 
         //We ensure that the activity will be replaced if needed, although the activity
         // was already open or running in the background

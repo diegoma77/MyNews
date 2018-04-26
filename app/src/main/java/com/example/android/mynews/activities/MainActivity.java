@@ -33,7 +33,8 @@ import com.example.android.mynews.groupwaiting.SearchArticlesActivityTrial;
 
 // TODO: 30/03/2018 The tablet crashes when showing the DF image
 // TODO: 24/04/2018 Pay attention to loader IDs
-// TODO: 24/04/2018 Add button in notifications to see the articles displayed by notifications
+// TODO: 26/04/2018 Too many requests are done at the same time in MainActivity. Change that
+// TODO: 26/04/2018 Some images (SearchArticles) load too slow
 
 public class MainActivity extends AppCompatActivity {
 

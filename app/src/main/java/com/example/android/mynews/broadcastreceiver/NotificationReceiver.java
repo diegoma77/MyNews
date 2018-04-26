@@ -7,20 +7,11 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.example.android.mynews.R;
-import com.example.android.mynews.activities.DisplayNotificationsActivity;
-import com.example.android.mynews.activities.DisplaySearchArticlesActivity;
-import com.example.android.mynews.data.DatabaseContract;
-import com.example.android.mynews.data.DatabaseHelper;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.android.mynews.groupwaiting.DisplayNotificationsActivityTrial;
 
 /**
  * Created by Diego Fajardo on 24/03/2018.
@@ -80,7 +71,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     private static PendingIntent contentIntent (Context context) {
 
         //When the user clicks the notification the app will be redirected to the activity
-        Intent intent = new Intent(context, DisplayNotificationsActivity.class);
+        Intent intent = new Intent(context, DisplayNotificationsActivityTrial.class);
 
         //We ensure that the activity will be replaced if needed, although the activity
         // was already open or running in the background

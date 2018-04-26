@@ -28,10 +28,6 @@ public class ATLFillListWithArticlesForSearchArticles extends AsyncTaskLoader<Li
             Context context) {
         super(context);
         dbH = new DatabaseHelper(context);
-        if (!dbH.isTableEmpty(DatabaseContract.Database.ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME)) {
-            mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME);
-        }
-
     }
 
     @Override
@@ -45,8 +41,9 @@ public class ATLFillListWithArticlesForSearchArticles extends AsyncTaskLoader<Li
 
         List<ArticlesSearchAPIObject> listOfObjects = new ArrayList<>();
 
-        if (!dbH.isTableEmpty(DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME)) {
+        if (!dbH.isTableEmpty(DatabaseContract.Database.ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME)) {
 
+            mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME);
             mCursor.moveToFirst();
             for (int i = 0; i < mCursor.getCount(); i++) {
 

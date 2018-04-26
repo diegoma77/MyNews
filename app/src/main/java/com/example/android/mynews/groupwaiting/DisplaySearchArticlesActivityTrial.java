@@ -1,9 +1,7 @@
 package com.example.android.mynews.groupwaiting;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -16,11 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.android.mynews.R;
-import com.example.android.mynews.activities.SearchArticlesActivity;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
-import com.example.android.mynews.data.DatabaseContract;
-import com.example.android.mynews.data.DatabaseHelper;
-import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 
 import java.util.ArrayList;

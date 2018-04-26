@@ -1,7 +1,6 @@
 package com.example.android.mynews.groupwaiting;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -13,35 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
-import com.example.android.mynews.activities.DisplayNotificationsActivity;
-import com.example.android.mynews.activities.MainActivity;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
-import com.example.android.mynews.data.DatabaseContract;
-import com.example.android.mynews.data.DatabaseHelper;
-import com.example.android.mynews.extras.helperclasses.DateHelper;
-import com.example.android.mynews.extras.interfaceswithconstants.Keys;
-import com.example.android.mynews.extras.interfaceswithconstants.Url;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
-import com.example.android.mynews.rvadapters.RvAdapterDisplaySearchArticles;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import static com.example.android.mynews.activities.MainActivity.setOverflowButtonColor;
@@ -66,7 +42,7 @@ public class DisplayNotificationsActivityTrial extends AppCompatActivity {
 
     //RecyclerView Variables
     private RecyclerView recyclerView;
-    private RvAdapterDisplaySearchArticlesTrial rvAdapterDisplaySearchArticlesTrial;
+    private RvAdapterDisplayNotificationArticlesTrial rvAdapterDisplayNotificationArticlesTrial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +71,7 @@ public class DisplayNotificationsActivityTrial extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        rvAdapterDisplaySearchArticlesTrial = new RvAdapterDisplaySearchArticlesTrial(
+        rvAdapterDisplayNotificationArticlesTrial = new RvAdapterDisplayNotificationArticlesTrial(
                 DisplayNotificationsActivityTrial.this,
                 articlesSearchAPIObjectList,
                 listOfReadArticlesUrls);
@@ -160,7 +136,7 @@ public class DisplayNotificationsActivityTrial extends AppCompatActivity {
 
                 @Override
                 public Loader<List<ArticlesSearchAPIObject>> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.getListFromDatabaseArticlesForSearchArticles(DisplayNotificationsActivityTrial.this);
+                    return AsyncTaskLoaderHelper.getListFromDatabaseArticlesForNotifications(DisplayNotificationsActivityTrial.this);
                 }
 
                 @Override
@@ -172,11 +148,11 @@ public class DisplayNotificationsActivityTrial extends AppCompatActivity {
 
                     Log.i(TAG, "onLoadFinished: list_size:" + articlesSearchAPIObjectList.size());
 
-                    rvAdapterDisplaySearchArticlesTrial = new RvAdapterDisplaySearchArticlesTrial(
+                    rvAdapterDisplayNotificationArticlesTrial = new RvAdapterDisplayNotificationArticlesTrial(
                             DisplayNotificationsActivityTrial.this,
                             articlesSearchAPIObjectList,
                             listOfReadArticlesUrls);
-                    recyclerView.setAdapter(rvAdapterDisplaySearchArticlesTrial);
+                    recyclerView.setAdapter(rvAdapterDisplayNotificationArticlesTrial);
 
                     loadLoaderGetReadArticlesFromDatabase(LOADER_READ_ARTICLES_DATABASE);
                 }
@@ -203,11 +179,11 @@ public class DisplayNotificationsActivityTrial extends AppCompatActivity {
                         listOfReadArticlesUrls.addAll(data);
                     }
 
-                    rvAdapterDisplaySearchArticlesTrial = new RvAdapterDisplaySearchArticlesTrial(
+                    rvAdapterDisplayNotificationArticlesTrial = new RvAdapterDisplayNotificationArticlesTrial(
                             DisplayNotificationsActivityTrial.this,
                             articlesSearchAPIObjectList,
                             listOfReadArticlesUrls);
-                    recyclerView.setAdapter(rvAdapterDisplaySearchArticlesTrial);
+                    recyclerView.setAdapter(rvAdapterDisplayNotificationArticlesTrial);
                 }
 
                 @Override

@@ -20,6 +20,7 @@ import com.example.android.mynews.R;
 import com.example.android.mynews.extras.helperclasses.DateHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.extras.interfaceswithconstants.Url;
+import com.example.android.mynews.groupwaiting.DisplaySearchArticlesActivityTrial;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -394,7 +395,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
      */
     public void createIntentForDisplayingSearchArticlesActivity() {
 
-        Intent intent = new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class);
+        Intent intent = new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivityTrial.class);
         intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1,
                 getSearchArticlesUrl(
                 getSearchQueryAndAdaptForUrl(),
