@@ -1,4 +1,4 @@
-package com.example.android.mynews.fragmentstrial;
+package com.example.android.mynews.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,7 +18,7 @@ import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelp
 import com.example.android.mynews.extras.helperclasses.ShowHelper;
 import com.example.android.mynews.pojo.MostPopularAPIObject;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
-import com.example.android.mynews.rvadapterstrial.RvAdapterMostPopularTrial;
+import com.example.android.mynews.rvadapters.RvAdapterMostPopular;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.List;
  * Created by Diego Fajardo on 22/02/2018.
  */
 
-public class PageFragmentMostPopularTrial extends android.support.v4.app.Fragment {
+public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
 
     private static final String TAG = "PageFragmentMostPopular";
 
@@ -126,7 +126,7 @@ public class PageFragmentMostPopularTrial extends android.support.v4.app.Fragmen
 
                     if (mostPopularObjectsList.size() != 0) {
                         ShowHelper.showRecyclerView(mProgressBar,mErrorMessageDisplay,recyclerView);
-                        RvAdapterMostPopularTrial adapterTopStories = new RvAdapterMostPopularTrial (
+                        RvAdapterMostPopular adapterTopStories = new RvAdapterMostPopular(
                                 getContext(),
                                 mostPopularObjectsList,
                                 listOfReadArticlesUrls);

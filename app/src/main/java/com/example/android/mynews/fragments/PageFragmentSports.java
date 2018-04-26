@@ -1,4 +1,4 @@
-package com.example.android.mynews.fragmentstrial;
+package com.example.android.mynews.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.example.android.mynews.R;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.extras.helperclasses.ShowHelper;
-import com.example.android.mynews.rvadapterstrial.RvAdapterTopStoriesTrial;
+import com.example.android.mynews.rvadapters.RvAdapterTopStories;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
 
 import java.util.ArrayList;
@@ -26,10 +26,10 @@ import java.util.List;
  * Created by Diego Fajardo on 22/02/2018.
  */
 
-public class PageFragmentSportsTrial extends android.support.v4.app.Fragment {
+public class PageFragmentSports extends android.support.v4.app.Fragment {
 
     //Logs
-    private static final String TAG = "PageFragmentSportsTrial";
+    private static final String TAG = "PageFragmentSports";
 
     //Loader ID
     private static final int LOADER_TOP_STORIES_API_REQUEST = 60;
@@ -129,7 +129,7 @@ public class PageFragmentSportsTrial extends android.support.v4.app.Fragment {
 
                     if (topStoriesObjectList.size() != 0) {
                         ShowHelper.showRecyclerView(mProgressBar,mErrorMessageDisplay,recyclerView);
-                        RvAdapterTopStoriesTrial adapterTopStories = new RvAdapterTopStoriesTrial (
+                        RvAdapterTopStories adapterTopStories = new RvAdapterTopStories(
                                 getContext(),
                                 topStoriesObjectList,
                                 listOfReadArticlesUrls);

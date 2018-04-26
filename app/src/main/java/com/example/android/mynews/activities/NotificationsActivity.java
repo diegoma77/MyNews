@@ -1,13 +1,9 @@
 package com.example.android.mynews.activities;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -15,21 +11,17 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.evernote.android.job.DailyJob;
-import com.evernote.android.job.Job;
-import com.evernote.android.job.JobCreator;
 import com.evernote.android.job.JobManager;
 import com.example.android.mynews.R;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
-import com.example.android.mynews.broadcastreceiver.NotificationReceiver;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.helperclasses.ToastHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
@@ -37,7 +29,6 @@ import com.example.android.mynews.job.NotificationDailyJob;
 import com.example.android.mynews.job.NotificationJobCreator;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -260,6 +251,8 @@ public class NotificationsActivity extends AppCompatActivity {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+            // TODO: 26/04/2018 Create app and add there JobCreator
+
             if (isChecked) {
 
                 updateQueryInTheList();
@@ -397,6 +390,12 @@ public class NotificationsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.notifications_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     /** Used to add a listener
      * to the home button*/
     @Override
@@ -406,6 +405,9 @@ public class NotificationsActivity extends AppCompatActivity {
                 Intent intent = new Intent(NotificationsActivity.this, MainActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.menu_display_notifications:
+                Intent intent1 = new Intent(NotificationsActivity.this, DisplayNotificationsActivity.class);
+                startActivity(intent1);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -422,7 +424,6 @@ public class NotificationsActivity extends AppCompatActivity {
         tv5.setText(listOfQueryAndSections.get(5));
         tv6.setText(listOfQueryAndSections.get(6));
     }
-
 
     /*****************************/
     /** METHODS TO INIT LOADERS **/
@@ -487,7 +488,6 @@ public class NotificationsActivity extends AppCompatActivity {
             loaderManager.restartLoader(id, null, loaderUpdateSwitchTable);
         }
     }
-
 
     /**********************/
     /** LOADER CALLBACKS **/

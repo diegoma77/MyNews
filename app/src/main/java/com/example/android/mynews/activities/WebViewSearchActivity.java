@@ -3,6 +3,8 @@ package com.example.android.mynews.activities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,31 +16,34 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
-import com.example.android.mynews.groupwaiting.DisplaySearchArticlesActivityTrial;
+
+import java.util.List;
 
 /**
  * Created by Diego Fajardo on 14/03/2018.
  */
 
-// TODO: 26/04/2018 Modify!
-
 public class WebViewSearchActivity extends AppCompatActivity {
+
+    private static final String TAG = "WebViewSearchActivityTr";
+
+    //Loader ID
+    private static final int LOADER_LOAD_URL = 84;
+    private static final int LOADER_INSERT_URL_DATABASE = 20;
 
     //WebView
     private WebView mWebView;
 
-    //Variable that store the urk that will be loaded by the WebView
+    //Variable that store the url that will be loaded by the WebView
     private String article_url;
 
     //Progress Bar
     private ProgressBar progressBar;
 
-    //Variables that store the urls needed by DisplaySearchArticlesActivity for sending a
-    //JSON Request to the API when back buttons are pressed
-    private String url1;
-    private String url2;
-    private String url3;
+    // TODO: 24/04/2018 Define
+    Intent intent;
 
 
     @Override
@@ -53,41 +58,30 @@ public class WebViewSearchActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        intent = getIntent();
+
         //We get the progress bar
         progressBar = (ProgressBar) findViewById(R.id.webView_progressBar);
 
-        //We get the url that will be displayed by the WebView and store it
-        Intent intent = getIntent();
-        article_url = intent.getStringExtra(Keys.PutExtras.ARTICLE_URL_SENT);
-
-        //We get the urls that will be sent back to DisplaySearchArticles activity
-        //if we press any back buttons
-        url1 = intent.getStringExtra(Keys.PutExtras.INTENT_SA_PAGE1);
-        url2 = intent.getStringExtra(Keys.PutExtras.INTENT_SA_PAGE2);
-        url3 = intent.getStringExtra(Keys.PutExtras.INTENT_SA_PAGE3);
-        Log.i("GETEXTRA1",url1);
-        Log.i("GETEXTRA2",url2);
-        Log.i("GETEXTRA3",url3);
+        //We insert the article in the database if needed
+        loadLoaderInsertArticleUrlInDatabase(LOADER_INSERT_URL_DATABASE);
 
         //We load the url
         mWebView = (WebView) findViewById(R.id.webView);
         mWebView.setWebViewClient(new MyWebClient());
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.loadUrl(article_url);
+        //We load the url in the Loader Callback
+        loadLoaderDisplayListFromBackground(LOADER_LOAD_URL);
 
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
 
-                //The intent carries the urls needed to display articles in DisplaySearchArticlesActivity
-                Intent intent = new Intent(WebViewSearchActivity.this, DisplaySearchArticlesActivityTrial.class);
-                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, url1);
-                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE2, url2);
-                intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE3, url3);
-                startActivity(intent);
+                startActivity(new Intent(WebViewSearchActivity.this, DisplaySearchArticlesActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -96,16 +90,13 @@ public class WebViewSearchActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        //The intent carries the urls needed to display articles in DisplaySearchArticlesActivity
-        Intent intent = new Intent(WebViewSearchActivity.this, DisplaySearchArticlesActivityTrial.class);
-        intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE1, url1);
-        intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE2, url2);
-        intent.putExtra(Keys.PutExtras.INTENT_SA_PAGE3, url3);
-        startActivity(intent);
-
+        startActivity(new Intent(WebViewSearchActivity.this, DisplaySearchArticlesActivity.class));
         super.onBackPressed();
     }
 
+    /**
+     * Loading the website
+     */
     public class MyWebClient extends WebViewClient {
 
         @Override
@@ -127,4 +118,95 @@ public class WebViewSearchActivity extends AppCompatActivity {
 
     }
 
+    /**************************
+     *** LOADERS **************
+     **************************/
+
+    private void loadLoaderDisplayListFromBackground(int id) {
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<Intent> loader = loaderManager.getLoader(id);
+
+        if (loader == null) {
+            Log.i(TAG, "loadLoaderUpdateList: ");
+            loaderManager.initLoader(id, null, displayListFromBackground);
+        } else {
+            Log.i(TAG, "loadLoaderUpdateList: ");
+            loaderManager.restartLoader(id, null, displayListFromBackground);
+        }
+
+    }
+
+    /** Used to insert the article url
+     * in the database if needed
+     * */
+
+    private void loadLoaderInsertArticleUrlInDatabase(int id) {
+
+        android.support.v4.app.LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<List<String>> loader = loaderManager.getLoader(id);
+
+        if (loader == null) {
+            Log.i(TAG, "loadLoaderGetReadArticlesFromDatabase: ");
+            loaderManager.initLoader(id, null, loaderInsertUrlInDatabase);
+        } else {
+            Log.i(TAG, "loadLoaderGetReadArticlesFromDatabase: ");
+            loaderManager.restartLoader(id, null, loaderInsertUrlInDatabase);
+        }
+    }
+
+
+    /**************************
+     *** LOADER CALLBACKS *****
+     **************************/
+
+    private LoaderManager.LoaderCallbacks<Intent> displayListFromBackground =
+            new LoaderManager.LoaderCallbacks<Intent>() {
+
+                @Override
+                public Loader<Intent> onCreateLoader(int id, Bundle args) {
+                    Log.i(TAG, "onCreateLoader: called! +++");
+                    return AsyncTaskLoaderHelper.sendIntentAndBringBack(WebViewSearchActivity.this, intent);
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Intent> loader, Intent intent) {
+                    //We get the url that will be displayed by the WebView and store it
+                    article_url = intent.getStringExtra(Keys.PutExtras.ARTICLE_URL_SENT);
+
+                    //We load the url
+                    mWebView.loadUrl(article_url);
+
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Intent> loader) {
+
+                }
+
+            };
+
+    /** Used to insert the article url
+     * in the database if needed
+     * */
+    private LoaderManager.LoaderCallbacks<String> loaderInsertUrlInDatabase =
+            new LoaderManager.LoaderCallbacks<String>() {
+
+                @Override
+                public Loader<String> onCreateLoader(int id, Bundle args) {
+                    Log.i(TAG, "onCreateLoader: called! +++");
+                    article_url = intent.getStringExtra(Keys.PutExtras.ARTICLE_URL_SENT);
+                    return AsyncTaskLoaderHelper.insertArticleUrlInDatabase(getApplicationContext(), article_url);
+                }
+
+                @Override
+                public void onLoadFinished(Loader<String> loader, String data) {
+
+                }
+
+                @Override
+                public void onLoaderReset(Loader<String> loader) {
+
+                }
+            };
 }

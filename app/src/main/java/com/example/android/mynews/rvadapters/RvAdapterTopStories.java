@@ -1,4 +1,4 @@
-package com.example.android.mynews.groupwaiting;
+package com.example.android.mynews.rvadapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +13,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.mynews.R;
+import com.example.android.mynews.activities.WebViewMainActivity;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
-import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
-import com.example.android.mynews.rvadapters.RvAdapterDisplayNotificationArticles;
+import com.example.android.mynews.pojo.TopStoriesAPIObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,16 +24,18 @@ import java.util.List;
  * Created by Diego Fajardo on 25/02/2018.
  */
 
-public class RvAdapterDisplayNotificationArticlesTrial extends RecyclerView.Adapter<RvAdapterDisplayNotificationArticlesTrial.ViewHolder> {
+public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStories.ViewHolder> {
+
+    // TODO: 23/04/2018 Adapt the RecyclerView to display the required information
 
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
-    private static final String TAG = "RvAdapterDisplayNotific";
+    private static final String TAG = RvAdapterTopStories.class.getSimpleName();
 
     //Loader ID
-    private static final int LOADER_INSERT_ARTICLE_DATABASE = 99;
+    private static final int LOADER_INSERT_ARTICLE_DATABASE = 12;
 
-    //List of Search articles
-    private List<ArticlesSearchAPIObject> listOfArticlesSearchAPIObjects = new ArrayList<>();
+    //Array that will store TopStoriesAPIObjects after request
+    private List<TopStoriesAPIObject> listOfTopStoriesAPIObjects;
 
     //List that stores the database urls
     private List<String> listOfArticlesReadInTheDatabase;
@@ -42,17 +44,17 @@ public class RvAdapterDisplayNotificationArticlesTrial extends RecyclerView.Adap
     private Context mContext;
 
     //Constructor of the RvAdapter
-    public RvAdapterDisplayNotificationArticlesTrial(Context context, List<ArticlesSearchAPIObject> listOfObjects, List<String> listOfUrls) {
+    public RvAdapterTopStories(Context context, List<TopStoriesAPIObject> listOfObjects, List<String> listOfUrls) {
         this.mContext = context;
-        this.listOfArticlesSearchAPIObjects = new ArrayList<>();
-        this.listOfArticlesSearchAPIObjects = listOfObjects;
+        this.listOfTopStoriesAPIObjects = new ArrayList<>();
+        this.listOfTopStoriesAPIObjects = listOfObjects;
         this.listOfArticlesReadInTheDatabase = new ArrayList<>();
         this.listOfArticlesReadInTheDatabase = listOfUrls;
 
     }
 
     @Override
-    public RvAdapterDisplayNotificationArticlesTrial.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
         Context context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.list_item_fragment;
@@ -63,71 +65,66 @@ public class RvAdapterDisplayNotificationArticlesTrial extends RecyclerView.Adap
                 viewGroup,
                 shouldAttachToParentImmediately);
 
-        RvAdapterDisplayNotificationArticlesTrial.ViewHolder viewHolder = new RvAdapterDisplayNotificationArticlesTrial.ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view);
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final RvAdapterDisplayNotificationArticlesTrial.ViewHolder holder, final int position) {
+    public void onBindViewHolder(RvAdapterTopStories.ViewHolder holder, final int position) {
 
         Log.d(TAG, "#" + position);
 
         Log.i("POSITION: " + position, "listOfArticlesInDatabase = " + listOfArticlesReadInTheDatabase.size());
 
-        if (listOfArticlesReadInTheDatabase.contains(listOfArticlesSearchAPIObjects.get(position).getWebUrl())){
+        if (listOfArticlesReadInTheDatabase.contains(listOfTopStoriesAPIObjects.get(position).getArticleUrl())){
             Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
             holder.title.setTypeface(bold);
         }
 
-        holder.title.setText(listOfArticlesSearchAPIObjects.get(position).getSnippet());
-        holder.section.setText("Top Stories < " + listOfArticlesSearchAPIObjects.get(position).getNewDesk());
-        holder.published_date.setText(listOfArticlesSearchAPIObjects.get(position).getPubDate());
+        holder.title.setText(listOfTopStoriesAPIObjects.get(position).getTitle());
+        holder.section.setText("Top Stories < " + listOfTopStoriesAPIObjects.get(position).getSection());
+        holder.update_date.setText(listOfTopStoriesAPIObjects.get(position).getUpdatedDate());
 
-        if (listOfArticlesSearchAPIObjects.get(position).getImageUrl() == null) {
+        if (listOfTopStoriesAPIObjects.get(position).getImageThumblarge() == null) {
             Glide.with(mContext)
                     .load(R.drawable.nyt)
                     .into(holder.imageOnLeft);
         }
         else {
             Glide.with(mContext)
-                    .load(listOfArticlesSearchAPIObjects.get(position).getImageUrl())
+                    .load(listOfTopStoriesAPIObjects.get(position).getImageThumblarge())
                     .into(holder.imageOnLeft);
         }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Log.i("ONCLICK - POSITION", "#" + " CLICKED");
                 Context context = v.getContext();
 
                 /** Since we cannot call here "getSupportLoaderManager()", we will add the url
                  * to the database in the next activity (if it is not there yet) */
 
-                Intent intent = new Intent(context, WebViewSearchActivityTrial.class);
-
-                /** We pass the webUrl that the next activity has to load and show
-                 * in the webView */
-                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, listOfArticlesSearchAPIObjects.get(position).getWebUrl());
+                Intent intent = new Intent(context, WebViewMainActivity.class);
+                intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, listOfTopStoriesAPIObjects.get(position).getArticleUrl());
                 context.startActivity(intent);
-
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        if (listOfArticlesSearchAPIObjects == null) { return 0; }
-        return listOfArticlesSearchAPIObjects.size();
+        if (listOfTopStoriesAPIObjects == null) { return 0; }
+        return listOfTopStoriesAPIObjects.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private View mView;
+        private final View mView;
         private ImageView imageOnLeft;
         private TextView section;
-        private TextView published_date;
+        private TextView update_date;
         private TextView title;
 
         public ViewHolder(View view) {
@@ -136,7 +133,7 @@ public class RvAdapterDisplayNotificationArticlesTrial extends RecyclerView.Adap
             mView = view.findViewById(R.id.list_item_globalLayout);
             imageOnLeft = view.findViewById(R.id.list_item_image_news);
             section = view.findViewById(R.id.list_item_continent);
-            published_date = view.findViewById(R.id.list_item_date);
+            update_date = view.findViewById(R.id.list_item_date);
             title = view.findViewById(R.id.list_item_news_text);
 
         }

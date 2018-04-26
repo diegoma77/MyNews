@@ -1,13 +1,8 @@
 package com.example.android.mynews;
 
-import android.util.Log;
-
-import com.example.android.mynews.groupwaiting.SearchArticlesActivityTrial;
-
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Calendar;
 
 import static org.junit.Assert.*;

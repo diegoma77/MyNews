@@ -22,21 +22,18 @@
         </activity>
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".activities.HelpActivity" />
-        <activity android:name=".activities.SearchArticlesActivity" />
         <activity android:name=".activities.WebViewMainActivity" />
-        <activity android:name=".activities.WebViewSearchActivity" />
         <activity
             android:name=".data.AndroidDatabaseManager"
             android:label="@string/app_name" />
 
         <receiver android:name=".broadcastreceiver.NotificationReceiver"></receiver>
-        <activity android:name=".activities.NotificationsActivity">
-        </activity>
-        <activity android:name=".groupwaiting.SearchArticlesActivityTrial" />
-        <activity android:name=".groupwaiting.DisplaySearchArticlesActivityTrial" />
-        <activity android:name=".groupwaiting.WebViewSearchActivityTrial" />
-        <activity android:name=".groupwaiting.DisplayNotificationsActivityTrial" />
-        <activity android:name=".groupwaiting.NotificationsActivityTrial" />
+
+        <activity android:name=".activities.SearchArticlesActivity" />
+        <activity android:name=".activities.DisplaySearchArticlesActivity" />
+        <activity android:name=".activities.WebViewSearchActivity" />
+        <activity android:name=".activities.DisplayNotificationsActivity" />
+        <activity android:name=".activities.NotificationsActivity" />
     </application>
 
 </manifest>

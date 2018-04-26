@@ -1,4 +1,4 @@
-package com.example.android.mynews.groupwaiting;
+package com.example.android.mynews.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,13 +16,14 @@ import android.view.MenuItem;
 import com.example.android.mynews.R;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
+import com.example.android.mynews.rvadapters.RvAdapterDisplayNotificationArticles;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.android.mynews.activities.MainActivity.setOverflowButtonColor;
 
-public class DisplayNotificationsActivityTrial extends AppCompatActivity {
+public class DisplayNotificationsActivity extends AppCompatActivity {
 
     //Tag variable
     private static final String TAG = "DisplayNotificationsAct";
@@ -42,7 +43,7 @@ public class DisplayNotificationsActivityTrial extends AppCompatActivity {
 
     //RecyclerView Variables
     private RecyclerView recyclerView;
-    private RvAdapterDisplayNotificationArticlesTrial rvAdapterDisplayNotificationArticlesTrial;
+    private RvAdapterDisplayNotificationArticles rvAdapterDisplayNotificationArticles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +72,8 @@ public class DisplayNotificationsActivityTrial extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        rvAdapterDisplayNotificationArticlesTrial = new RvAdapterDisplayNotificationArticlesTrial(
-                DisplayNotificationsActivityTrial.this,
+        rvAdapterDisplayNotificationArticles = new RvAdapterDisplayNotificationArticles(
+                DisplayNotificationsActivity.this,
                 articlesSearchAPIObjectList,
                 listOfReadArticlesUrls);
 
@@ -86,7 +87,7 @@ public class DisplayNotificationsActivityTrial extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(DisplayNotificationsActivityTrial.this, NotificationsActivityTrial.class);
+                Intent intent = new Intent(DisplayNotificationsActivity.this, NotificationsActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -136,7 +137,7 @@ public class DisplayNotificationsActivityTrial extends AppCompatActivity {
 
                 @Override
                 public Loader<List<ArticlesSearchAPIObject>> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.getListFromDatabaseArticlesForNotifications(DisplayNotificationsActivityTrial.this);
+                    return AsyncTaskLoaderHelper.getListFromDatabaseArticlesForNotifications(DisplayNotificationsActivity.this);
                 }
 
                 @Override
@@ -148,11 +149,11 @@ public class DisplayNotificationsActivityTrial extends AppCompatActivity {
 
                     Log.i(TAG, "onLoadFinished: list_size:" + articlesSearchAPIObjectList.size());
 
-                    rvAdapterDisplayNotificationArticlesTrial = new RvAdapterDisplayNotificationArticlesTrial(
-                            DisplayNotificationsActivityTrial.this,
+                    rvAdapterDisplayNotificationArticles = new RvAdapterDisplayNotificationArticles(
+                            DisplayNotificationsActivity.this,
                             articlesSearchAPIObjectList,
                             listOfReadArticlesUrls);
-                    recyclerView.setAdapter(rvAdapterDisplayNotificationArticlesTrial);
+                    recyclerView.setAdapter(rvAdapterDisplayNotificationArticles);
 
                     loadLoaderGetReadArticlesFromDatabase(LOADER_READ_ARTICLES_DATABASE);
                 }
@@ -169,7 +170,7 @@ public class DisplayNotificationsActivityTrial extends AppCompatActivity {
 
                 @Override
                 public Loader<List<String>> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.getArticlesReadFromDatabase(DisplayNotificationsActivityTrial.this);
+                    return AsyncTaskLoaderHelper.getArticlesReadFromDatabase(DisplayNotificationsActivity.this);
                 }
 
                 @Override
@@ -179,11 +180,11 @@ public class DisplayNotificationsActivityTrial extends AppCompatActivity {
                         listOfReadArticlesUrls.addAll(data);
                     }
 
-                    rvAdapterDisplayNotificationArticlesTrial = new RvAdapterDisplayNotificationArticlesTrial(
-                            DisplayNotificationsActivityTrial.this,
+                    rvAdapterDisplayNotificationArticles = new RvAdapterDisplayNotificationArticles(
+                            DisplayNotificationsActivity.this,
                             articlesSearchAPIObjectList,
                             listOfReadArticlesUrls);
-                    recyclerView.setAdapter(rvAdapterDisplayNotificationArticlesTrial);
+                    recyclerView.setAdapter(rvAdapterDisplayNotificationArticles);
                 }
 
                 @Override

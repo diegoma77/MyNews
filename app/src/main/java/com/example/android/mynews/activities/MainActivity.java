@@ -19,22 +19,21 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
-import com.example.android.mynews.fragmentstrial.PageFragmentBusinessTrial;
-import com.example.android.mynews.fragmentstrial.PageFragmentSportsTrial;
-import com.example.android.mynews.fragmentstrial.PageFragmentTopStoriesTrial;
+import com.example.android.mynews.fragments.PageFragmentBusiness;
+import com.example.android.mynews.fragments.PageFragmentSports;
+import com.example.android.mynews.fragments.PageFragmentTopStories;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
 import com.example.android.mynews.R;
-import com.example.android.mynews.fragmentstrial.PageFragmentMostPopularTrial;
-import com.example.android.mynews.groupwaiting.DisplaySearchArticlesActivityTrial;
-import com.example.android.mynews.groupwaiting.NotificationsActivityTrial;
-import com.example.android.mynews.groupwaiting.SearchArticlesActivityTrial;
+import com.example.android.mynews.fragments.PageFragmentMostPopular;
 
 // TODO: 30/03/2018 The tablet crashes when showing the DF image
 // TODO: 24/04/2018 Pay attention to loader IDs
 // TODO: 26/04/2018 Too many requests are done at the same time in MainActivity. Change that
 // TODO: 26/04/2018 Some images (SearchArticles) load too slow
+// TODO: 26/04/2018 Delete List Detectors from NotificationsActivity
+// TODO: 26/04/2018 Broadcast Receiver
 
 public class MainActivity extends AppCompatActivity {
 
@@ -91,11 +90,11 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_search_button:
                 // TODO: 24/04/2018 Changes SearchArticlesActivity to SAActivityTrial
-                Intent intent1 = new Intent(MainActivity.this, SearchArticlesActivityTrial.class);
+                Intent intent1 = new Intent(MainActivity.this, SearchArticlesActivity.class);
                 startActivity(intent1);
                 break;
             case R.id.menu_notifications_button:
-                Intent intent2 = new Intent(MainActivity.this, NotificationsActivityTrial.class);
+                Intent intent2 = new Intent(MainActivity.this, NotificationsActivity.class);
                 startActivity(intent2);
                 break;
             case R.id.menu_delete_database:
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity (new Intent(MainActivity.this, HelpActivity.class));
                 break;
             case R.id.menu_about_button:
-                startActivity (new Intent(MainActivity.this, DisplaySearchArticlesActivityTrial.class));
+                startActivity (new Intent(MainActivity.this, DisplaySearchArticlesActivity.class));
                 break;
 
         }
@@ -115,10 +114,10 @@ public class MainActivity extends AppCompatActivity {
     //Uses de FragmentPageAdapter to link the PageFragmentTopStories to the ViewPager
     private void setupViewPager(ViewPager viewPager) {
         FragmentPageAdapter fragmentPageAdapter = new FragmentPageAdapter(getSupportFragmentManager());
-        fragmentPageAdapter.addFragment(new PageFragmentTopStoriesTrial(), getResources().getString(R.string.top_stories_tag));
-        fragmentPageAdapter.addFragment(new PageFragmentMostPopularTrial(), getResources().getString(R.string.most_popular_tag));
-        fragmentPageAdapter.addFragment(new PageFragmentBusinessTrial(), getResources().getString(R.string.business_tag));
-        fragmentPageAdapter.addFragment(new PageFragmentSportsTrial(), getResources().getString(R.string.sports_tag));
+        fragmentPageAdapter.addFragment(new PageFragmentTopStories(), getResources().getString(R.string.top_stories_tag));
+        fragmentPageAdapter.addFragment(new PageFragmentMostPopular(), getResources().getString(R.string.most_popular_tag));
+        fragmentPageAdapter.addFragment(new PageFragmentBusiness(), getResources().getString(R.string.business_tag));
+        fragmentPageAdapter.addFragment(new PageFragmentSports(), getResources().getString(R.string.sports_tag));
 
         viewPager.setAdapter(fragmentPageAdapter);
     }

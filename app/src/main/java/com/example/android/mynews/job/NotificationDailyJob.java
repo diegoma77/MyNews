@@ -17,7 +17,7 @@ import com.example.android.mynews.R;
 import com.example.android.mynews.apirequesters.APISearchArticlesRequester;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
-import com.example.android.mynews.groupwaiting.DisplayNotificationsActivityTrial;
+import com.example.android.mynews.activities.DisplayNotificationsActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -107,9 +107,7 @@ public class NotificationDailyJob extends DailyJob {
 
     public static void scheduleNotificationJob (int id) {
 
-        int JobId = id;
-
-        JobId = DailyJob.schedule(new JobRequest.Builder(TAG),
+        DailyJob.schedule(new JobRequest.Builder(TAG),
                 TimeUnit.HOURS.toMillis(9),
                 TimeUnit.HOURS.toMillis(10));
     }
@@ -126,7 +124,7 @@ public class NotificationDailyJob extends DailyJob {
     private PendingIntent contentIntent (Context context) {
 
         //When the user clicks the notification the app will be redirected to the activity
-        Intent intent = new Intent(context, DisplayNotificationsActivityTrial.class);
+        Intent intent = new Intent(context, DisplayNotificationsActivity.class);
 
         //We ensure that the activity will be replaced if needed, although the activity
         // was already open or running in the background
