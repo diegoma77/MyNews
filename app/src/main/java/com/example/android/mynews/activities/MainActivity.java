@@ -28,6 +28,7 @@ import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
 import com.example.android.mynews.R;
 import com.example.android.mynews.fragmentstrial.PageFragmentMostPopularTrial;
 import com.example.android.mynews.groupwaiting.DisplaySearchArticlesActivityTrial;
+import com.example.android.mynews.groupwaiting.NotificationsActivityTrial;
 import com.example.android.mynews.groupwaiting.SearchArticlesActivityTrial;
 
 // TODO: 30/03/2018 The tablet crashes when showing the DF image
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent1);
                 break;
             case R.id.menu_notifications_button:
-                Intent intent2 = new Intent(MainActivity.this, NotificationsActivity.class);
+                Intent intent2 = new Intent(MainActivity.this, NotificationsActivityTrial.class);
                 startActivity(intent2);
                 break;
             case R.id.menu_delete_database:

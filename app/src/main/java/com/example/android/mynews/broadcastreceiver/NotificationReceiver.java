@@ -36,16 +36,9 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     private static final String NOTIFICATION_CHANNEL_ID = "notification_channel";
 
-    private DatabaseHelper dbH;
-    private Cursor mCursor;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-        dbH = new DatabaseHelper(context);
-        // TODO: 23/04/2018 Change this cursor so it'll grab info from the Notifications Articles Table
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
-
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(
                 Context.NOTIFICATION_SERVICE);
@@ -87,7 +80,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     private static PendingIntent contentIntent (Context context) {
 
         //When the user clicks the notification the app will be redirected to the activity
-        Intent intent = new Intent(context, DisplaySearchArticlesActivity.class);
+        Intent intent = new Intent(context, DisplayNotificationsActivity.class);
 
         //We ensure that the activity will be replaced if needed, although the activity
         // was already open or running in the background

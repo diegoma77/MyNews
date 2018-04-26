@@ -45,11 +45,6 @@ public class DatabaseContract {
         public static final String SWITCH_ID = "id";
         public static final String SWITCH_STATE = "state";
 
-        // TODO: 23/04/2018 Delete this if needed
-        /*****
-         * NEW STUFF
-         * ****/
-
         //TABLE NAME for Notifications Activity
         public static final String ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME = "articles_for_search_articles";
 
@@ -72,7 +67,12 @@ public class DatabaseContract {
         public static final String NOTIF_NEW_DESK = "new_desk";
         public static final String NOTIF_PUB_DATE = "pub_date";
 
+        //TABLE NAME for Saving urls for notifications
+        public static final String URLS_FOR_NOTIFICATIONS_TABLE_NAME = "urls_for_notifications";
 
+        //TABLE COLUMNS
+        public static final String URL_ID = "id";
+        public static final String URL = "url";
 
     }
 

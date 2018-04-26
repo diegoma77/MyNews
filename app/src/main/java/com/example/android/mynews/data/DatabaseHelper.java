@@ -59,11 +59,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + DatabaseContract.Database.SWITCH_STATE + " FLAG INTEGER DEFAULT 0"
                     + ")";
 
-    // TODO: 23/04/2018 Delete if needed
-    /************
-     * NEW STUFF
-     */
-
     private static final String CREATE_ARTICLES_FOR_SEARCH_ARTICLES_TABLE =
             "CREATE TABLE " + DatabaseContract.Database.ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME
                     + "( "
@@ -86,6 +81,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + DatabaseContract.Database.NOTIF_PUB_DATE + " TEXT NOT NULL"
                     + ")";
 
+    private static final String CREATE_URLS_FOR_NOTIFICATIONS_TABLE =
+            "CREATE TABLE " + DatabaseContract.Database.URLS_FOR_NOTIFICATIONS_TABLE_NAME
+                    + " ("
+                    + DatabaseContract.Database.URL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + DatabaseContract.Database.URL + " TEXT NOT NULL"
+                    + ")";
+
 
     /******************************
      * CREATING THE TABLES ********
@@ -100,6 +102,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_SWITCH_TABLE);
         sqLiteDatabase.execSQL(CREATE_ARTICLES_FOR_SEARCH_ARTICLES_TABLE);
         sqLiteDatabase.execSQL(CREATE_ARTICLES_FOR_NOTIFICATION_TABLE);
+        sqLiteDatabase.execSQL(CREATE_URLS_FOR_NOTIFICATIONS_TABLE);
 
     }
 
@@ -116,6 +119,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.Database.URLS_FOR_NOTIFICATIONS_TABLE_NAME);
 
         //Create new table
         onCreate(db);
@@ -181,6 +185,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
         }
     }
+
+    /** METHOD FOR INSERTING data in Urls For Notifications Table
+     * */
+    public boolean insertDataToUrlsForNotificationsTable (String url) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseContract.Database.URL, url);
+
+        long result = db.insert(
+                DatabaseContract.Database.URLS_FOR_NOTIFICATIONS_TABLE_NAME,
+                null,
+                contentValues);
+
+        db.close();
+
+        if (result == -1) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+
+
+
 
     /**
      * METHOD FOR INSERTING data in Search Queries' Table

@@ -18,9 +18,9 @@ import java.util.List;
  * It returns a listOfMostPopularAPI Objects that are used to display
  * information in a recycler view */
 
-public class ATLMostPopularAPIRequest extends AsyncTaskLoader  <List<MostPopularAPIObject>>{
+public class ATLRequestMostPopularAPI extends AsyncTaskLoader  <List<MostPopularAPIObject>>{
 
-    public ATLMostPopularAPIRequest(Context context) {
+    public ATLRequestMostPopularAPI(Context context) {
         super(context);
     }
 

@@ -16,16 +16,16 @@ import java.util.List;
 /** This ATL is called when the user launches the Main Activity.
  * It returns a listOfTopStoriesAPI Objects that are used to display
  * information in a recycler view */
-public class ATLTopStoriesAPIRequest extends android.support.v4.content.AsyncTaskLoader <List<TopStoriesAPIObject>>{
+public class ATLRequestTopStoriesAPI extends android.support.v4.content.AsyncTaskLoader <List<TopStoriesAPIObject>>{
 
-    private static final String TAG = "ATLTopStoriesAPIRequest";
+    private static final String TAG = "ATLRequestTopStoriesAPI";
 
     //1.Top Stories
     //2.Business
     //3.Sports
     private int flag;
 
-    public ATLTopStoriesAPIRequest(Context context, int flag) {
+    public ATLRequestTopStoriesAPI(Context context, int flag) {
         super(context);
         this.flag = flag;
     }

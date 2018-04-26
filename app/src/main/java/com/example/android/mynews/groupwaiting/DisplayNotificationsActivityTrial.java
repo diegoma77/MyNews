@@ -3,7 +3,6 @@ package com.example.android.mynews.groupwaiting;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -14,28 +13,47 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.android.mynews.R;
-import com.example.android.mynews.activities.SearchArticlesActivity;
+import com.example.android.mynews.activities.DisplayNotificationsActivity;
+import com.example.android.mynews.activities.MainActivity;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
+import com.example.android.mynews.extras.helperclasses.DateHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
+import com.example.android.mynews.extras.interfaceswithconstants.Url;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
+import com.example.android.mynews.rvadapters.RvAdapterDisplaySearchArticles;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.android.mynews.activities.MainActivity.setOverflowButtonColor;
 
-public class DisplaySearchArticlesActivityTrial extends AppCompatActivity {
+public class DisplayNotificationsActivityTrial extends AppCompatActivity {
 
     //Tag variable
-    private static final String TAG = "DisplaySearchArticlesAc";
+    private static final String TAG = "DisplayNotificationsAct";
 
     // TODO: 24/04/2018 Define
-    private static final int LOADER_GET_LIST_IN_BACKGROUND = 71;
-    private static final int LOADER_READ_ARTICLES_DATABASE = 73;
+    private static final int LOADER_GET_LIST_IN_BACKGROUND = 41;
+    private static final int LOADER_READ_ARTICLES_DATABASE = 43;
 
     //List that will store the JSON Response objects
     private List<ArticlesSearchAPIObject> articlesSearchAPIObjectList;
@@ -78,7 +96,7 @@ public class DisplaySearchArticlesActivityTrial extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         rvAdapterDisplaySearchArticlesTrial = new RvAdapterDisplaySearchArticlesTrial(
-                DisplaySearchArticlesActivityTrial.this,
+                DisplayNotificationsActivityTrial.this,
                 articlesSearchAPIObjectList,
                 listOfReadArticlesUrls);
 
@@ -92,7 +110,7 @@ public class DisplaySearchArticlesActivityTrial extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(DisplaySearchArticlesActivityTrial.this, SearchArticlesActivityTrial.class);
+                Intent intent = new Intent(DisplayNotificationsActivityTrial.this, NotificationsActivityTrial.class);
                 startActivity(intent);
                 break;
         }
@@ -142,7 +160,7 @@ public class DisplaySearchArticlesActivityTrial extends AppCompatActivity {
 
                 @Override
                 public Loader<List<ArticlesSearchAPIObject>> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.getListFromDatabaseArticlesForSearchArticles(DisplaySearchArticlesActivityTrial.this);
+                    return AsyncTaskLoaderHelper.getListFromDatabaseArticlesForSearchArticles(DisplayNotificationsActivityTrial.this);
                 }
 
                 @Override
@@ -155,7 +173,7 @@ public class DisplaySearchArticlesActivityTrial extends AppCompatActivity {
                     Log.i(TAG, "onLoadFinished: list_size:" + articlesSearchAPIObjectList.size());
 
                     rvAdapterDisplaySearchArticlesTrial = new RvAdapterDisplaySearchArticlesTrial(
-                            DisplaySearchArticlesActivityTrial.this,
+                            DisplayNotificationsActivityTrial.this,
                             articlesSearchAPIObjectList,
                             listOfReadArticlesUrls);
                     recyclerView.setAdapter(rvAdapterDisplaySearchArticlesTrial);
@@ -175,7 +193,7 @@ public class DisplaySearchArticlesActivityTrial extends AppCompatActivity {
 
                 @Override
                 public Loader<List<String>> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.getArticlesReadFromDatabase(DisplaySearchArticlesActivityTrial.this);
+                    return AsyncTaskLoaderHelper.getArticlesReadFromDatabase(DisplayNotificationsActivityTrial.this);
                 }
 
                 @Override
@@ -186,7 +204,7 @@ public class DisplaySearchArticlesActivityTrial extends AppCompatActivity {
                     }
 
                     rvAdapterDisplaySearchArticlesTrial = new RvAdapterDisplaySearchArticlesTrial(
-                            DisplaySearchArticlesActivityTrial.this,
+                            DisplayNotificationsActivityTrial.this,
                             articlesSearchAPIObjectList,
                             listOfReadArticlesUrls);
                     recyclerView.setAdapter(rvAdapterDisplaySearchArticlesTrial);
@@ -196,9 +214,5 @@ public class DisplaySearchArticlesActivityTrial extends AppCompatActivity {
                 public void onLoaderReset(Loader<List<String>> loader) {
 
                 }
-
-
-
             };
-
 }

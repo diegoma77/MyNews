@@ -6,6 +6,7 @@ import android.support.v4.content.Loader;
 import android.util.Log;
 
 import com.example.android.mynews.asynctaskloaders.atl.ATLDoNothing;
+import com.example.android.mynews.asynctaskloaders.atl.ATLFillListWithArticlesForNotifications;
 import com.example.android.mynews.asynctaskloaders.atl.ATLFillListWithArticlesForSearchArticles;
 import com.example.android.mynews.asynctaskloaders.atl.atlwebview.ATLSendIntentBack;
 import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLFillListWithReadArticles;
@@ -15,9 +16,9 @@ import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateDa
 import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateList;
 import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateSwitchDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateSwitchVariable;
-import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLMostPopularAPIRequest;
+import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLRequestMostPopularAPI;
 import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLSearchArticlesAPIRequestAndFillArticlesForSearchArticlesTable;
-import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLTopStoriesAPIRequest;
+import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLRequestTopStoriesAPI;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 import com.example.android.mynews.pojo.MostPopularAPIObject;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
@@ -48,13 +49,13 @@ public class AsyncTaskLoaderHelper {
     /** Used to do requests
      * to TopStories API*/
     public static Loader<List<TopStoriesAPIObject>> topStoriesAPIRequest(Context context, int flag) {
-        return new ATLTopStoriesAPIRequest(context, flag);
+        return new ATLRequestTopStoriesAPI(context, flag);
     }
 
     /** Used to do requests
      * to MostPopular API*/
     public static Loader<List<MostPopularAPIObject>> mostPopularAPIRequest(Context context) {
-        return new ATLMostPopularAPIRequest(context);
+        return new ATLRequestMostPopularAPI(context);
     }
 
     /** Used to do requests
@@ -74,6 +75,9 @@ public class AsyncTaskLoaderHelper {
         return new ATLFillListWithArticlesForSearchArticles(context);
     }
 
+    public static Loader<List<ArticlesSearchAPIObject>> getListFromDatabaseArticlesForNotifications(Context context){
+        return new ATLFillListWithArticlesForNotifications(context);
+    }
 
     /** Used in MainActivity to create
      * the databases and fill the tables */

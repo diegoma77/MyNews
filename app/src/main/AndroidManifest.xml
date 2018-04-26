@@ -39,6 +39,8 @@
         <activity android:name=".groupwaiting.SearchArticlesActivityTrial" />
         <activity android:name=".groupwaiting.DisplaySearchArticlesActivityTrial" />
         <activity android:name=".groupwaiting.WebViewSearchActivityTrial" />
+        <activity android:name=".groupwaiting.DisplayNotificationsActivityTrial" />
+        <activity android:name=".groupwaiting.NotificationsActivityTrial" />
     </application>
 
 </manifest>

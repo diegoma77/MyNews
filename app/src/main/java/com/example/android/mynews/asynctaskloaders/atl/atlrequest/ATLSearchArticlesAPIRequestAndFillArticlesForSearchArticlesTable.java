@@ -36,6 +36,7 @@ public class ATLSearchArticlesAPIRequestAndFillArticlesForSearchArticlesTable ex
         this.dbH = new DatabaseHelper(context);
         if (!dbH.isTableEmpty(DatabaseContract.Database.ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME)){
             dbH.deleteAllRowsFromTableName(DatabaseContract.Database.ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME);
+            dbH.resetAutoIncrement(DatabaseContract.Database.ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME);
         }
     }
 

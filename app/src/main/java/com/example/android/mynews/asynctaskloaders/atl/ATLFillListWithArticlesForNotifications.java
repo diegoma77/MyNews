@@ -3,7 +3,6 @@ package com.example.android.mynews.asynctaskloaders.atl;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
@@ -19,19 +18,18 @@ import java.util.List;
 /** This ATL fills a list with all the information from the table
  * Articles for Search Articles
  * */
-public class ATLFillListWithArticlesForSearchArticles extends AsyncTaskLoader<List<ArticlesSearchAPIObject>> {
+public class ATLFillListWithArticlesForNotifications extends AsyncTaskLoader<List<ArticlesSearchAPIObject>> {
 
     DatabaseHelper dbH;
     Cursor mCursor;
 
-    public ATLFillListWithArticlesForSearchArticles(
+    public ATLFillListWithArticlesForNotifications(
             Context context) {
         super(context);
         dbH = new DatabaseHelper(context);
-        if (!dbH.isTableEmpty(DatabaseContract.Database.ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME)) {
-            mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ARTICLES_FOR_SEARCH_ARTICLES_TABLE_NAME);
+        if (!dbH.isTableEmpty(DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME)) {
+            mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME);
         }
-
     }
 
     @Override
@@ -45,7 +43,7 @@ public class ATLFillListWithArticlesForSearchArticles extends AsyncTaskLoader<Li
 
         List<ArticlesSearchAPIObject> listOfObjects = new ArrayList<>();
 
-        if (!dbH.isTableEmpty(DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME)) {
+        if (!dbH.isTableEmpty(DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME)){
 
             mCursor.moveToFirst();
             for (int i = 0; i < mCursor.getCount(); i++) {
