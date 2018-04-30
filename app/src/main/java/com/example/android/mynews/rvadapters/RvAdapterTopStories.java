@@ -24,15 +24,12 @@ import java.util.List;
  * Created by Diego Fajardo on 25/02/2018.
  */
 
+/** Recycler View Adapter used to display all the articles that are related to Top Stories API
+ * */
 public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStories.ViewHolder> {
-
-    // TODO: 23/04/2018 Adapt the RecyclerView to display the required information
 
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
     private static final String TAG = RvAdapterTopStories.class.getSimpleName();
-
-    //Loader ID
-    private static final int LOADER_INSERT_ARTICLE_DATABASE = 12;
 
     //Array that will store TopStoriesAPIObjects after request
     private List<TopStoriesAPIObject> listOfTopStoriesAPIObjects;
@@ -77,11 +74,18 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
 
         Log.i("POSITION: " + position, "listOfArticlesInDatabase = " + listOfArticlesReadInTheDatabase.size());
 
+        /** We check if the article url (of the object) is in the database (a list has been filled with
+         * the articles' url of the database). If it is, we change the Typeface to bold.
+         * */
         if (listOfArticlesReadInTheDatabase.contains(listOfTopStoriesAPIObjects.get(position).getArticleUrl())){
             Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
             holder.title.setTypeface(bold);
         }
 
+        /** We set the texts displayed in the layout (textviews) and the pictures
+         *  according to the information provided by the objects of the list. If the image
+         * is null, we display the New York Times logo
+         * */
         holder.title.setText(listOfTopStoriesAPIObjects.get(position).getTitle());
         holder.section.setText("Top Stories < " + listOfTopStoriesAPIObjects.get(position).getSection());
         holder.update_date.setText(listOfTopStoriesAPIObjects.get(position).getUpdatedDate());
@@ -100,12 +104,16 @@ public class RvAdapterTopStories extends RecyclerView.Adapter<RvAdapterTopStorie
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                /** When the user clicks the article to read it, we add it to the database (read articles)
+                 * We will add the url to the database in the next activity (if it is not there yet)
+                 * */
                 Log.i("ONCLICK - POSITION", "#" + " CLICKED");
                 Context context = v.getContext();
 
-                /** Since we cannot call here "getSupportLoaderManager()", we will add the url
-                 * to the database in the next activity (if it is not there yet) */
-
+                /** We pass the webUrl that the next activity has to load and show
+                 * in the webView
+                 * */
                 Intent intent = new Intent(context, WebViewMainActivity.class);
                 intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, listOfTopStoriesAPIObjects.get(position).getArticleUrl());
                 context.startActivity(intent);

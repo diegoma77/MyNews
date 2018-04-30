@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -21,12 +23,14 @@ import android.widget.TextView;
 
 import com.evernote.android.job.JobManager;
 import com.example.android.mynews.R;
+import com.example.android.mynews.asynctaskloaders.atl.ATLFillListWithArticlesForNotifications;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.helperclasses.ToastHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.job.NotificationDailyJob;
 import com.example.android.mynews.job.NotificationJobCreator;
+import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +42,7 @@ import java.util.List;
 public class NotificationsActivity extends AppCompatActivity {
 
     // TODO: 22/04/2018 Remove the ListDetector!!!!
+    // TODO: 29/04/2018 Change the icon
 
     private static final String TAG = "NotificationsActivity";
 
@@ -45,6 +50,7 @@ public class NotificationsActivity extends AppCompatActivity {
     private static final int LOADER_UPDATE_LIST_ID = 2;
     private static final int LOADER_UPDATE_DATABASE_SWITCH_ID = 3;
     private static final int LOADER_UPDATE_SWITCH_ID = 4;
+    private static final int LOADER_GET_LIST_FOR_NOTIFICATIONS = 5;
 
     //Needed for getApplicationContext() to work
     private Context context;
@@ -53,6 +59,10 @@ public class NotificationsActivity extends AppCompatActivity {
     //1: for the query
     //2 - 7: for the sections
     private List<String> listOfQueryAndSections;
+
+    //List of Notification articles that will be used to allow access to DisplayNotifications
+    //if the list is not null
+    private List<ArticlesSearchAPIObject> listOfNotificationObjects;
 
     //TextInput
     private TextInputEditText mTextInputEditText;
@@ -117,6 +127,9 @@ public class NotificationsActivity extends AppCompatActivity {
             listOfQueryAndSections.add("");
         }
 
+        //Instantiation of the list
+        listOfNotificationObjects = new ArrayList<>();
+
         //TextInputEditText
         mTextInputEditText = (TextInputEditText) findViewById(R.id.notif_text_input_edit_text);
 
@@ -136,10 +149,13 @@ public class NotificationsActivity extends AppCompatActivity {
         dbH = new DatabaseHelper (this);
 
         /** We fill the list with the information from the database (Query and Sections table)
-         * and also check or uncheck the switch according to the database */
+         * and also check or uncheck the switch according to the database. Additionally, we fill
+         * a list with the articles for notifications (if it is empty, then we won't be able
+         * to reach "Display Notifications Activity when the action bar button is clicked)
+         * */
         loadLoaderUpdateList(LOADER_UPDATE_LIST_ID);
         loadLoaderUpdateSwitchVariable(LOADER_UPDATE_SWITCH_ID);
-
+        loadLoaderGetNotificationArticles(LOADER_GET_LIST_FOR_NOTIFICATIONS);
 
     }
 
@@ -406,8 +422,15 @@ public class NotificationsActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.menu_display_notifications:
-                Intent intent1 = new Intent(NotificationsActivity.this, DisplayNotificationsActivity.class);
-                startActivity(intent1);
+
+                if (listOfNotificationObjects.size() != 0) {
+                    Intent intent1 = new Intent(NotificationsActivity.this, DisplayNotificationsActivity.class);
+                    startActivity(intent1);
+                } else {
+                    ToastHelper.toastShort(NotificationsActivity.this, "There are available articles");
+                }
+
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -487,6 +510,22 @@ public class NotificationsActivity extends AppCompatActivity {
             Log.i(TAG, "loadLoaderUpdateSwitchTable: ");
             loaderManager.restartLoader(id, null, loaderUpdateSwitchTable);
         }
+    }
+
+    private void loadLoaderGetNotificationArticles (int id) {
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<Boolean> loader = loaderManager.getLoader(id);
+
+        if (loader == null) {
+            Log.i(TAG, "loadLoaderGetNotificationArticles: ");
+            loaderManager.initLoader(id, null, loaderUpdateSwitchTable);
+        } else {
+            Log.i(TAG, "loadLoaderGetNotificationArticles: ");
+            loaderManager.restartLoader(id, null, loaderUpdateSwitchTable);
+        }
+
+
     }
 
     /**********************/
@@ -602,6 +641,30 @@ public class NotificationsActivity extends AppCompatActivity {
 
                 @Override
                 public void onLoaderReset(Loader<Boolean> loader) {
+
+                }
+            };
+
+    private LoaderManager.LoaderCallbacks <List<ArticlesSearchAPIObject>> loaderGetNotificationArticlesList =
+            new LoaderManager.LoaderCallbacks<List<ArticlesSearchAPIObject>>() {
+                @NonNull
+                @Override
+                public Loader<List<ArticlesSearchAPIObject>> onCreateLoader(int id, @Nullable Bundle args) {
+                    return new ATLFillListWithArticlesForNotifications(NotificationsActivity.this);
+                }
+
+                @Override
+                public void onLoadFinished(@NonNull Loader<List<ArticlesSearchAPIObject>> loader, List<ArticlesSearchAPIObject> data) {
+
+                    if (data.size() != 0) {
+                        listOfNotificationObjects = data;
+                    }
+
+
+                }
+
+                @Override
+                public void onLoaderReset(@NonNull Loader<List<ArticlesSearchAPIObject>> loader) {
 
                 }
             };

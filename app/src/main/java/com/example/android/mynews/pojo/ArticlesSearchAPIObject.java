@@ -6,6 +6,9 @@ import java.io.Serializable;
  * Created by Diego Fajardo on 17/03/2018.
  */
 
+/** POJO: object used to gather all the needed information
+ * from a request to Articles Search API
+ * */
 public class ArticlesSearchAPIObject implements Serializable {
 
     private String webUrl = "webUrl";

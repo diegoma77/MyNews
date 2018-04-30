@@ -24,13 +24,14 @@ import java.util.List;
  * Created by Diego Fajardo on 25/02/2018.
  */
 
+/** Recycler View Adapter used to display all the articles that are related to Articles Search API.
+ * This RV displays those articles that are found using SearchArticlesActivity and that, therefore,
+ * are displayed in DisplaySearchArticlesActivity.
+ * */
 public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapterDisplaySearchArticles.ViewHolder> {
 
     //Variable that allows to control the Adapter using "logs" (used in onBindViewHolder method)
     private static final String TAG = RvAdapterDisplaySearchArticles.class.getSimpleName();
-
-    //Loader ID
-    private static final int LOADER_INSERT_ARTICLE_DATABASE = 99;
 
     //List of Search articles
     private List<ArticlesSearchAPIObject> listOfArticlesSearchAPIObjects = new ArrayList<>();
@@ -75,11 +76,18 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
 
         Log.i("POSITION: " + position, "listOfArticlesInDatabase = " + listOfArticlesReadInTheDatabase.size());
 
+        /** We check if the article url (of the object) is in the database (a list has been filled with
+         * the articles' url of the database). If it is, we change the Typeface to bold.
+         * */
         if (listOfArticlesReadInTheDatabase.contains(listOfArticlesSearchAPIObjects.get(position).getWebUrl())){
             Typeface bold = Typeface.defaultFromStyle(Typeface.BOLD);
             holder.title.setTypeface(bold);
         }
 
+        /** We set the texts displayed in the layout (textviews) and the pictures
+         *  according to the information provided by the objects of the list. If the image
+         * is null, we display the New York Times logo
+         * */
         holder.title.setText(listOfArticlesSearchAPIObjects.get(position).getSnippet());
         holder.section.setText("Top Stories < " + listOfArticlesSearchAPIObjects.get(position).getNewDesk());
         holder.published_date.setText(listOfArticlesSearchAPIObjects.get(position).getPubDate());
@@ -99,16 +107,16 @@ public class RvAdapterDisplaySearchArticles extends RecyclerView.Adapter<RvAdapt
             @Override
             public void onClick(View v) {
 
+                /** When the user clicks the article to read it, we add it to the database (read articles)
+                 * We will add the url to the database in the next activity (if it is not there yet)
+                 */
                 Log.i("ONCLICK - POSITION", "#" + " CLICKED");
                 Context context = v.getContext();
 
-                /** Since we cannot call here "getSupportLoaderManager()", we will add the url
-                 * to the database in the next activity (if it is not there yet) */
-
-                Intent intent = new Intent(context, WebViewSearchActivity.class);
-
                 /** We pass the webUrl that the next activity has to load and show
-                 * in the webView */
+                 * in the webView
+                 * */
+                Intent intent = new Intent(context, WebViewSearchActivity.class);
                 intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, listOfArticlesSearchAPIObjects.get(position).getWebUrl());
                 context.startActivity(intent);
 

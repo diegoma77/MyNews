@@ -43,13 +43,22 @@ public class ATLRequestTopStoriesAPI extends android.support.v4.content.AsyncTas
 
         APITopStoriesRequester requester = new APITopStoriesRequester(getContext());
 
-        /** The flag allows us to differentiate the url used to do the request */
-        if (flag == 1) {
-            requester.startJSONRequestTopStoriesAPI(Url.TopStoriesUrl.TS_FINAL_URL);
-        } else if (flag == 2) {
-            requester.startJSONRequestTopStoriesAPI(Url.BusinessUrl.B_FINAL_URL);
-        } else if (flag == 3) {
-            requester.startJSONRequestTopStoriesAPI(Url.SportsUrl.S_FINAL_URL);
+        try {
+            /** The flag allows us to differentiate the url used to do the request.
+             * Thread times are different to do the request not at the same time
+             * provoking error 429 (Most popular API request will be done at (2000) */
+            if (flag == 1) {
+                requester.startJSONRequestTopStoriesAPI(Url.TopStoriesUrl.TS_FINAL_URL);
+            } else if (flag == 2) {
+                Thread.sleep(1000);
+                requester.startJSONRequestTopStoriesAPI(Url.BusinessUrl.B_FINAL_URL);
+            } else if (flag == 3) {
+                Thread.sleep(2000);
+                requester.startJSONRequestTopStoriesAPI(Url.SportsUrl.S_FINAL_URL);
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         try {

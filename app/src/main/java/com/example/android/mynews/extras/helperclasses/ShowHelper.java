@@ -12,9 +12,12 @@ import android.widget.TextView;
 /** This class is used when
  * displaying the list of articles.
  * It allows showing and hiding elements
- * in an easier way */
+ * in an easier way
+ * */
 public class ShowHelper {
 
+    /** Shows the ProgressBar and hides the RecyclerView and the ErrorMessage
+     * */
     public static void showProgressBar (ProgressBar progressBar,
                                  TextView textViewError,
                                  RecyclerView recyclerView) {
@@ -25,6 +28,8 @@ public class ShowHelper {
 
     }
 
+    /** Shows the RecyclerView and hides the ProgressBar and the ErrorMessage
+     * */
     public static void showRecyclerView(ProgressBar progressBar,
                                  TextView textViewError,
                                  RecyclerView recyclerView) {
@@ -35,6 +40,8 @@ public class ShowHelper {
 
     }
 
+    /** Shows the ErrorMessage and hides the ProgressBar and the RecyclerView
+     * */
     public static void showErrorMessage (ProgressBar progressBar,
                                   TextView textViewError,
                                   RecyclerView recyclerView) {

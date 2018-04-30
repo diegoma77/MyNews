@@ -4,14 +4,13 @@ package com.example.android.mynews.extras.interfaceswithconstants;
  * Created by Diego Fajardo on 12/03/2018.
  */
 
+/** This interface gives easy access to constants (Strings) used in the app
+ * */
 public interface Keys {
 
-    interface ApiFetcher {
-        String ARTICLES_API_REFERENCE = "Articles";
-        String TOPSTORIES_API_REFERENCE = "TopStories";
-        String MOSTPOPULAR_API_REFERENCE = "MostPopular";
-    }
-
+    /** Used in the intents that bring the article url to the webViewActivity
+     * where we will add the article to the database (read articles)
+     * */
     interface PutExtras {
 
         String ARTICLE_URL_SENT = "article_url";
@@ -22,6 +21,8 @@ public interface Keys {
 
     }
 
+    /** Used during the requests to TOP STORIES API
+     * */
     interface TopStoriesAPIKeys {
 
         String KEY_RESULTS = "results";
@@ -34,18 +35,8 @@ public interface Keys {
         String KEY_IMAGE_URL = "url";
     }
 
-    interface TopStoriesKeys {
-
-        String KEY_RESULTS = "results";
-        String KEY_SECTION = "section";
-        String KEY_TITLE = "title";
-        String KEY_ARTICLE_URL = "url";
-        String KEY_UPDATED_DATE = "updated_date";
-        String KEY_MULTIMEDIA = "multimedia";
-        String KEY_IMAGE_URL = "url";
-
-    }
-
+    /** Used during the requests to MOST POPULAR API
+     * */
     interface MostPopularKeys {
 
         String KEY_RESULTS = "results";
@@ -59,30 +50,8 @@ public interface Keys {
 
     }
 
-    interface Business {
-
-        String KEY_RESULTS = "results";
-        String KEY_SUBSECTION = "subsection";
-        String KEY_TITLE = "title";
-        String KEY_ARTICLE_URL = "url";
-        String KEY_UPDATED_DATE = "updated_date";
-        String KEY_MULTIMEDIA = "multimedia";
-        String KEY_IMAGE_URL = "url";
-
-    }
-
-    interface Sports {
-
-        String KEY_RESULTS = "results";
-        String KEY_SUBSECTION = "subsection";
-        String KEY_TITLE = "title";
-        String KEY_ARTICLE_URL = "url";
-        String KEY_UPDATED_DATE = "updated_date";
-        String KEY_MULTIMEDIA = "multimedia";
-        String KEY_IMAGE_URL = "url";
-
-    }
-
+    /** Used during the requests to ARTICLES SEARCH API
+     * */
     interface SearchArticles {
 
         String KEY_RESPONSE = "response";
@@ -96,6 +65,8 @@ public interface Keys {
 
     }
 
+    /** Used to identify the different checkboxes
+     * */
     interface CheckboxFields {
 
         String CB_ARTS = "arts";

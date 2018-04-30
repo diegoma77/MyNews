@@ -13,6 +13,8 @@ import java.util.List;
  * Created by Diego Fajardo on 24/02/2018.
  */
 
+/** Adapter used to synchronize the Fragments with the ViewPager (used in MainActivity)
+ * */
 public class FragmentPageAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
     private final List<Fragment> fragments = new ArrayList<>();

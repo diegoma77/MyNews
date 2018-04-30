@@ -34,6 +34,7 @@ import com.example.android.mynews.fragments.PageFragmentMostPopular;
 // TODO: 26/04/2018 Some images (SearchArticles) load too slow
 // TODO: 26/04/2018 Delete List Detectors from NotificationsActivity
 // TODO: 26/04/2018 Broadcast Receiver
+// TODO: 30/04/2018 See what to do when there is no information and the text views show things grey (change in layout)
 
 public class MainActivity extends AppCompatActivity {
 
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Uses de FragmentPageAdapter to link the PageFragmentTopStories to the ViewPager
+
     private void setupViewPager(ViewPager viewPager) {
         FragmentPageAdapter fragmentPageAdapter = new FragmentPageAdapter(getSupportFragmentManager());
         fragmentPageAdapter.addFragment(new PageFragmentTopStories(), getResources().getString(R.string.top_stories_tag));

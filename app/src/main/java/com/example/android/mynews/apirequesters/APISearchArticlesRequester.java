@@ -101,8 +101,7 @@ public class APISearchArticlesRequester {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //In case of error of in the Request,//we get a Toast
-                        //ToastHelper.toastShort(context, error.getMessage());
+                        //In case of error of in the Request, we get a Toast
                     }
                 }
         );

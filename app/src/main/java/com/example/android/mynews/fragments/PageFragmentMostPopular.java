@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLFillListWithReadArticles;
+import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLRequestMostPopularAPI;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.extras.helperclasses.ShowHelper;
 import com.example.android.mynews.pojo.MostPopularAPIObject;
@@ -27,16 +29,24 @@ import java.util.List;
  * Created by Diego Fajardo on 22/02/2018.
  */
 
+/** Fragment that displays MostPopular news
+ * using RvAdapterMostPopular.
+ * This fragment uses two lists:
+ * topStoriesObjectList: used to display the news.
+ * listOfReadArticlesUrls: filled with the urls of the articles that has been read
+ * to display them in a different way (bold style)
+ * */
 public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
 
+    //Log
     private static final String TAG = "PageFragmentMostPopular";
+
+    //IDs to identify the Loaders
+    private static final int LOADER_MOST_POPULAR_API_REQUEST = 55;
+    private static final int LOADER_READ_ARTICLES_DATABASE = 15;
 
     //Array that will store the TopStoriesObject object to display in the RecyclerView
     private List<MostPopularAPIObject> mostPopularObjectsList;
-
-    //Loader ID
-    private static final int LOADER_MOST_POPULAR_API_REQUEST = 55;
-    private static final int LOADER_READ_ARTICLES_DATABASE = 15;
 
     //List that will store the urls of the read articles in the database
     private List<String> listOfReadArticlesUrls;
@@ -68,7 +78,7 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         loadLoaderGetReadArticlesFromDatabase(LOADER_READ_ARTICLES_DATABASE);
-        loadLoaderTopStoriesAPIRequest(LOADER_MOST_POPULAR_API_REQUEST);
+        loadLoaderMostPopularAPIRequest(LOADER_MOST_POPULAR_API_REQUEST);
 
         return view;
 
@@ -78,10 +88,12 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
      *** LOADERS **************
      **************************/
 
-    private void loadLoaderTopStoriesAPIRequest(int id) {
+    /** Loader used to send a Request to MostPopular API
+     * */
+    private void loadLoaderMostPopularAPIRequest(int id) {
 
         LoaderManager loaderManager = getActivity().getSupportLoaderManager();
-        Loader<List<TopStoriesAPIObject>> loader = loaderManager.getLoader(id);
+        Loader<List<MostPopularAPIObject>> loader = loaderManager.getLoader(id);
 
         if (loader == null) {
             Log.i(TAG, "loadLoaderUpdateList: ");
@@ -92,6 +104,8 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
         }
     }
 
+    /** Loader used to fill a list with the articles that had been read before
+     * */
     private void loadLoaderGetReadArticlesFromDatabase(int id) {
 
         android.support.v4.app.LoaderManager loaderManager = getActivity().getSupportLoaderManager();
@@ -110,13 +124,16 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
      *** LOADER CALLBACKS *****
      **************************/
 
+    /** This Loader Callback is used to send a request to MostPopular API using an
+     * AsyncTaskLoader called "ATLRequestMostPopularAPI"
+     * */
     private LoaderManager.LoaderCallbacks<List<MostPopularAPIObject>> loaderMostPopularAPIRequest =
             new LoaderManager.LoaderCallbacks<List<MostPopularAPIObject>>() {
 
                 @Override
                 public Loader<List<MostPopularAPIObject>> onCreateLoader(int id, Bundle args) {
                     Log.i(TAG, "onCreateLoader: called! +++");
-                    return AsyncTaskLoaderHelper.mostPopularAPIRequest(getActivity());
+                    return new ATLRequestMostPopularAPI(getContext());
                 }
 
                 @Override
@@ -134,6 +151,8 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
 
                     } else {
                         ShowHelper.showErrorMessage(mProgressBar,mErrorMessageDisplay,recyclerView);
+                        loadLoaderMostPopularAPIRequest(LOADER_MOST_POPULAR_API_REQUEST);
+                        ShowHelper.showProgressBar(mProgressBar,mErrorMessageDisplay,recyclerView);
                     }
                 }
 
@@ -143,12 +162,15 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
                 }
             };
 
+    /** This Loader Callback is used to fill a list with all the read articles using an
+     * AsyncTaskLoader called "ATLFillListWithReadArticles"
+     * */
     private android.support.v4.app.LoaderManager.LoaderCallbacks<List<String>> loaderGetReadArticlesFromDatabase =
             new android.support.v4.app.LoaderManager.LoaderCallbacks<List<String>>() {
 
                 @Override
                 public Loader<List<String>> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.getArticlesReadFromDatabase(getContext());
+                    return new ATLFillListWithReadArticles(getContext());
                 }
 
                 @Override

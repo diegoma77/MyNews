@@ -84,7 +84,7 @@ public class APITopStoriesRequester {
     }
 
 
-    private StringRequest createStringRequest(String url, final Context context) {
+    private StringRequest createStringRequest(final String url, final Context context) {
 
         //String request
         StringRequest stringRequest = new StringRequest(
@@ -100,8 +100,8 @@ public class APITopStoriesRequester {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //In case of error of in the Request,//we get a Toast
-                        ToastHelper.toastShort(context, error.getMessage());
+                        //In case of error of in the Request, we get a Toast
+                        createStringRequest(url, context);
                     }
                 }
         );
@@ -123,7 +123,7 @@ public class APITopStoriesRequester {
 
             //JSON array made of the objects inside the "result"
             JSONArray results_array =
-                    jsonObject_response.getJSONArray(Keys.TopStoriesKeys.KEY_RESULTS);
+                    jsonObject_response.getJSONArray(Keys.TopStoriesAPIKeys.KEY_RESULTS);
 
             //Iterating through "results_array"
             for (int i = 0; i < results_array.length(); i++) {
@@ -135,7 +135,7 @@ public class APITopStoriesRequester {
                 JSONObject dataObject = results_array.getJSONObject(i);
 
                 //We get the multimedia array from the "i results object".
-                JSONArray multimedia_array = dataObject.getJSONArray(Keys.TopStoriesKeys.KEY_MULTIMEDIA);
+                JSONArray multimedia_array = dataObject.getJSONArray(Keys.TopStoriesAPIKeys.KEY_MULTIMEDIA);
 
                 Log.i ("MULTIMEDIA_LENGTH", "" + multimedia_array.length());
 

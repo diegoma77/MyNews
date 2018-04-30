@@ -14,7 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
-import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
+import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLFillListWithReadArticles;
+import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLRequestTopStoriesAPI;
 import com.example.android.mynews.extras.helperclasses.ShowHelper;
 import com.example.android.mynews.rvadapters.RvAdapterTopStories;
 import com.example.android.mynews.pojo.TopStoriesAPIObject;
@@ -26,17 +27,24 @@ import java.util.List;
  * Created by Diego Fajardo on 22/02/2018.
  */
 
+/** Fragment that displays Top Stories news
+ * using RvAdapterTopStories.
+ * This fragment uses two lists:
+ * topStoriesObjectList: used to display the news.
+ * listOfReadArticlesUrls: filled with the urls of the articles that has been read
+ * to display them in a different way (bold style)
+ * */
 public class PageFragmentTopStories extends android.support.v4.app.Fragment {
 
     //Logs
     private static final String TAG = "PageFragmentTopStories";
 
-    //Loader ID
+    //IDs to identify the Loaders
     private static final int LOADER_TOP_STORIES_API_REQUEST = 10;
     private static final int LOADER_READ_ARTICLES_DATABASE = 11;
 
     //Flag to specify the request to APITopStoriesRequester
-    private static final int FLAG = 1;
+    private static final int FLAG_TOP_STORIES = 1;
 
     //List that will store the TopStoriesObject object to display in the RecyclerView
     private List<TopStoriesAPIObject> topStoriesObjectList;
@@ -81,6 +89,8 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
      *** LOADERS **************
      **************************/
 
+    /** Loader used to send a Request to Top Stories API
+     * */
     private void loadLoaderTopStoriesAPIRequest(int id) {
 
         LoaderManager loaderManager = getActivity().getSupportLoaderManager();
@@ -95,6 +105,8 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
         }
     }
 
+    /** Loader used to fill a list with the articles that had been read before
+     * */
     private void loadLoaderGetReadArticlesFromDatabase(int id) {
 
         android.support.v4.app.LoaderManager loaderManager = getActivity().getSupportLoaderManager();
@@ -113,13 +125,16 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
      *** LOADER CALLBACKS *****
      **************************/
 
+    /** This Loader Callback is used to send a request to Top Stories API using an
+     * AsyncTaskLoader called "ATLRequestTopStoriesAPI"
+     * */
     private LoaderManager.LoaderCallbacks<List<TopStoriesAPIObject>> loaderTopStoriesAPIRequest =
             new LoaderManager.LoaderCallbacks<List<TopStoriesAPIObject>>() {
 
                 @Override
                 public Loader<List<TopStoriesAPIObject>> onCreateLoader(int id, Bundle args) {
                     Log.i(TAG, "onCreateLoader: called! +++");
-                    return AsyncTaskLoaderHelper.topStoriesAPIRequest(getActivity(), FLAG);
+                    return new ATLRequestTopStoriesAPI(getContext(), FLAG_TOP_STORIES);
                 }
 
                 @Override
@@ -137,6 +152,8 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
 
                     } else {
                         ShowHelper.showErrorMessage(mProgressBar,mErrorMessageDisplay,recyclerView);
+                        loadLoaderTopStoriesAPIRequest(LOADER_TOP_STORIES_API_REQUEST);
+                        ShowHelper.showProgressBar(mProgressBar,mErrorMessageDisplay,recyclerView);
                     }
                 }
 
@@ -146,12 +163,15 @@ public class PageFragmentTopStories extends android.support.v4.app.Fragment {
                 }
             };
 
+    /** This Loader Callback is used to fill a list with all the read articles using an
+     * AsyncTaskLoader called "ATLFillListWithReadArticles"
+     * */
     private android.support.v4.app.LoaderManager.LoaderCallbacks<List<String>> loaderGetReadArticlesFromDatabase =
             new android.support.v4.app.LoaderManager.LoaderCallbacks<List<String>>() {
 
                 @Override
                 public Loader<List<String>> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.getArticlesReadFromDatabase(getContext());
+                    return new ATLFillListWithReadArticles(getContext());
                 }
 
                 @Override

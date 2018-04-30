@@ -4,6 +4,9 @@ package com.example.android.mynews.pojo;
  * Created by Diego Fajardo on 12/03/2018.
  */
 
+/** POJO: object used to gather all the needed information
+ * from a request to Top Stories API
+ * */
 public class TopStoriesAPIObject {
 
     private String section;

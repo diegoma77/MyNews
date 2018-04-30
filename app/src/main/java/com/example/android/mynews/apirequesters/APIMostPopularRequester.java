@@ -26,6 +26,7 @@ import java.util.List;
 
 public class APIMostPopularRequester {
 
+    // TODO: 29/04/2018 Define
     // TODO: 23/04/2018 Do this class
 
     //Context
@@ -85,7 +86,7 @@ public class APIMostPopularRequester {
 
     }
 
-    private StringRequest createStringRequest(String url, final Context context) {
+    private StringRequest createStringRequest(final String url, final Context context) {
 
         //String request
         StringRequest stringRequest = new StringRequest(
@@ -101,8 +102,7 @@ public class APIMostPopularRequester {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //In case of error of in the Request,//we get a Toast
-                        ToastHelper.toastShort(context, error.getMessage());
+                        //In case of error of in the Request, we get a Toast
                     }
                 }
         );
