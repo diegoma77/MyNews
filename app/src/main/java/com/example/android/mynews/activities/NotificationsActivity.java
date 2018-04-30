@@ -49,8 +49,6 @@ import java.util.List;
 public class NotificationsActivity extends AppCompatActivity {
 
     // TODO: 22/04/2018 Remove the ListDetector!!!!
-    // TODO: 29/04/2018 Change the icon
-
     //Tag
     private static final String TAG = "NotificationsActivity";
 
@@ -433,13 +431,13 @@ public class NotificationsActivity extends AppCompatActivity {
                 Intent intent = new Intent(NotificationsActivity.this, MainActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.menu_display_notifications:
 
+            case R.id.menu_display_notifications:
                 if (listOfNotificationObjects.size() != 0) {
                     Intent intent1 = new Intent(NotificationsActivity.this, DisplayNotificationsActivity.class);
                     startActivity(intent1);
                 } else {
-                    ToastHelper.toastShort(NotificationsActivity.this, "There are available articles");
+                    ToastHelper.toastShort(NotificationsActivity.this, getResources().getString(R.string.no_available_articles));
                 }
 
 

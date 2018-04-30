@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_display_notifications"
-        android:icon="@android:drawable/ic_menu_agenda"
+        android:icon="@drawable/ic_event_note_white_24dp"
         app:showAsAction="ifRoom"
         android:title="Display Notifications articles" />
 

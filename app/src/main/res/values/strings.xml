@@ -43,6 +43,7 @@
     <string name="notification_title">New Articles available!</string>
     <string name="notification_message">Tap to read Articles</string>
     <string name="image_for_mynews">Image for MyNews</string>
+    <string name="no_available_articles">There are not available articles</string>
 
     <!-- FOUND ARTICLES LAYOUT -->
 
@@ -93,6 +94,7 @@
         the main bar), choose the categories, introduce a search query if you'd like and switch
         the button on. The app will send you a notification every day with new articles.
     </string>
+
 
 
 </resources>
