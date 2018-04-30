@@ -7,12 +7,12 @@ import android.util.Log;
 
 import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithArticlesForNotifications;
 import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithArticlesForSearchArticles;
+import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLGetListFromQueryAndSectionsTable;
 import com.example.android.mynews.asynctaskloaders.atl.atlwebview.ATLSendIntentBack;
 import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithReadArticles;
 import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLInsertReadArticleInDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLMainActCreateDatabase;
-import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateDatabase;
-import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateList;
+import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateQueryAndSectionsTable;
 import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateSwitchDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateSwitchVariable;
 import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLRequestMostPopularAPI;
@@ -109,7 +109,7 @@ public class AsyncTaskLoaderHelper {
      * to update the database with the information of NotificationsActivity */
     public static Loader<Boolean> updateQueryAndSectionsTable(Context context, List<String> list) {
         Log.i(TAG, "updateQueryAndSectionsTable: +++");
-        return new ATLNotifUpdateDatabase(context, list);
+        return new ATLNotifUpdateQueryAndSectionsTable(context, list);
     }
 
     public static Loader<Boolean> updateSwitchTable (Context context, boolean switchState) {
@@ -121,7 +121,7 @@ public class AsyncTaskLoaderHelper {
      * to update the listOfQueryAndSections with the information from the Database */
     public static Loader<List<String>> updateListOfQueryAndSections(Context context) {
         Log.i(TAG, "updateListOfQueryAndSections: +++");
-        return new ATLNotifUpdateList(context);
+        return new ATLGetListFromQueryAndSectionsTable(context);
     }
 
     public static Loader<Boolean> updateSwitchVariable(Context context) {

@@ -16,13 +16,13 @@ import java.util.List;
 
 /** This ATL is called when the user reaches the Notifications Activity.
  * It returns a list to fill the listOfQueryAndSections with the information from the database */
-public class ATLNotifUpdateList extends android.support.v4.content.AsyncTaskLoader<List<String>> {
+public class ATLGetListFromQueryAndSectionsTable extends android.support.v4.content.AsyncTaskLoader<List<String>> {
 
-    private static final String TAG = "ATLNotifUpdateList";
+    private static final String TAG = "ATLNotifUpdateListOfQue";
 
     private DatabaseHelper dbH;
 
-    public ATLNotifUpdateList(Context context) {
+    public ATLGetListFromQueryAndSectionsTable(Context context) {
         super(context);
         dbH = new DatabaseHelper(context);
     }

@@ -2,7 +2,6 @@ package com.example.android.mynews.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,8 +23,10 @@ import android.widget.TextView;
 import com.evernote.android.job.JobManager;
 import com.example.android.mynews.R;
 import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithArticlesForNotifications;
-import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
-import com.example.android.mynews.data.DatabaseHelper;
+import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLGetListFromQueryAndSectionsTable;
+import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateQueryAndSectionsTable;
+import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateSwitchDatabase;
+import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateSwitchVariable;
 import com.example.android.mynews.extras.helperclasses.ToastHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.job.NotificationDailyJob;
@@ -39,20 +40,28 @@ import java.util.List;
  * Created by Diego Fajardo on 26/02/2018.
  */
 
+/** Activity that displays different options to allow the user get
+ * notifications of new articles according to those options.
+ * It allows to set the notifications on/off and allows the user to
+ * reach an Activity where can see the Articles for Notifications (using
+ * the button in the action bar)
+ * */
 public class NotificationsActivity extends AppCompatActivity {
 
     // TODO: 22/04/2018 Remove the ListDetector!!!!
     // TODO: 29/04/2018 Change the icon
 
+    //Tag
     private static final String TAG = "NotificationsActivity";
 
+    //Loaders' IDs
     private static final int LOADER_UPDATE_DATABASE_QUERY_AND_SECTIONS_ID = 1;
     private static final int LOADER_UPDATE_LIST_ID = 2;
     private static final int LOADER_UPDATE_DATABASE_SWITCH_ID = 3;
     private static final int LOADER_UPDATE_SWITCH_ID = 4;
     private static final int LOADER_GET_LIST_FOR_NOTIFICATIONS = 5;
 
-    //Needed for getApplicationContext() to work
+    //Context
     private Context context;
 
     //List of 7 elements that stores the information of QueryAndSection Table for the activity
@@ -87,10 +96,6 @@ public class NotificationsActivity extends AppCompatActivity {
     private TextView tv4;
     private TextView tv5;
     private TextView tv6;
-
-    //Database variables
-    DatabaseHelper dbH;
-    Cursor mCursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,15 +150,14 @@ public class NotificationsActivity extends AppCompatActivity {
         mSwitch = findViewById(R.id.notif_switch);
         mSwitch.setOnCheckedChangeListener(switchListener);
 
-        //Instantiation of the DatabaseHelper
-        dbH = new DatabaseHelper (this);
-
-        /** We fill the list with the information from the database (Query and Sections table)
+        /** These loaders are used to update the user interface so the user will see the last
+         * state he saved (state is saved when the activity looses focus).
+         * We fill the list with the information from the database (Query and Sections table)
          * and also check or uncheck the switch according to the database. Additionally, we fill
          * a list with the articles for notifications (if it is empty, then we won't be able
          * to reach "Display Notifications Activity when the action bar button is clicked)
          * */
-        loadLoaderUpdateList(LOADER_UPDATE_LIST_ID);
+        loadLoaderGetListFromQueryAndSectionsTable(LOADER_UPDATE_LIST_ID);
         loadLoaderUpdateSwitchVariable(LOADER_UPDATE_SWITCH_ID);
         loadLoaderGetNotificationArticles(LOADER_GET_LIST_FOR_NOTIFICATIONS);
 
@@ -171,7 +175,8 @@ public class NotificationsActivity extends AppCompatActivity {
     }
 
     /** We update the database in
-     * onPause() and onDestroy() */
+     * onPause() and onDestroy()
+     * */
     @Override
     protected void onPause() {
         super.onPause();
@@ -198,7 +203,8 @@ public class NotificationsActivity extends AppCompatActivity {
     /*******************/
 
     /** Method used to show on the user interface the information of the database (that is
-     * already in the list) */
+     * already in the list)
+     * */
     private void updateSearchQueryAndCheckboxes() {
 
         mTextInputEditText.setText(listOfQueryAndSections.get(0));
@@ -262,12 +268,14 @@ public class NotificationsActivity extends AppCompatActivity {
 
     /** Switch Listener: updates the query in the list and updates the database. Additionally,
      * shows a message to the user (alarm set) and creates or cancels the alarm to send the
-     * notification */
+     * notification
+     *
+     * */
     CompoundButton.OnCheckedChangeListener switchListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-            // TODO: 26/04/2018 Create app and add there JobCreator
+            // TODO: 26/04/2018 Create app (already created, "Application package") and add there JobCreator
 
             if (isChecked) {
 
@@ -440,7 +448,7 @@ public class NotificationsActivity extends AppCompatActivity {
     }
 
 
-    // TODO: 22/04/2018 Delete this method
+    // TODO: 22/04/2018 Delete these
 
     public void listDetector () {
         tv0.setText(listOfQueryAndSections.get(0));
@@ -457,19 +465,19 @@ public class NotificationsActivity extends AppCompatActivity {
     /*****************************/
 
     /** The loaders use the LoaderCallbacks to call AsyncTaskLoaders
-     * and update variables and/or the database */
-
-    private void loadLoaderUpdateList(int id) {
+     * and update variables and/or the database
+     * */
+    private void loadLoaderGetListFromQueryAndSectionsTable(int id) {
 
         LoaderManager loaderManager = getSupportLoaderManager();
         Loader<List<String>> loader = loaderManager.getLoader(id);
 
         if (loader == null) {
-            Log.i(TAG, "loadLoaderUpdateList: ");
-            loaderManager.initLoader(id, null, loaderUpdateListOfQueryAndSections);
+            Log.i(TAG, "loadLoaderGetListFromQueryAndSectionsTable: ");
+            loaderManager.initLoader(id, null, loaderGetListOfQueryAndSections);
         } else {
-            Log.i(TAG, "loadLoaderUpdateList: ");
-            loaderManager.restartLoader(id, null, loaderUpdateListOfQueryAndSections);
+            Log.i(TAG, "loadLoaderGetListFromQueryAndSectionsTable: ");
+            loaderManager.restartLoader(id, null, loaderGetListOfQueryAndSections);
         }
     }
 
@@ -547,12 +555,12 @@ public class NotificationsActivity extends AppCompatActivity {
      * in the Activity using
      * the information in the database
      * */
-    private LoaderManager.LoaderCallbacks<List<String>> loaderUpdateListOfQueryAndSections =
+    private LoaderManager.LoaderCallbacks<List<String>> loaderGetListOfQueryAndSections =
             new LoaderManager.LoaderCallbacks<List<String>>() {
 
                 @Override
                 public Loader<List<String>> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.updateListOfQueryAndSections(NotificationsActivity.this);
+                    return new ATLGetListFromQueryAndSectionsTable(NotificationsActivity.this);
                 }
 
                 @Override
@@ -587,7 +595,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
                 @Override
                 public Loader<Boolean> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.updateQueryAndSectionsTable(
+                    return new ATLNotifUpdateQueryAndSectionsTable(
                             NotificationsActivity.this,
                             listOfQueryAndSections);
                 }
@@ -611,7 +619,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
                 @Override
                 public Loader<Boolean> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.updateSwitchTable(
+                    return new ATLNotifUpdateSwitchDatabase(
                             NotificationsActivity.this,
                             mSwitch.isChecked());
                 }
@@ -635,7 +643,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
                 @Override
                 public Loader<Boolean> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.updateSwitchVariable(NotificationsActivity.this);
+                    return new ATLNotifUpdateSwitchVariable(NotificationsActivity.this);
                 }
 
                 @Override
