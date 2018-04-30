@@ -16,6 +16,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLInsertReadArticleInDatabase;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 
@@ -25,6 +26,11 @@ import java.util.List;
  * Created by Diego Fajardo on 14/03/2018.
  */
 
+/** Activity that displays the articles related to Main Activity and its fragments
+ * that have been displayed in a RecyclerView.
+ * It uses a WebView. It also sets the articles as a Read Article (inserts
+ * the url in the database)
+ * */
 public class WebViewMainActivity extends AppCompatActivity {
 
     //Tag
@@ -42,6 +48,9 @@ public class WebViewMainActivity extends AppCompatActivity {
     //Progress Bar
     private ProgressBar progressBar;
 
+    //Intent variable
+    private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,16 +67,18 @@ public class WebViewMainActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.webView_progressBar);
 
         //We get the url that will be displayed by the WebView and store it
-        Intent intent = getIntent();
+        intent = getIntent();
         article_url = intent.getStringExtra(Keys.PutExtras.ARTICLE_URL_SENT);
 
         //We insert the article in the database if needed
         loadLoaderInsertArticleUrlInDatabase(LOADER_INSERT_URL_DATABASE);
 
-        //We load the url
+        //We prepare to load the url
         mWebView = (WebView) findViewById(R.id.webView);
-        mWebView.setWebViewClient(new MyWebClient());
+        mWebView.setWebViewClient(new WebViewMainActivity.MyWebClient());
         mWebView.getSettings().setJavaScriptEnabled(true);
+
+        //We load the url
         mWebView.loadUrl(article_url);
     }
 
@@ -148,7 +159,7 @@ public class WebViewMainActivity extends AppCompatActivity {
                 @Override
                 public Loader<String> onCreateLoader(int id, Bundle args) {
                     Log.i(TAG, "onCreateLoader: called! +++");
-                    return AsyncTaskLoaderHelper.insertArticleUrlInDatabase(getApplicationContext(), article_url);
+                    return new ATLInsertReadArticleInDatabase(getApplicationContext(), article_url);
                 }
 
                 @Override

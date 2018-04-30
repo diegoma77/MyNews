@@ -16,6 +16,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLInsertReadArticleInDatabase;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 
@@ -25,12 +26,16 @@ import java.util.List;
  * Created by Diego Fajardo on 14/03/2018.
  */
 
+/** Activity that displays the articles related to Search Articles Activity
+ * that have been displayed in a RecyclerView in DisplaySearchArticlesActivity
+ * It uses a WebView. It also sets the articles as a Read Article (inserts
+ * the url in the database)
+ * */
 public class WebViewSearchActivity extends AppCompatActivity {
 
     private static final String TAG = "WebViewSearchActivityTr";
 
     //Loader ID
-    private static final int LOADER_LOAD_URL = 84;
     private static final int LOADER_INSERT_URL_DATABASE = 20;
 
     //WebView
@@ -42,9 +47,8 @@ public class WebViewSearchActivity extends AppCompatActivity {
     //Progress Bar
     private ProgressBar progressBar;
 
-    // TODO: 24/04/2018 Define
-    Intent intent;
-
+    //Intent variable
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,23 +62,30 @@ public class WebViewSearchActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        intent = getIntent();
-
         //We get the progress bar
         progressBar = (ProgressBar) findViewById(R.id.webView_progressBar);
+
+        //We insert the article in the database if needed (first we get the information from
+        //the intent)
+        intent = getIntent();
+        article_url = intent.getStringExtra(Keys.PutExtras.ARTICLE_URL_SENT);
 
         //We insert the article in the database if needed
         loadLoaderInsertArticleUrlInDatabase(LOADER_INSERT_URL_DATABASE);
 
-        //We load the url
+        //We prepare to load the url
         mWebView = (WebView) findViewById(R.id.webView);
         mWebView.setWebViewClient(new MyWebClient());
         mWebView.getSettings().setJavaScriptEnabled(true);
-        //We load the url in the Loader Callback
-        loadLoaderDisplayListFromBackground(LOADER_LOAD_URL);
+
+        //We load the url
+        mWebView.loadUrl(article_url);
 
     }
 
+    /*********************
+     * MENU OPTIONS ******
+     ********************/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -95,7 +106,8 @@ public class WebViewSearchActivity extends AppCompatActivity {
     }
 
     /**
-     * Loading the website
+     * INNER CLASS used to
+     * load the website
      */
     public class MyWebClient extends WebViewClient {
 
@@ -122,25 +134,9 @@ public class WebViewSearchActivity extends AppCompatActivity {
      *** LOADERS **************
      **************************/
 
-    private void loadLoaderDisplayListFromBackground(int id) {
-
-        LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<Intent> loader = loaderManager.getLoader(id);
-
-        if (loader == null) {
-            Log.i(TAG, "loadLoaderUpdateList: ");
-            loaderManager.initLoader(id, null, displayListFromBackground);
-        } else {
-            Log.i(TAG, "loadLoaderUpdateList: ");
-            loaderManager.restartLoader(id, null, displayListFromBackground);
-        }
-
-    }
-
     /** Used to insert the article url
      * in the database if needed
      * */
-
     private void loadLoaderInsertArticleUrlInDatabase(int id) {
 
         android.support.v4.app.LoaderManager loaderManager = getSupportLoaderManager();
@@ -160,32 +156,6 @@ public class WebViewSearchActivity extends AppCompatActivity {
      *** LOADER CALLBACKS *****
      **************************/
 
-    private LoaderManager.LoaderCallbacks<Intent> displayListFromBackground =
-            new LoaderManager.LoaderCallbacks<Intent>() {
-
-                @Override
-                public Loader<Intent> onCreateLoader(int id, Bundle args) {
-                    Log.i(TAG, "onCreateLoader: called! +++");
-                    return AsyncTaskLoaderHelper.sendIntentAndBringBack(WebViewSearchActivity.this, intent);
-                }
-
-                @Override
-                public void onLoadFinished(Loader<Intent> loader, Intent intent) {
-                    //We get the url that will be displayed by the WebView and store it
-                    article_url = intent.getStringExtra(Keys.PutExtras.ARTICLE_URL_SENT);
-
-                    //We load the url
-                    mWebView.loadUrl(article_url);
-
-                }
-
-                @Override
-                public void onLoaderReset(Loader<Intent> loader) {
-
-                }
-
-            };
-
     /** Used to insert the article url
      * in the database if needed
      * */
@@ -195,8 +165,7 @@ public class WebViewSearchActivity extends AppCompatActivity {
                 @Override
                 public Loader<String> onCreateLoader(int id, Bundle args) {
                     Log.i(TAG, "onCreateLoader: called! +++");
-                    article_url = intent.getStringExtra(Keys.PutExtras.ARTICLE_URL_SENT);
-                    return AsyncTaskLoaderHelper.insertArticleUrlInDatabase(getApplicationContext(), article_url);
+                    return new ATLInsertReadArticleInDatabase(getApplicationContext(), article_url);
                 }
 
                 @Override

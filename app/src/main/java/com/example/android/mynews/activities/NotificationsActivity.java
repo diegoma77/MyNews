@@ -406,6 +406,10 @@ public class NotificationsActivity extends AppCompatActivity {
         }
     }
 
+    /*********************
+     * MENU OPTIONS ******
+     ********************/
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.notifications_menu, menu);

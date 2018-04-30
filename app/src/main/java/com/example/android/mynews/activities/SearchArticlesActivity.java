@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLSearchArticlesAPIRequestAndFillArticlesForSearchArticlesTable;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.extras.helperclasses.ToastHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
@@ -33,8 +34,15 @@ import java.util.List;
  * Created by Diego Fajardo on 25/02/2018.
  */
 
+/** Activity that allows the user to search articles according to different
+ * criteria. The user can insert a query and check different checkboxes.
+ * When the user clicks the Search Button, the search begins. If the search
+ * is successful, the user will be brought to next Activity. If not, a toast
+ * will be displayed indicating the user no articles were found.
+ * */
 public class SearchArticlesActivity extends AppCompatActivity {
 
+    //Tag
     private static final String TAG = "SearchArticlesActivityT";
 
     //Loader ID
@@ -91,7 +99,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeActionContentDescription(R.string.home_button_search_activity_content_description);
 
-        //Instantiating Calendars (the order is important)
+        /** Instantiating Calendars (the order is important because is related to the
+         * current system time and endDate must be after beginDate always) */
         calendarBeginDate = Calendar.getInstance();
         calendarBeginDate.add(Calendar.DATE, -100 * 365); //beginDate is 100 years ago
         calendarEndDate = Calendar.getInstance();
@@ -119,12 +128,9 @@ public class SearchArticlesActivity extends AppCompatActivity {
         tv_beginDateTextView = (TextView) findViewById(R.id.search_beginDate_date);
         tv_endDateTextView = (TextView) findViewById(R.id.search_endDate_date);
 
-
-
         /********************
          * LISTENERS ********
          * *****************/
-
 
         /**** ONCLICK ******/
 
@@ -139,6 +145,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
 
         /**** ON DATE SET ******/
+        /** Used to get the information the user inputted in the dialog
+         * */
 
         mBeginDateSetListener = new android.app.DatePickerDialog.OnDateSetListener() {
             @Override
@@ -181,6 +189,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
      * BUTTON ONCLICK LISTENERS **
      ****************************/
 
+    /** Dialog creation to set begin date
+     * */
     View.OnClickListener listenerBeginDate = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -199,6 +209,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
         }
     };
 
+    /** Dialog creation to set end date
+     * */
     View.OnClickListener listenerEndDate = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -217,12 +229,14 @@ public class SearchArticlesActivity extends AppCompatActivity {
         }
     };
 
+    /** Listener for when Search Button is clicked
+     * */
     View.OnClickListener listenerButtonSearch = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
 
-            /** At least one checkbox
-             * must be checked
+            /** At least one checkbox must be checked,
+             * otherwise we cannot proceed to the Search
              * */
             if (!cb_arts.isChecked()
                     && !cb_business.isChecked()
@@ -504,6 +518,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
     }
 
+    /** Method that hides the progress information
+     */
     private void hideProgressInfo() {
 
         LinearLayout layout = findViewById(R.id.progress_info);
@@ -540,10 +556,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 @Override
                 public Loader<List<ArticlesSearchAPIObject>> onCreateLoader(int id, Bundle args) {
                     Log.i(TAG, "onCreateLoader: called! +++");
-
                     showProgressInfo();
-
-                    return AsyncTaskLoaderHelper.articlesSearchAPIRequest(SearchArticlesActivity.this, createListOfUrls());
+                    return new ATLSearchArticlesAPIRequestAndFillArticlesForSearchArticlesTable(SearchArticlesActivity.this, createListOfUrls());
                 }
 
                 @Override
@@ -551,12 +565,10 @@ public class SearchArticlesActivity extends AppCompatActivity {
                     Log.i(TAG, "onLoadFinished: called! +++");
 
                     if (data.size() != 0) {
-
                         Intent intent = new Intent(SearchArticlesActivity.this, DisplaySearchArticlesActivity.class);
                         startActivity(intent);
 
                     } else {
-
                         ToastHelper.toastShort(SearchArticlesActivity.this, "No articles were found");
                         hideProgressInfo();
                     }

@@ -15,14 +15,14 @@ import com.example.android.mynews.data.DatabaseHelper;
  * activity that displays the article) It adds the article url to the database if is needed
  * to show the user those articles that have been read.
  */
-public class ATLInsertArticleInDatabase extends AsyncTaskLoader<String> {
+public class ATLInsertReadArticleInDatabase extends AsyncTaskLoader<String> {
 
     private String url;
     private DatabaseHelper dbH;
     private Cursor mCursor;
 
 
-    public ATLInsertArticleInDatabase(Context context, String url) {
+    public ATLInsertReadArticleInDatabase(Context context, String url) {
         super(context);
         this.dbH = new DatabaseHelper(context);
         this.mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);

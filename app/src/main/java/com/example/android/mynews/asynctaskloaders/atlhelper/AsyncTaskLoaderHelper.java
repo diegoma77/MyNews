@@ -9,7 +9,7 @@ import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWi
 import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithArticlesForSearchArticles;
 import com.example.android.mynews.asynctaskloaders.atl.atlwebview.ATLSendIntentBack;
 import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithReadArticles;
-import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLInsertArticleInDatabase;
+import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLInsertReadArticleInDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLMainActCreateDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateList;
@@ -88,7 +88,7 @@ public class AsyncTaskLoaderHelper {
      * the article in the recycler view. If the article already exists in the database
      * nothing is added */
     public static Loader<String> insertArticleUrlInDatabase(Context context, String url) {
-        return new ATLInsertArticleInDatabase(context, url);
+        return new ATLInsertReadArticleInDatabase(context, url);
     }
 
 

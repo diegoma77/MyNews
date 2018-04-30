@@ -28,6 +28,7 @@ import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
 import com.example.android.mynews.R;
 import com.example.android.mynews.fragments.PageFragmentMostPopular;
 
+// TODO: 30/04/2018 Search articles activity. See how to hide the keyboard
 // TODO: 23/04/2018 Do what is done in the Dialog in a different thread (MainActivity)
 // TODO: 30/03/2018 The tablet crashes when showing the DF image
 // TODO: 24/04/2018 Pay attention to loader IDs
@@ -84,6 +85,10 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
     }
+
+    /*********************
+     * MENU OPTIONS ******
+     ********************/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
