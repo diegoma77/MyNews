@@ -445,6 +445,13 @@ public class NotificationsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /** METHOD that returns the listOfQueryAndSections
+     * (test purposes)
+     * */
+    public List<String> getListOfQueryAndSections() {
+        return listOfQueryAndSections;
+    }
+
 
     // TODO: 22/04/2018 Delete these
 

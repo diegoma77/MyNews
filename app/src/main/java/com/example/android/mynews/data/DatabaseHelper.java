@@ -212,10 +212,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-
-
-
-
     /**
      * METHOD FOR INSERTING data in Search Queries' Table
      * */
@@ -239,21 +235,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else {
             return true;
         }
-    }
-
-    /** METHOD THAT UPDATES the Query or Section Table in the database
-     * */
-    public void updateSearchQueryOrSection(String queryOrSection, int position) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseContract.Database.QUERY_OR_SECTION, queryOrSection);
-
-        db.update(DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME,
-                contentValues,
-                DatabaseContract.Database.QUERY_OR_SECTION_ID + "=?",
-                new String[] { "" + position });
     }
 
     /** METHOD FOR INSERTING data in Already Read Articles' Table
@@ -302,6 +283,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else {
             return true;
         }
+    }
+
+    /** METHOD THAT UPDATES the Query or Section Table in the database
+     * */
+    public boolean updateSearchQueryOrSection(String queryOrSection, int position) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseContract.Database.QUERY_OR_SECTION, queryOrSection);
+
+        return db.update(DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME,
+                contentValues,
+                DatabaseContract.Database.QUERY_OR_SECTION_ID + "=?",
+                new String[] { "" + position }) > 0;
     }
 
     /** METHOD THAT SETS the state of the switch in the database to true

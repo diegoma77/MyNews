@@ -19,10 +19,11 @@ public class ArticlesSearchAPIObject implements Serializable {
 
     public ArticlesSearchAPIObject() { }
 
-    public ArticlesSearchAPIObject(String webUrl, String snippet, String imageUrl, String pubDate) {
+    public ArticlesSearchAPIObject(String webUrl, String snippet, String imageUrl, String newDesk, String pubDate) {
         this.webUrl = webUrl;
         this.snippet = snippet;
         this.imageUrl = imageUrl;
+        this.newDesk = newDesk;
         this.pubDate = pubDate;
     }
 
