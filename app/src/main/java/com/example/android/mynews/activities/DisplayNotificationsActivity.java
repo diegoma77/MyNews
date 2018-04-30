@@ -25,6 +25,8 @@ import static com.example.android.mynews.activities.MainActivity.setOverflowButt
 
 public class DisplayNotificationsActivity extends AppCompatActivity {
 
+    // TODO: 30/04/2018 Do this when JobScheduler is prepared
+
     //Tag variable
     private static final String TAG = "DisplayNotificationsAct";
 

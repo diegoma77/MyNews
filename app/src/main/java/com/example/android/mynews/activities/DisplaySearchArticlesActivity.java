@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithArticlesForSearchArticles;
+import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithReadArticles;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 import com.example.android.mynews.rvadapters.RvAdapterDisplaySearchArticles;
@@ -23,17 +25,25 @@ import java.util.List;
 
 import static com.example.android.mynews.activities.MainActivity.setOverflowButtonColor;
 
+/** Activity that displays the articles found using SearchArticlesActivity.
+ * It uses a RecyclerView to display the articles. The activity gets two lists
+ * in the background and passes them to the RecyclerView via the constructor:
+ * - listOfArticlesSearchAPIObjects: list with the objects that have the information that
+ * will be displayed
+ * - listOfReadArticlesUrls: list of articles' urls that will be used to display differently
+ * those articles that have been already read
+ * */
 public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
     //Tag variable
     private static final String TAG = "DisplaySearchArticlesAc";
 
-    // TODO: 24/04/2018 Define
+    //Loaders' IDs
     private static final int LOADER_GET_LIST_IN_BACKGROUND = 71;
     private static final int LOADER_READ_ARTICLES_DATABASE = 73;
 
     //List that will store the JSON Response objects
-    private List<ArticlesSearchAPIObject> articlesSearchAPIObjectList;
+    private List<ArticlesSearchAPIObject> listOfArticlesSearchAPIObjects;
 
     //List that will store the urls of the read articles in the database
     private List<String> listOfReadArticlesUrls;
@@ -65,7 +75,7 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
         setOverflowButtonColor(toolbar, Color.WHITE);
 
         //Instantiating the lists to store the objects
-        articlesSearchAPIObjectList = new ArrayList<>();
+        listOfArticlesSearchAPIObjects = new ArrayList<>();
         listOfReadArticlesUrls = new ArrayList<>();
 
         //Instantiating and preparing the RecyclerView
@@ -74,10 +84,10 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         rvAdapterDisplaySearchArticles = new RvAdapterDisplaySearchArticles(
                 DisplaySearchArticlesActivity.this,
-                articlesSearchAPIObjectList,
+                listOfArticlesSearchAPIObjects,
                 listOfReadArticlesUrls);
 
-        //We get the list from the activity that passed it (SearchArticlesActivity or WebViewSearchActivity)
+        //We get the list from the database
         loadLoaderGetListFromDatabaseInBackground(LOADER_GET_LIST_IN_BACKGROUND);
 
     }
@@ -137,21 +147,24 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
                 @Override
                 public Loader<List<ArticlesSearchAPIObject>> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.getListFromDatabaseArticlesForSearchArticles(DisplaySearchArticlesActivity.this);
+                    return new ATLFillListWithArticlesForSearchArticles(DisplaySearchArticlesActivity.this);
                 }
 
                 @Override
                 public void onLoadFinished(Loader<List<ArticlesSearchAPIObject>> loader, List<ArticlesSearchAPIObject> data) {
 
                     if (data != null) {
-                        articlesSearchAPIObjectList.addAll(data);
+                        listOfArticlesSearchAPIObjects.addAll(data);
                     }
 
-                    Log.i(TAG, "onLoadFinished: list_size:" + articlesSearchAPIObjectList.size());
+                    Log.i(TAG, "onLoadFinished: list_size:" + listOfArticlesSearchAPIObjects.size());
+
+                    /** After getting the list, we pass it to the RVAdapter
+                     * */
 
                     rvAdapterDisplaySearchArticles = new RvAdapterDisplaySearchArticles(
                             DisplaySearchArticlesActivity.this,
-                            articlesSearchAPIObjectList,
+                            listOfArticlesSearchAPIObjects,
                             listOfReadArticlesUrls);
                     recyclerView.setAdapter(rvAdapterDisplaySearchArticles);
 
@@ -170,7 +183,7 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
 
                 @Override
                 public Loader<List<String>> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.getArticlesReadFromDatabase(DisplaySearchArticlesActivity.this);
+                    return new ATLFillListWithReadArticles(DisplaySearchArticlesActivity.this);
                 }
 
                 @Override
@@ -180,9 +193,12 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
                         listOfReadArticlesUrls.addAll(data);
                     }
 
+                    /** After getting the list, we pass it to the RVAdapter
+                     * */
+
                     rvAdapterDisplaySearchArticles = new RvAdapterDisplaySearchArticles(
                             DisplaySearchArticlesActivity.this,
-                            articlesSearchAPIObjectList,
+                            listOfArticlesSearchAPIObjects,
                             listOfReadArticlesUrls);
                     recyclerView.setAdapter(rvAdapterDisplaySearchArticles);
                 }
