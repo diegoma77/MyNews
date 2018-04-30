@@ -18,7 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
+import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLMainActCreateDatabase;
 import com.example.android.mynews.fragments.PageFragmentBusiness;
 import com.example.android.mynews.fragments.PageFragmentSports;
 import com.example.android.mynews.fragments.PageFragmentTopStories;
@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public Loader<Boolean> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.createDatabaseIfDoesntExist(MainActivity.this);
+                    return new ATLMainActCreateDatabase(MainActivity.this);
                 }
 
                 @Override

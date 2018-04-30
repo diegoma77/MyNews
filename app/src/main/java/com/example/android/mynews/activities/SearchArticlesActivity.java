@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.example.android.mynews.R;
 import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLSearchArticlesAPIRequestAndFillArticlesForSearchArticlesTable;
-import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.extras.helperclasses.ToastHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.extras.interfaceswithconstants.Url;
@@ -477,6 +476,15 @@ public class SearchArticlesActivity extends AppCompatActivity {
      * by the loaders to do the API requests
      */
     private List<String> createListOfUrls() {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        if (calendarBeginDate != null){
+            beginDate = sdf.format(calendarBeginDate.getTime());
+        }
+
+        if (calendarEndDate != null){
+            endDate = sdf.format(calendarEndDate.getTime());
+        }
 
         List <String> listOfUrls = new ArrayList<>();
 

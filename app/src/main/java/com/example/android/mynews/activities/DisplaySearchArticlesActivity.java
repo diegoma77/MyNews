@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import com.example.android.mynews.R;
 import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithArticlesForSearchArticles;
 import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithReadArticles;
-import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 import com.example.android.mynews.rvadapters.RvAdapterDisplaySearchArticles;
 

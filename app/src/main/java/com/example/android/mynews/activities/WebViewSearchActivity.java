@@ -17,7 +17,6 @@ import android.widget.ProgressBar;
 
 import com.example.android.mynews.R;
 import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLInsertReadArticleInDatabase;
-import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 
 import java.util.List;

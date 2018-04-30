@@ -14,7 +14,8 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.android.mynews.R;
-import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
+import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithArticlesForNotifications;
+import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithReadArticles;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 import com.example.android.mynews.rvadapters.RvAdapterDisplayNotificationArticles;
 
@@ -139,7 +140,7 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
 
                 @Override
                 public Loader<List<ArticlesSearchAPIObject>> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.getListFromDatabaseArticlesForNotifications(DisplayNotificationsActivity.this);
+                    return new ATLFillListWithArticlesForNotifications(DisplayNotificationsActivity.this);
                 }
 
                 @Override
@@ -172,7 +173,7 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
 
                 @Override
                 public Loader<List<String>> onCreateLoader(int id, Bundle args) {
-                    return AsyncTaskLoaderHelper.getArticlesReadFromDatabase(DisplayNotificationsActivity.this);
+                    return new ATLFillListWithReadArticles(DisplayNotificationsActivity.this);
                 }
 
                 @Override
