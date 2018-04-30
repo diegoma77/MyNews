@@ -4,8 +4,12 @@ package com.example.android.mynews.extras.interfaceswithconstants;
  * Created by Diego Fajardo on 15/03/2018.
  */
 
+/** This interface is used to build the urls
+ * */
 public interface Url {
 
+    /** Tokens that are common to different parts of the urls
+     * */
     interface GeneralTokens {
 
         String EQUAL = "=";
@@ -15,6 +19,8 @@ public interface Url {
 
     }
 
+    /** Used to build the Top Stories API request
+     * */
     interface TopStoriesUrl {
 
         String TS_BASE_URL = "http://api.nytimes.com/svc/topstories/v2/";
@@ -25,6 +31,8 @@ public interface Url {
 
     }
 
+    /** Used to build the Most Popular API request
+     * */
     interface MostPopularUrl {
 
         String MP_BASE_URL = "https://api.nytimes.com/svc/mostpopular/v2/mostviewed/";
@@ -36,6 +44,8 @@ public interface Url {
 
     }
 
+    /** Used to build the Top Stories API request(only for business articles)
+     * */
     interface BusinessUrl {
 
         String B_BASE_URL = "http://api.nytimes.com/svc/topstories/v2/";
@@ -46,6 +56,8 @@ public interface Url {
 
     }
 
+    /** Used to build the Top Stories API request (only for sports articles)
+     * */
     interface SportsUrl {
 
         String S_BASE_URL = "http://api.nytimes.com/svc/topstories/v2/";
@@ -56,6 +68,8 @@ public interface Url {
 
     }
 
+    /** Used to build the Articles Search API request
+     * */
     interface ArticleSearchUrl {
 
         String BASE_URL = "http://api.nytimes.com/svc/search/v2/articlesearch.json?";
