@@ -24,10 +24,9 @@ import java.util.List;
  * Created by Diego Fajardo on 23/04/2018.
  */
 
+/** Class used to do requests to Most Popular API
+ * */
 public class APIMostPopularRequester {
-
-    // TODO: 29/04/2018 Define
-    // TODO: 23/04/2018 Do this class
 
     //Context
     Context context;
@@ -76,6 +75,8 @@ public class APIMostPopularRequester {
      * METHODS TO DO THE API REQUEST ****
      ************************************/
 
+    /** Starts the JSON Request
+     * */
     public void startJSONRequestMostPopularAPI(String url) {
 
         //Creating a request queue
@@ -86,6 +87,8 @@ public class APIMostPopularRequester {
 
     }
 
+    /** Creates a StringRequest
+     * */
     private StringRequest createStringRequest(final String url, final Context context) {
 
         //String request
@@ -111,6 +114,9 @@ public class APIMostPopularRequester {
 
     }
 
+    /** Parses the JSON Response and fills the list with objects that gather the
+     * proper information
+     * */
     private void MostPopularAPIParseJSONResponse(String response) {
 
         if (response == null || response.length() == 0) {

@@ -5,11 +5,10 @@ import android.content.Intent;
 import android.support.v4.content.Loader;
 import android.util.Log;
 
-import com.example.android.mynews.asynctaskloaders.atl.ATLDoNothing;
-import com.example.android.mynews.asynctaskloaders.atl.ATLFillListWithArticlesForNotifications;
-import com.example.android.mynews.asynctaskloaders.atl.ATLFillListWithArticlesForSearchArticles;
+import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithArticlesForNotifications;
+import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithArticlesForSearchArticles;
 import com.example.android.mynews.asynctaskloaders.atl.atlwebview.ATLSendIntentBack;
-import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLFillListWithReadArticles;
+import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithReadArticles;
 import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLInsertArticleInDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLMainActCreateDatabase;
 import com.example.android.mynews.asynctaskloaders.atl.atlnotif.ATLNotifUpdateDatabase;
@@ -35,12 +34,6 @@ import java.util.List;
 public class AsyncTaskLoaderHelper {
 
     private static final String TAG = "AsyncTaskLoaderHelper";
-
-    /** Used to do sth in the background
-     * but only on the Loader Callback*/
-    public static Loader<Void> doNothing(Context context) {
-        return new ATLDoNothing(context);
-    }
 
     /************************
      * REQUESTS TO API ******

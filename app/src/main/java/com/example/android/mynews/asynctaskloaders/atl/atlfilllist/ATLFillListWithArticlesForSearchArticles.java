@@ -1,4 +1,4 @@
-package com.example.android.mynews.asynctaskloaders.atl;
+package com.example.android.mynews.asynctaskloaders.atl.atlfilllist;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -38,6 +38,10 @@ public class ATLFillListWithArticlesForSearchArticles extends AsyncTaskLoader<Li
 
     @Override
     public List<ArticlesSearchAPIObject> loadInBackground() {
+
+        /** We create a list in the background and if the specific table is not empty,
+         * we fill the list with the information in it. Finally, we return it.
+         * */
 
         List<ArticlesSearchAPIObject> listOfObjects = new ArrayList<>();
 

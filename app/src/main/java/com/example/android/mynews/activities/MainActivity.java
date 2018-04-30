@@ -28,6 +28,7 @@ import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
 import com.example.android.mynews.R;
 import com.example.android.mynews.fragments.PageFragmentMostPopular;
 
+// TODO: 23/04/2018 Do what is done in the Dialog in a different thread (MainActivity)
 // TODO: 30/03/2018 The tablet crashes when showing the DF image
 // TODO: 24/04/2018 Pay attention to loader IDs
 // TODO: 26/04/2018 Too many requests are done at the same time in MainActivity. Change that
@@ -36,6 +37,11 @@ import com.example.android.mynews.fragments.PageFragmentMostPopular;
 // TODO: 26/04/2018 Broadcast Receiver
 // TODO: 30/04/2018 See what to do when there is no information and the text views show things grey (change in layout)
 
+/** First activity displayed when the app is launched.
+ * It shows a tab on the top link to a viewPager. The user
+ * can navigate between for different RecyclerViews to see different
+ * articles ordered by Topic
+ * */
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -90,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.menu_search_button:
-                // TODO: 24/04/2018 Changes SearchArticlesActivity to SAActivityTrial
                 Intent intent1 = new Intent(MainActivity.this, SearchArticlesActivity.class);
                 startActivity(intent1);
                 break;
@@ -112,7 +117,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    /** Method used to link the viewPager with the Adapters via the PageFragmentAdapter
+     */
     private void setupViewPager(ViewPager viewPager) {
         FragmentPageAdapter fragmentPageAdapter = new FragmentPageAdapter(getSupportFragmentManager());
         fragmentPageAdapter.addFragment(new PageFragmentTopStories(), getResources().getString(R.string.top_stories_tag));
@@ -123,7 +129,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(fragmentPageAdapter);
     }
 
-    //Changes the color of the Toolbar Overflow ButtonListener to white
+    /** Changes the color of the Toolbar Overflow ButtonListener to white
+     * */
     public static void setOverflowButtonColor(final Toolbar toolbar, final int color) {
         Drawable drawable = toolbar.getOverflowIcon();
         if(drawable != null) {
@@ -133,8 +140,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // TODO: 23/04/2018 Do it in a different thread
-
+    /** Method that creates an alert dialog that
+     * can be used to delete the Read Articles History
+     * */
     private void alertDialogDeleteHistory () {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -192,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
     /**********************/
 
     /** This LoaderCallback
-     * checks if the tables in the database
+     * allows to check if the tables in the database
      * exist and, if they don't, it fills them
      * with the necessary information
      * */

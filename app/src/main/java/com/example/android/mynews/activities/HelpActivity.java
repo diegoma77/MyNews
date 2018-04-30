@@ -15,6 +15,9 @@ import com.example.android.mynews.R;
  * Created by Diego Fajardo on 26/03/2018.
  */
 
+/** Activity used to display information about how to
+ * use the application
+ * */
 public class HelpActivity extends AppCompatActivity {
 
     private Toolbar toolbar;

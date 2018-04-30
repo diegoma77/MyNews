@@ -17,6 +17,8 @@ import java.util.ArrayList;
  * Created by Diego Fajardo on 02/03/2018.
  */
 
+/** Helper class used to create, read, insert and delete data from the database
+ * */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     //LOG helper
@@ -239,7 +241,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    /** Updates the Query or Section in the database
+    /** METHOD THAT UPDATES the Query or Section Table in the database
      * */
     public void updateSearchQueryOrSection(String queryOrSection, int position) {
 
@@ -302,7 +304,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    /** Sets the state of the switch in the database to true
+    /** METHOD THAT SETS the state of the switch in the database to true
      * */
     public void setSwitchOnInDatabase() {
 
@@ -317,7 +319,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[] { "1" });
     }
 
-    /** Sets the state of the switch in the database to false
+    /** METHOD THAT SETS the state of the switch in the database to false
      * */
     public void setSwitchOffInDatabase() {
 

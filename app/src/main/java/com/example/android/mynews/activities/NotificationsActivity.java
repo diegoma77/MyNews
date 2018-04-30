@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import com.evernote.android.job.JobManager;
 import com.example.android.mynews.R;
-import com.example.android.mynews.asynctaskloaders.atl.ATLFillListWithArticlesForNotifications;
+import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithArticlesForNotifications;
 import com.example.android.mynews.asynctaskloaders.atlhelper.AsyncTaskLoaderHelper;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.helperclasses.ToastHelper;
@@ -541,7 +541,8 @@ public class NotificationsActivity extends AppCompatActivity {
     /** This LoaderCallback
      * updates the listOfQueryAndSections List
      * in the Activity using
-     * the information in the database */
+     * the information in the database
+     * */
     private LoaderManager.LoaderCallbacks<List<String>> loaderUpdateListOfQueryAndSections =
             new LoaderManager.LoaderCallbacks<List<String>>() {
 
@@ -575,7 +576,8 @@ public class NotificationsActivity extends AppCompatActivity {
             };
 
     /** This LoaderCallback
-     * updates the QueryAndSectionsTable of the database */
+     * updates the QueryAndSectionsTable of the database
+     * */
     private LoaderManager.LoaderCallbacks<Boolean> loaderUpdateQueryAndSectionsTable =
             new LoaderManager.LoaderCallbacks<Boolean>() {
 
@@ -598,7 +600,8 @@ public class NotificationsActivity extends AppCompatActivity {
             };
 
     /** This LoaderCallback
-     * updates the switch table of the database */
+     * updates the switch table of the database
+     * */
     private LoaderManager.LoaderCallbacks<Boolean> loaderUpdateSwitchTable =
             new LoaderManager.LoaderCallbacks<Boolean>() {
 
@@ -621,7 +624,8 @@ public class NotificationsActivity extends AppCompatActivity {
             };
 
     /** This LoaderCallback
-     * updates the mSwitch variable in the Activity */
+     * updates the mSwitch variable in the Activity
+     * */
     private LoaderManager.LoaderCallbacks<Boolean> loaderUpdateSwitchVariable =
             new LoaderManager.LoaderCallbacks<Boolean>() {
 
@@ -645,6 +649,10 @@ public class NotificationsActivity extends AppCompatActivity {
                 }
             };
 
+    /** This LoaderCallback
+     * updates fills a list with
+     * the Articles in Articles For Notifications Table
+     * */
     private LoaderManager.LoaderCallbacks <List<ArticlesSearchAPIObject>> loaderGetNotificationArticlesList =
             new LoaderManager.LoaderCallbacks<List<ArticlesSearchAPIObject>>() {
                 @NonNull

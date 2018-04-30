@@ -1,4 +1,4 @@
-package com.example.android.mynews.asynctaskloaders.atl;
+package com.example.android.mynews.asynctaskloaders.atl.atlfilllist;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -41,6 +41,10 @@ public class ATLFillListWithArticlesForNotifications extends AsyncTaskLoader<Lis
     @Override
     public List<ArticlesSearchAPIObject> loadInBackground() {
 
+        /** We create a list in the background and if the specific table is not empty,
+         * we fill the list with the information in it.
+         * */
+
         List<ArticlesSearchAPIObject> listOfObjects = new ArrayList<>();
 
         if (!dbH.isTableEmpty(DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME)){
@@ -65,8 +69,10 @@ public class ATLFillListWithArticlesForNotifications extends AsyncTaskLoader<Lis
                 }
             }
 
-            /** If the list has at least one item and
-             * the Articles Read Database is not empty, then...
+            /** If the list has at least one item and the Articles Read Database is not empty,
+             * then we check that there are not read articles between the articles we want to
+             * display in the notification link (because, supposedly, they are new
+             * so they cannot be "already read" articles).
              * */
             if ((!dbH.isTableEmpty(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME) && (listOfObjects.size()!= 0))){
 

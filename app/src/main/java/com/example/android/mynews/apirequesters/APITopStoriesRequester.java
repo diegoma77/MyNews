@@ -24,6 +24,8 @@ import java.util.List;
  * Created by Diego Fajardo on 22/04/2018.
  */
 
+/** Class used to do requests to Top Stories API
+ * */
 public class APITopStoriesRequester {
 
     //Context
@@ -73,6 +75,8 @@ public class APITopStoriesRequester {
      * METHODS TO DO THE API REQUEST ****
      ************************************/
 
+    /** Starts the JSON Request
+     * */
     public void startJSONRequestTopStoriesAPI(String url) {
 
         //Creating a request queue
@@ -83,7 +87,8 @@ public class APITopStoriesRequester {
 
     }
 
-
+    /** Creates a StringRequest
+     * */
     private StringRequest createStringRequest(final String url, final Context context) {
 
         //String request
@@ -110,6 +115,9 @@ public class APITopStoriesRequester {
 
     }
 
+    /** Parses the JSON Response and fills the list with objects that gather the
+     * proper information
+     * */
     private void TopStoriesAPIParseJSONResponse(String response) {
 
         if (response == null || response.length() == 0) {

@@ -17,6 +17,8 @@ import com.example.android.mynews.activities.DisplayNotificationsActivity;
  * Created by Diego Fajardo on 24/03/2018.
  */
 
+// TODO: 30/04/2018 Delete
+
 public class NotificationReceiver extends BroadcastReceiver {
 
     /** This class is used for displaying the notifications */

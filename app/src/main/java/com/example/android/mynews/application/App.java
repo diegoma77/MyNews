@@ -1,4 +1,4 @@
-package com.example.android.mynews.Application;
+package com.example.android.mynews.application;
 
 import android.app.Application;
 
@@ -12,6 +12,8 @@ import com.example.android.mynews.job.NotificationJobCreator;
 /** Used for Android Job, Evernote Library
  * */
 public class App extends Application {
+
+    // TODO: 30/04/2018 Put it in the manifest
 
     @Override
     public void onCreate() {
