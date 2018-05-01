@@ -1,5 +1,6 @@
 package com.example.android.mynews.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -247,6 +249,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 ToastHelper.toastShort(
                         SearchArticlesActivity.this,
                         getResources().getString(R.string.search_articles_toast_choose_one_category));
+                hideKeyboard(SearchArticlesActivity.this);
 
                 /** The endDate must be
                  * after beginDate
@@ -258,6 +261,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 ToastHelper.toastShort(
                         SearchArticlesActivity.this,
                         getResources().getString(R.string.search_articles_toast_end_and_begin_dates));
+                hideKeyboard(SearchArticlesActivity.this);
 
                 /** The endDate must not be
                  * after today
@@ -269,6 +273,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
                 ToastHelper.toastShort(
                         SearchArticlesActivity.this,
                         getResources().getString(R.string.search_articles_toast_end_and_today_dates));
+                hideKeyboard(SearchArticlesActivity.this);
 
                 /** If the rest of if and if else statements does not
                  * run, then everything is fine and we can start
@@ -278,6 +283,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
                 Log.i(TAG, "onClick last else beginDate: " + beginDate);
                 Log.i(TAG, "onClick last else endDate: " + endDate);
+                hideKeyboard(SearchArticlesActivity.this);
 
                 //We start the API Request
                 loadLoaderArticlesSearchAPIRequest(LOADER_ARTICLES_SEARCH_API_REQUEST);
@@ -301,7 +307,6 @@ public class SearchArticlesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // TODO: 25/04/2018 Save here the search of the user (if wanted)
     @Override
     protected void onPause() {
         super.onPause();
@@ -517,6 +522,20 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
     }
 
+    /** Method that hides the keyboard
+     * */
+    private static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+
     /** Method that shows the progress information
      */
     private void showProgressInfo() {
@@ -533,6 +552,13 @@ public class SearchArticlesActivity extends AppCompatActivity {
         LinearLayout layout = findViewById(R.id.progress_info);
         layout.setVisibility(View.INVISIBLE);
 
+    }
+
+    /** METHOD that returns the listOfQueryAndSections
+     * (test purposes)
+     * */
+    public List<String> getListOfSections() {
+        return listOfSections;
     }
 
 

@@ -28,6 +28,7 @@ import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
 import com.example.android.mynews.R;
 import com.example.android.mynews.fragments.PageFragmentMostPopular;
 
+
 // TODO: 30/04/2018 Search articles activity. See how to hide the keyboard
 // TODO: 23/04/2018 Do what is done in the Dialog in a different thread (MainActivity)
 // TODO: 30/03/2018 The tablet crashes when showing the DF image
@@ -36,6 +37,7 @@ import com.example.android.mynews.fragments.PageFragmentMostPopular;
 // TODO: 26/04/2018 Delete List Detectors from NotificationsActivity
 // TODO: 26/04/2018 Broadcast Receiver
 // TODO: 30/04/2018 See what to do when there is no information and the text views show things grey (change in layout)
+// TODO: 01/05/2018 Progress Bar (test SearchArticlesActivity)
 
 /** First activity displayed when the app is launched.
  * It shows a tab on the top link to a viewPager. The user

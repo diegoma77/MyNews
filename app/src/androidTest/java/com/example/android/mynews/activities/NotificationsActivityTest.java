@@ -1,10 +1,8 @@
 package com.example.android.mynews.activities;
 
-import android.app.Activity;
 import android.app.Instrumentation;
 import android.database.Cursor;
 import android.support.design.widget.TextInputEditText;
-import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.widget.CheckBox;
 import android.widget.Switch;
@@ -31,10 +29,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
-import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertTrue;
 
@@ -43,6 +38,9 @@ import static org.junit.Assert.assertTrue;
  */
 
 // TODO: 30/04/2018 Test a notification has been created
+// TODO: 30/04/2018 Test DisplayNotificationsActivity Button
+// TODO: 01/05/2018 Test MainActivityIsLaunched
+
 public class NotificationsActivityTest {
 
     /**
@@ -76,7 +74,7 @@ public class NotificationsActivityTest {
 
     private Switch notif_switch;
 
-    List<String> listOfQueryAndSections;
+    private List<String> listOfQueryAndSections;
 
     private TextInputEditText mTextInputEditText;
 

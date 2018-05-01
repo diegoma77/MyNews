@@ -103,6 +103,13 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(DisplaySearchArticlesActivity.this, SearchArticlesActivity.class);
+        startActivity(intent);
+        super.onBackPressed();
+    }
+
     /**************************
      *** LOADERS **************
      **************************/

@@ -1,24 +1,16 @@
 package com.example.android.mynews.activities;
 
-import android.app.Instrumentation;
 import android.database.Cursor;
-import android.support.design.widget.TextInputEditText;
 import android.support.test.rule.ActivityTestRule;
-import android.widget.CheckBox;
-import android.widget.Switch;
-import android.widget.Toast;
 
-import com.example.android.mynews.R;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
-import com.example.android.mynews.extras.helperclasses.ToastHelper;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
 
 /**
