@@ -1,8 +1,9 @@
-package com.example.android.mynews.activities;
+package com.example.android.mynews.activities.tests;
 
 import android.database.Cursor;
 import android.support.test.rule.ActivityTestRule;
 
+import com.example.android.mynews.activities.MainActivity;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;

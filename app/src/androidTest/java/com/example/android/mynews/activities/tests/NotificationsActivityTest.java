@@ -1,4 +1,4 @@
-package com.example.android.mynews.activities;
+package com.example.android.mynews.activities.tests;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -9,6 +9,9 @@ import android.widget.CheckBox;
 import android.widget.Switch;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.activities.DisplayNotificationsActivity;
+import com.example.android.mynews.activities.MainActivity;
+import com.example.android.mynews.activities.NotificationsActivity;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;

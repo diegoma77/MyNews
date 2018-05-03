@@ -1,4 +1,4 @@
-package com.example.android.mynews.activities;
+package com.example.android.mynews.activities.tests;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -8,6 +8,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.activities.DisplayNotificationsActivity;
+import com.example.android.mynews.activities.WebViewNotificationsActivity;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 
 import org.junit.After;
@@ -28,17 +30,17 @@ import static org.junit.Assert.assertNotNull;
  * Created by Diego Fajardo on 03/05/2018.
  */
 
-public class WebViewMainActivityTest {
+public class WebViewNotificationsActivityTest {
 
     @Rule
-    public ActivityTestRule<WebViewMainActivity> webViewMainActivityTestRule =
-            new ActivityTestRule<WebViewMainActivity>(WebViewMainActivity.class);
+    public ActivityTestRule<WebViewNotificationsActivity> webViewNotificationsActivityTestRule =
+            new ActivityTestRule<WebViewNotificationsActivity>(WebViewNotificationsActivity.class);
 
-    private WebViewMainActivity mActivity = null;
+    private WebViewNotificationsActivity mActivity = null;
 
-    Instrumentation.ActivityMonitor mainActivityMonitor =
+    Instrumentation.ActivityMonitor displayNotificationsActivityMonitor =
             getInstrumentation().addMonitor(
-                    MainActivity.class.getName(),
+                    DisplayNotificationsActivity.class.getName(),
                     null,
                     false);
 
@@ -52,13 +54,13 @@ public class WebViewMainActivityTest {
     public void setUp() throws Exception {
 
         /** With this, we get the context! */
-        mActivity = webViewMainActivityTestRule.getActivity();
+        mActivity = webViewNotificationsActivityTestRule.getActivity();
 
         articleUrl = "https://www.nytimes.com/1990/10/19/business/textron-posts-gain-in-profits.html";
 
         targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        intent = new Intent(targetContext, WebViewMainActivity.class);
+        intent = new Intent(targetContext, WebViewNotificationsActivity.class);
         intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, articleUrl);
 
     }
@@ -66,10 +68,10 @@ public class WebViewMainActivityTest {
     @Test
     public void testHomeButton() {
 
-        webViewMainActivityTestRule.launchActivity(intent);
+        webViewNotificationsActivityTestRule.launchActivity(intent);
 
         onView(withContentDescription(R.string.go_back)).perform(click());
-        Activity displaySearcgArticlesActivity = getInstrumentation().waitForMonitorWithTimeout(mainActivityMonitor, 5000);
+        Activity displaySearcgArticlesActivity = getInstrumentation().waitForMonitorWithTimeout(displayNotificationsActivityMonitor, 5000);
         assertNotNull(displaySearcgArticlesActivity);
         displaySearcgArticlesActivity.finish();
 
@@ -78,7 +80,7 @@ public class WebViewMainActivityTest {
     @Test
     public void testWebViewDisplayed () {
 
-        webViewMainActivityTestRule.launchActivity(intent);
+        webViewNotificationsActivityTestRule.launchActivity(intent);
 
         onView(withId(R.id.webView)).check(matches(isDisplayed()));
 

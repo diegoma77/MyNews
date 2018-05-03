@@ -1,4 +1,4 @@
-package com.example.android.mynews.activities;
+package com.example.android.mynews.activities.tests;
 
 import android.app.Instrumentation;
 import android.content.Context;
@@ -10,6 +10,9 @@ import android.support.test.rule.ActivityTestRule;
 import android.view.View;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.activities.DisplayNotificationsActivity;
+import com.example.android.mynews.activities.MainActivity;
+import com.example.android.mynews.activities.SearchArticlesActivity;
 
 import org.hamcrest.Matcher;
 import org.junit.After;
@@ -38,7 +41,8 @@ import static org.hamcrest.core.IsNull.notNullValue;
 
 public class MainActivityTest {
 
-    // TODO: 03/05/2018 I have to differentiate between the different fragments
+    // TODO: 03/05/2018 I have to differentiate between the different fragments.
+    // Doesnt let me test.
 
     /**
      * This RULE specifies that this activity is launched
@@ -130,36 +134,6 @@ public class MainActivityTest {
 
         mActivity = null;
 
-    }
-
-    /** Used to click items in the recyclerview
-     * */
-    public class MyViewAction {
-
-        public ViewAction clickChildViewWithId(final int id) {
-            return new ViewAction() {
-                @Override
-                public Matcher<View> getConstraints() {
-                    return null;
-                }
-
-                @Override
-                public String getDescription() {
-                    return "Click on a child view with specified id.";
-                }
-
-                @Override
-                public void perform(UiController uiController, View view) {
-                    View v = view.findViewById(id);
-                    v.performClick();
-                }
-            };
-        }
-    }
-
-    private String getResourceString(int id) {
-        Context targetContext = InstrumentationRegistry.getTargetContext();
-        return targetContext.getResources().getString(id);
     }
 
 }

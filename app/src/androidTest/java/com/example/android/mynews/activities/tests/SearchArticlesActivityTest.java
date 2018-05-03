@@ -1,4 +1,4 @@
-package com.example.android.mynews.activities;
+package com.example.android.mynews.activities.tests;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -13,6 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.activities.DisplaySearchArticlesActivity;
+import com.example.android.mynews.activities.MainActivity;
+import com.example.android.mynews.activities.SearchArticlesActivity;
 import com.example.android.mynews.extras.helperclasses.UrlConverter;
 
 import org.hamcrest.Matchers;

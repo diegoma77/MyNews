@@ -1,4 +1,4 @@
-package com.example.android.mynews.activities;
+package com.example.android.mynews.activities.tests;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -8,6 +8,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.activities.DisplaySearchArticlesActivity;
+import com.example.android.mynews.activities.WebViewSearchActivity;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 
 import org.junit.After;

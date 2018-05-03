@@ -1,10 +1,13 @@
-package com.example.android.mynews.activities;
+package com.example.android.mynews.activities.tests;
 
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.support.test.rule.ActivityTestRule;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.activities.DisplayNotificationsActivity;
+import com.example.android.mynews.activities.NotificationsActivity;
+import com.example.android.mynews.activities.WebViewNotificationsActivity;
 
 import org.junit.After;
 import org.junit.Before;

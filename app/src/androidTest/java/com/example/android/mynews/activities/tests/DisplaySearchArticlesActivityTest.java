@@ -1,4 +1,4 @@
-package com.example.android.mynews.activities;
+package com.example.android.mynews.activities.tests;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.activities.DisplaySearchArticlesActivity;
+import com.example.android.mynews.activities.SearchArticlesActivity;
+import com.example.android.mynews.activities.WebViewSearchActivity;
 import com.example.android.mynews.activities.helpers.RecyclerViewMatcher;
 
 import org.hamcrest.Description;
