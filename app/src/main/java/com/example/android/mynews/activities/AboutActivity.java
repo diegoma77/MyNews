@@ -21,9 +21,6 @@ public class AboutActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
-    private TextView textView;
-    private ImageView imageView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

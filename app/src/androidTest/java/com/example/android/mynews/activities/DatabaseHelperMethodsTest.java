@@ -135,29 +135,6 @@ public class DatabaseHelperMethodsTest {
     }
 
     @Test
-    public void testInsertDataToUrlsForNotificationsTable() throws Exception {
-
-        //We delete all the rows of the table
-        dbH.deleteAllRowsFromTableName(DatabaseContract.Database.URLS_FOR_NOTIFICATIONS_TABLE_NAME);
-        dbH.resetAutoIncrement(DatabaseContract.Database.URLS_FOR_NOTIFICATIONS_TABLE_NAME);
-
-        String url = "url";
-
-        //We check that the insertion in the database returned true
-        boolean valueReturned = dbH.insertDataToUrlsForNotificationsTable(url);
-        assertTrue(valueReturned);
-
-        //We check that the data (new row) is in every column
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.URLS_FOR_NOTIFICATIONS_TABLE_NAME);
-
-        //We check what is in the row (every column)
-        mCursor.moveToFirst();
-        String tempStorage = mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.URL));
-        assertTrue(tempStorage.equals(url));
-
-    }
-
-    @Test
     public void testInsertDataToSearchQueryTable () throws Exception {
 
         //We delete all the rows of the table

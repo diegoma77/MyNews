@@ -80,19 +80,6 @@ public class DatabaseContract {
         public static final String NOTIF_NEW_DESK = "new_desk";
         public static final String NOTIF_PUB_DATE = "pub_date";
 
-
-        /** URLS FOR NOTIFICATIONS TABLE
-         * Table that stores the urls needed to do an Articles Search API request
-         * on the background as a previous step before creting the
-         * notification
-         * */
-        //TABLE NAME for Saving urls for notifications
-        public static final String URLS_FOR_NOTIFICATIONS_TABLE_NAME = "urls_for_notifications";
-
-        //TABLE COLUMNS
-        public static final String URL_ID = "id";
-        public static final String URL = "url";
-
     }
 
 }

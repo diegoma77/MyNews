@@ -26,18 +26,4 @@
         android:textColor="@color/colorPrimaryDark"
         android:padding="10dp"/>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:src="@drawable/df_logo_round"/>
-
-    </FrameLayout>
-
-
-
 </LinearLayout>

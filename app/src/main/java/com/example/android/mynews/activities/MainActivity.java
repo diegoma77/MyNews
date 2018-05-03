@@ -4,6 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -11,46 +14,37 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import com.example.android.mynews.R;
+import com.example.android.mynews.asynctaskloaders.atldatabase.ATLDeleteHistory;
 import com.example.android.mynews.asynctaskloaders.atldatabase.ATLMainActCreateDatabase;
+import com.example.android.mynews.extras.helperclasses.ToastHelper;
+import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
 import com.example.android.mynews.fragments.PageFragmentBusiness;
+import com.example.android.mynews.fragments.PageFragmentMostPopular;
 import com.example.android.mynews.fragments.PageFragmentSports;
 import com.example.android.mynews.fragments.PageFragmentTopStories;
-import com.example.android.mynews.data.DatabaseContract;
-import com.example.android.mynews.data.DatabaseHelper;
-import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
-import com.example.android.mynews.R;
-import com.example.android.mynews.fragments.PageFragmentMostPopular;
 
-
-// TODO: 30/04/2018 Search articles activity. See how to hide the keyboard
-// TODO: 23/04/2018 Do what is done in the Dialog in a different thread (MainActivity)
-// TODO: 30/03/2018 The tablet crashes when showing the DF image
 // TODO: 24/04/2018 Pay attention to loader IDs
 // TODO: 26/04/2018 Some images (SearchArticles) load too slow
-// TODO: 26/04/2018 Delete List Detectors from NotificationsActivity
-// TODO: 26/04/2018 Broadcast Receiver
 // TODO: 30/04/2018 See what to do when there is no information and the text views show things grey (change in layout)
 // TODO: 01/05/2018 Progress Bar (test SearchArticlesActivity)
 
 /** First activity displayed when the app is launched.
  * It shows a tab on the top link to a viewPager. The user
- * can navigate between for different RecyclerViews to see different
- * articles ordered by Topic
+ * can navigate between for different RecyclerViews to see
+ * different articles ordered by Topic.
  * */
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
     private static final int LOADER_DATABASE_CREATION = 1;
-
-    private DatabaseHelper dbH;
+    private static final int LOADER_DELETE_HISTORY = 2;
 
     //Toolbar variable
     private Toolbar toolbar;
@@ -72,9 +66,6 @@ public class MainActivity extends AppCompatActivity {
         //we create them
         loadLoaderCreateDatabase(LOADER_DATABASE_CREATION);
 
-        //Instantiation of the DatabaseHelper
-        dbH = new DatabaseHelper(this);
-
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         if (viewPager != null){
@@ -86,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
     }
+
 
     /*********************
      * MENU OPTIONS ******
@@ -116,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity (new Intent(MainActivity.this, HelpActivity.class));
                 break;
             case R.id.menu_about_button:
-                startActivity (new Intent(MainActivity.this, DisplaySearchArticlesActivity.class));
+                startActivity (new Intent(MainActivity.this, AboutActivity.class));
                 break;
 
         }
@@ -157,14 +149,9 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton(getResources().getString(R.string.delete_history_positive_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dbH.deleteAllRowsFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
-                        dbH.resetAutoIncrement(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
-                        Toast.makeText(MainActivity.this, getResources().getString(R.string.delete_history_toast), Toast.LENGTH_SHORT).show();
 
-                        //Code used to restart the activity
-                        Intent intent = getIntent();
-                        finish();
-                        startActivity(intent);
+                        loadLoaderDeleteHistory(LOADER_DELETE_HISTORY);
+
                     }
                 })
                 .setNegativeButton(getResources().getString(R.string.delete_history_negative_button), new DialogInterface.OnClickListener() {
@@ -200,6 +187,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void loadLoaderDeleteHistory (int id) {
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<Void> loader = loaderManager.getLoader(id);
+
+        if (loader == null) {
+            Log.i(TAG, "loadLoaderUpdateSwitchTable: ");
+            loaderManager.initLoader(id, null, loaderDeleteHistory);
+        } else {
+            Log.i(TAG, "loadLoaderUpdateSwitchTable: ");
+            loaderManager.restartLoader(id, null, loaderDeleteHistory);
+        }
+    }
+
 
     /**********************/
     /** LOADER CALLBACKS **/
@@ -227,7 +228,31 @@ public class MainActivity extends AppCompatActivity {
                 public void onLoaderReset(Loader<Boolean> loader) {
 
                 }
-
             };
 
+    private LoaderManager.LoaderCallbacks<Void> loaderDeleteHistory =
+            new LoaderManager.LoaderCallbacks<Void>() {
+                @NonNull
+                @Override
+                public Loader<Void> onCreateLoader(int id, @Nullable Bundle args) {
+                    return new ATLDeleteHistory(MainActivity.this);
+                }
+
+                @Override
+                public void onLoadFinished(@NonNull Loader<Void> loader, Void data) {
+
+                    ToastHelper.toastShort(MainActivity.this, getResources().getString(R.string.delete_history_toast));
+
+                    //Code used to restart the activity
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+
+                }
+
+                @Override
+                public void onLoaderReset(@NonNull Loader<Void> loader) {
+
+                }
+            };
 }

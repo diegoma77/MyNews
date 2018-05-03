@@ -2,10 +2,7 @@ package com.example.android.mynews.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -13,32 +10,22 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import com.evernote.android.job.JobManager;
 import com.example.android.mynews.R;
-import com.example.android.mynews.apirequesters.APISearchArticlesRequester;
-import com.example.android.mynews.asynctaskloaders.atlnotif.ATLNotifCheckIfArticlesForNotificationsIsNotEmpty;
-import com.example.android.mynews.asynctaskloaders.atlnotif.ATLNotifFillURLsTable;
-import com.example.android.mynews.asynctaskloaders.atlnotif.ATLNotifUpdateUIQueryAndSectionsTable;
 import com.example.android.mynews.asynctaskloaders.atlnotif.ATLNotifUpdateQueryAndSectionsTable;
 import com.example.android.mynews.asynctaskloaders.atlnotif.ATLNotifUpdateSwitchTable;
+import com.example.android.mynews.asynctaskloaders.atlnotif.ATLNotifUpdateUIQueryAndSectionsTable;
 import com.example.android.mynews.asynctaskloaders.atlnotif.ATLNotifUpdateUISwitch;
-import com.example.android.mynews.asynctaskloaders.atlrequest.ATLSearchArticlesAPIRequestAndFillArticlesForNotificationsTable;
-import com.example.android.mynews.data.DatabaseContract;
-import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.extras.helperclasses.ToastHelper;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.job.NotificationDailyJob;
 import com.example.android.mynews.job.NotificationJobCreator;
-import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,13 +36,10 @@ import java.util.List;
 
 /** Activity that displays different options to allow the user get
  * notifications of new articles according to those options.
- * It allows to set the notifications on/off and allows the user to
- * reach an Activity where can see the Articles for Notifications (using
- * the button in the action bar)
+ * It allows to set the notifications on/off.
  * */
 public class NotificationsActivity extends AppCompatActivity {
 
-    // TODO: 22/04/2018 Remove the ListDetector!!!!
     //Tag
     private static final String TAG = "NotificationsActivity";
 
@@ -64,7 +48,6 @@ public class NotificationsActivity extends AppCompatActivity {
     private static final int LOADER_UPDATE_LIST_ID = 2;
     private static final int LOADER_UPDATE_DATABASE_SWITCH_ID = 3;
     private static final int LOADER_UPDATE_SWITCH_ID = 4;
-    private static final int LOADER_FILL_URLS_ID = 5;
 
     //Context
     private Context context;
@@ -90,7 +73,6 @@ public class NotificationsActivity extends AppCompatActivity {
 
     //JobScheduler id
     private int id;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,6 +175,9 @@ public class NotificationsActivity extends AppCompatActivity {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
             if (isChecked) {
+
+                //We cancel the job to avoid creating more than one
+                cancelJob(id);
 
                 updateQueryInTheList();
                 ToastHelper.toastShort(NotificationsActivity.this, getResources().getString(R.string.notification_is_created));
