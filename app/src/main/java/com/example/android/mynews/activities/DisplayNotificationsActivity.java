@@ -62,6 +62,7 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeActionContentDescription(getResources().getString(R.string.go_back));
         }
 
         //Changes the color of the Toolbar Overflow ButtonListener to white

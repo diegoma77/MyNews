@@ -93,6 +93,7 @@ public class NotificationsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeActionContentDescription(getResources().getString(R.string.go_back));
         }
 
         //Needed for getApplicationContext() to work

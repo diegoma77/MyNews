@@ -7,6 +7,7 @@ import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -220,6 +221,13 @@ public class DatabaseHelperMethodsTest {
         mCursor.moveToFirst();
         tempStorage = mCursor.getInt(mCursor.getColumnIndex(DatabaseContract.Database.SWITCH_STATE));
         assertTrue(tempStorage == off);
+
+    }
+
+    @After
+    public void tearDown() throws Exception {
+
+        mActivity = null;
 
     }
 

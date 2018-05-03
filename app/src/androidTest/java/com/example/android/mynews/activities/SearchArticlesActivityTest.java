@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
+import com.example.android.mynews.extras.helperclasses.UrlConverter;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -104,6 +105,16 @@ public class SearchArticlesActivityTest {
         //Views (buttons)
         endDateButton = mActivity.findViewById(R.id.search_button_endDate);
         beginDateButton = mActivity.findViewById(R.id.search_button_beginDate);
+
+    }
+
+    @Test
+    public void testHomeButton() {
+
+        onView(withContentDescription(R.string.go_back)).perform(click());
+        Activity searchArticlesActivity = getInstrumentation().waitForMonitorWithTimeout(mainActivityMonitor, 5000);
+        assertNotNull(searchArticlesActivity);
+        searchArticlesActivity.finish();
 
     }
 
@@ -238,7 +249,7 @@ public class SearchArticlesActivityTest {
         onView(withId(R.id.search_text_input_edit_text))
                 .perform(typeText("This is a test"));
 
-        String searchQueryAfterTransformation = mActivity.getSearchQueryAndAdaptForUrl();
+        String searchQueryAfterTransformation = UrlConverter.getSearchQueryAndAdaptForUrl(mTextInputEditText);
 
         //If the String has no spaces between the words then it's suitable for the Url
         assertTrue(!searchQueryAfterTransformation.contains(" "));
@@ -251,8 +262,8 @@ public class SearchArticlesActivityTest {
         onView(withId(R.id.search_checkBox_sports)).perform(click());
         onView(withId(R.id.search_checkBox_travel)).perform(click());
 
-        String checkboxesToString = mActivity
-                .getNewDeskValuesAndAdaptForUrl(mActivity.getListOfSections());
+        String checkboxesToString = UrlConverter.getSectionsAndAdaptForUrl(
+                mActivity.getListOfSections());
 
         //If the String has no spaces between the words then it's suitable for the Url
         assertTrue(!checkboxesToString.contains(" "));
@@ -304,9 +315,7 @@ public class SearchArticlesActivityTest {
         onView(withId(R.id.search_button)).perform(click());
 
         Activity displaySearchArticles = getInstrumentation().waitForMonitorWithTimeout(displaySearchArticlesActivityMonitor, 5000);
-
         assertNotNull(displaySearchArticles);
-
         displaySearchArticles.finish();
 
     }

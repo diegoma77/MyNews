@@ -99,7 +99,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeActionContentDescription(R.string.home_button_search_activity_content_description);
+        actionBar.setHomeActionContentDescription(getResources().getString(R.string.go_back));
 
         /** Instantiating Calendars (the order is important because is related to the
          * current system time and endDate must be after beginDate always) */
@@ -500,7 +500,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
         List <String> listOfUrls = new ArrayList<>();
 
         listOfUrls.add(
-                getSearchArticlesUrl(
+                UrlConverter.getSearchArticlesUrl(
                         UrlConverter.getSearchQueryAndAdaptForUrl(mTextInputEditText),
                         UrlConverter.getSectionsAndAdaptForUrl(listOfSections),
                         beginDate,
@@ -508,7 +508,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
                         Url.ArticleSearchUrl.PAGE_ONE));
 
         listOfUrls.add(
-                getSearchArticlesUrl(
+                UrlConverter.getSearchArticlesUrl(
                         UrlConverter.getSearchQueryAndAdaptForUrl(mTextInputEditText),
                         UrlConverter.getSectionsAndAdaptForUrl(listOfSections),
                         beginDate,
@@ -516,7 +516,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
                         Url.ArticleSearchUrl.PAGE_TWO));
 
         listOfUrls.add(
-                getSearchArticlesUrl(
+                UrlConverter.getSearchArticlesUrl(
                         UrlConverter.getSearchQueryAndAdaptForUrl(mTextInputEditText),
                         UrlConverter.getSectionsAndAdaptForUrl(listOfSections),
                         beginDate,

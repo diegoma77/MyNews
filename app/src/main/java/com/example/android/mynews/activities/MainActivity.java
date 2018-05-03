@@ -22,7 +22,6 @@ import android.view.MenuItem;
 import com.example.android.mynews.R;
 import com.example.android.mynews.asynctaskloaders.atldatabase.ATLDeleteHistory;
 import com.example.android.mynews.asynctaskloaders.atldatabase.ATLMainActCreateDatabase;
-import com.example.android.mynews.data.AndroidDatabaseManager;
 import com.example.android.mynews.extras.helperclasses.ToastHelper;
 import com.example.android.mynews.fragmentadapters.FragmentPageAdapter;
 import com.example.android.mynews.fragments.PageFragmentBusiness;
@@ -33,6 +32,7 @@ import com.example.android.mynews.fragments.PageFragmentTopStories;
 // TODO: 26/04/2018 Some images (SearchArticles) load too slow
 // TODO: 30/04/2018 See what to do when there is no information and the text views show things grey (change in layout)
 // TODO: 01/05/2018 Progress Bar (test SearchArticlesActivity)
+// TODO: 03/05/2018 Problems with webViewsTests
 
 /** First activity displayed when the app is launched.
  * It shows a tab on the top link to a viewPager. The user
@@ -110,8 +110,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_about_button:
                 startActivity (new Intent(MainActivity.this, AboutActivity.class));
                 break;
-            case R.id.menu_database_manager_button:
-                startActivity(new Intent(MainActivity.this, AndroidDatabaseManager.class));
 
         }
         return super.onOptionsItemSelected(item);

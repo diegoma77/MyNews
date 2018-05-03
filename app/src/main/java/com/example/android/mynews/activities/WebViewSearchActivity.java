@@ -58,8 +58,11 @@ public class WebViewSearchActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeActionContentDescription(getResources().getString(R.string.go_back));
+        }
 
         //We get the progress bar
         progressBar = (ProgressBar) findViewById(R.id.webView_progressBar);

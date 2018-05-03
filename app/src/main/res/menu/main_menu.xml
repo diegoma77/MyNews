@@ -6,37 +6,30 @@
         android:id="@+id/menu_search_button"
         android:icon="@drawable/ic_search_white_24dp"
         app:showAsAction="ifRoom"
-        android:title="Search" />
+        android:title="@string/main_search" />
 
     <item
         android:id="@+id/menu_notifications_button"
-        android:title="Notifications"
+        android:title="@string/main_notifications"
         app:showAsAction="never">
     </item>
 
     <item
         android:id="@+id/menu_delete_database"
-        android:title="Delete History"
+        android:title="@string/main_delete_history"
         app:showAsAction="never">
     </item>
 
     <item
         android:id="@+id/menu_help_button"
-        android:title="Help"
+        android:title="@string/main_help"
         app:showAsAction="never">
     </item>
 
     <item
         android:id="@+id/menu_about_button"
-        android:title="About"
+        android:title="@string/main_about"
         app:showAsAction="never">
     </item>
-
-    <item
-        android:id="@+id/menu_database_manager_button"
-        android:title="Database Manager"
-        app:showAsAction="never">
-    </item>
-
 
 </menu>

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">My News</string>
 
+    <string name="go_back" >Go back</string>
+
     <!-- MAIN ACTIVITY STRINGS -->
 
     <string name="top_stories_tag"> TOP STORIES </string>
@@ -13,6 +15,12 @@
     <string name="delete_history_positive_button">Yes, I am sure</string>
     <string name="delete_history_negative_button">No</string>
     <string name="delete_history_toast">History has been deleted</string>
+
+    <string name="main_search">Search</string>
+    <string name="main_notifications">Notifications</string>
+    <string name="main_delete_history">Delete History</string>
+    <string name="main_help">Help</string>
+    <string name="main_about">About</string>
 
     <!-- SEARCH QUERY TERM, CHECKBOXES AND DATE BUTTONS -->
 
@@ -95,5 +103,6 @@
         the main bar), choose the categories, introduce a search query if you'd like and switch
         the button on. The app will send you a notification every day with new articles.
     </string>
+
 
 </resources>

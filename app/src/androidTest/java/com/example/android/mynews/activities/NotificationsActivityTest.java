@@ -1,5 +1,6 @@
 package com.example.android.mynews.activities;
 
+import android.app.Activity;
 import android.app.Instrumentation;
 import android.database.Cursor;
 import android.support.design.widget.TextInputEditText;
@@ -29,8 +30,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -111,6 +114,16 @@ public class NotificationsActivityTest {
                 DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME);
         mCursorSwitch = dbH.getAllDataFromTableName(
                 DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME);
+
+    }
+
+    @Test
+    public void testHomeButton() {
+
+        onView(withContentDescription(R.string.go_back)).perform(click());
+        Activity searchArticlesActivity = getInstrumentation().waitForMonitorWithTimeout(mainActivityMonitor, 5000);
+        assertNotNull(searchArticlesActivity);
+        searchArticlesActivity.finish();
 
     }
 
