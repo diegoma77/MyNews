@@ -23,8 +23,7 @@ import java.util.List;
 public class ATLFillListWithArticlesForNotifications extends AsyncTaskLoader<List<ArticlesSearchAPIObject>> {
 
     private DatabaseHelper dbH;
-    private Cursor cursorNotificationTable;
-    private Cursor cursorReadArticlesTable;
+    private Cursor mCursor;
 
     public ATLFillListWithArticlesForNotifications(
             Context context) {
@@ -47,74 +46,29 @@ public class ATLFillListWithArticlesForNotifications extends AsyncTaskLoader<Lis
 
         List<ArticlesSearchAPIObject> listOfObjects = new ArrayList<>();
 
-        if (!dbH.isTableEmpty(DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME)){
+        if (!dbH.isTableEmpty(DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME)) {
 
-            cursorNotificationTable = dbH.getAllDataFromTableName(DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME);
-            cursorNotificationTable.moveToFirst();
-
-            for (int i = 0; i < cursorNotificationTable.getCount(); i++) {
+            mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME);
+            mCursor.moveToFirst();
+            for (int i = 0; i < mCursor.getCount(); i++) {
 
                 ArticlesSearchAPIObject object = new ArticlesSearchAPIObject();
 
-                object.setWebUrl(cursorNotificationTable.getString(cursorNotificationTable.getColumnIndex(DatabaseContract.Database.SA_WEB_URL)));
-                object.setSnippet(cursorNotificationTable.getString(cursorNotificationTable.getColumnIndex(DatabaseContract.Database.SA_SNIPPET)));
-                object.setImageUrl(cursorNotificationTable.getString(cursorNotificationTable.getColumnIndex(DatabaseContract.Database.SA_IMAGE_URL)));
-                object.setNewDesk(cursorNotificationTable.getString(cursorNotificationTable.getColumnIndex(DatabaseContract.Database.SA_NEW_DESK)));
-                object.setPubDate(cursorNotificationTable.getString(cursorNotificationTable.getColumnIndex(DatabaseContract.Database.SA_PUB_DATE)));
+                object.setWebUrl(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SA_WEB_URL)));
+                object.setSnippet(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SA_SNIPPET)));
+                object.setImageUrl(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SA_IMAGE_URL)));
+                object.setNewDesk(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SA_NEW_DESK)));
+                object.setPubDate(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.SA_PUB_DATE)));
 
                 listOfObjects.add(object);
 
-                if (i != cursorNotificationTable.getCount()) {
-                    cursorNotificationTable.moveToNext();
+                if (i != mCursor.getCount()) {
+                    mCursor.moveToNext();
                 }
             }
-
-            /** If the list has at least one item and the Articles Read Database is not empty,
-             * then we check that there are not read articles between the articles we want to
-             * display in the notification link (because, supposedly, they are new
-             * so they cannot be "already read" articles).
-             * */
-            if ((!dbH.isTableEmpty(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME) && (listOfObjects.size()!= 0))){
-
-                cursorReadArticlesTable = dbH.getAllDataFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
-
-                List<String> listOfReadArticlesUrls = new ArrayList<>();
-
-                cursorReadArticlesTable.moveToFirst();
-
-                /** We fill a list with the urls of the read articles
-                 * */
-                for (int i = 0; i < cursorReadArticlesTable.getCount(); i++) {
-
-                    listOfReadArticlesUrls.add(cursorReadArticlesTable.getString(cursorReadArticlesTable.getColumnIndex(DatabaseContract.Database.ARTICLE_URL)));
-
-                    if(i != cursorReadArticlesTable.getCount()) {
-                        cursorReadArticlesTable.moveToNext();
-                    }
-
-                }
-
-                /** We check if the article has been read.
-                 * If it has been read, we remove it.
-                 * */
-                for (int i = 0; i < listOfObjects.size(); i++) {
-
-                    for (int j = 0; j < listOfReadArticlesUrls.size(); j++) {
-
-                        if (listOfObjects.get(i).getWebUrl().equals(listOfReadArticlesUrls.get(j))){
-                            listOfObjects.remove(i);
-                            i = 0;
-                        }
-                    }
-                }
-
-            }
-        }
-
-        if (listOfObjects.size() != 0) {
             return listOfObjects;
         } else {
-            return null; }
-
+            return null;
+        }
     }
 }

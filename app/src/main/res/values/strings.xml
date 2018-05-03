@@ -42,8 +42,8 @@
     <string name="notification_app"> My News </string>
     <string name="notification_title">New Articles available!</string>
     <string name="notification_message">Tap to read Articles</string>
-    <string name="image_for_mynews">Image for MyNews</string>
-    <string name="no_available_articles">There are not available articles</string>
+    <string name="notification_image_for_mynews">Image for MyNews</string>
+    <string name="notification_no_available_articles">There are not available articles</string>
     <string name="notifications_not_enabled">Notifications are not enabled</string>
 
     <!-- FOUND ARTICLES LAYOUT -->

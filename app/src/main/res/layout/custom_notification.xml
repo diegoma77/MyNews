@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@android:drawable/ic_menu_sort_by_size"
-            android:contentDescription="@string/image_for_mynews" />
+            android:contentDescription="@string/notification_image_for_mynews" />
 
         <TextView
             android:layout_width="wrap_content"

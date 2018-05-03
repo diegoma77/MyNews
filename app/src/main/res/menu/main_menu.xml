@@ -32,5 +32,11 @@
         app:showAsAction="never">
     </item>
 
+    <item
+        android:id="@+id/menu_database_manager_button"
+        android:title="Database Manager"
+        app:showAsAction="never">
+    </item>
+
 
 </menu>

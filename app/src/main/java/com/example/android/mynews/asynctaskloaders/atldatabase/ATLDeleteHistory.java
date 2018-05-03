@@ -14,7 +14,7 @@ import com.example.android.mynews.data.DatabaseHelper;
 
 public class ATLDeleteHistory extends AsyncTaskLoader<Void> {
 
-    DatabaseHelper dbH;
+    private DatabaseHelper dbH;
 
     public ATLDeleteHistory(@NonNull Context context) {
         super(context);

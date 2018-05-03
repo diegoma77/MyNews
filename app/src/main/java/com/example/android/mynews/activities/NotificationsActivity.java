@@ -3,6 +3,8 @@ package com.example.android.mynews.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -10,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -18,6 +21,7 @@ import android.widget.Switch;
 
 import com.evernote.android.job.JobManager;
 import com.example.android.mynews.R;
+import com.example.android.mynews.asynctaskloaders.atlnotif.ATLNotifCheckIfArticlesForNotificationsIsNotEmpty;
 import com.example.android.mynews.asynctaskloaders.atlnotif.ATLNotifUpdateQueryAndSectionsTable;
 import com.example.android.mynews.asynctaskloaders.atlnotif.ATLNotifUpdateSwitchTable;
 import com.example.android.mynews.asynctaskloaders.atlnotif.ATLNotifUpdateUIQueryAndSectionsTable;
@@ -48,6 +52,7 @@ public class NotificationsActivity extends AppCompatActivity {
     private static final int LOADER_UPDATE_LIST_ID = 13;
     private static final int LOADER_UPDATE_DATABASE_SWITCH_ID = 14;
     private static final int LOADER_UPDATE_SWITCH_ID = 15;
+    private static final int LOADER_CHECK_ARTICLES_ID = 16;
 
     //Context
     private Context context;
@@ -366,6 +371,11 @@ public class NotificationsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.notifications_menu, menu);
+        return true;
+    }
 
     /*********************
      * MENU OPTIONS ******
@@ -380,6 +390,10 @@ public class NotificationsActivity extends AppCompatActivity {
                 Intent intent = new Intent(NotificationsActivity.this, MainActivity.class);
                 startActivity(intent);
                 break;
+
+            case R.id.menu_notifications_button: {
+                loadLoaderCheckArticlesAvailable(LOADER_CHECK_ARTICLES_ID);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -464,6 +478,19 @@ public class NotificationsActivity extends AppCompatActivity {
         }
     }
 
+    private void loadLoaderCheckArticlesAvailable(int id) {
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<Boolean> loader = loaderManager.getLoader(id);
+
+        if (loader == null) {
+            Log.i(TAG, "loadLoaderUpdateSwitchTable: ");
+            loaderManager.initLoader(id, null, loaderCheckArticles);
+        } else {
+            Log.i(TAG, "loadLoaderUpdateSwitchTable: ");
+            loaderManager.restartLoader(id, null, loaderCheckArticles);
+        }
+    }
 
     /**********************/
     /** LOADER CALLBACKS **/
@@ -585,4 +612,28 @@ public class NotificationsActivity extends AppCompatActivity {
                 }
             };
 
+    private LoaderManager.LoaderCallbacks<Boolean> loaderCheckArticles =
+            new LoaderManager.LoaderCallbacks<Boolean>() {
+                @NonNull
+                @Override
+                public Loader<Boolean> onCreateLoader(int id, @Nullable Bundle args) {
+                    return new ATLNotifCheckIfArticlesForNotificationsIsNotEmpty(NotificationsActivity.this);
+                }
+
+                @Override
+                public void onLoadFinished(@NonNull Loader<Boolean> loader, Boolean data) {
+
+                    if (data) {
+                        Intent intent = new Intent(NotificationsActivity.this, DisplayNotificationsActivity.class);
+                        startActivity(intent);
+                    } else {
+                        ToastHelper.toastShort(NotificationsActivity.this, getResources().getString(R.string.notification_no_available_articles));
+                    }
+                }
+
+                @Override
+                public void onLoaderReset(@NonNull Loader<Boolean> loader) {
+
+                }
+            };
 }

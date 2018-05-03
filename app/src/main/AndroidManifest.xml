@@ -33,6 +33,7 @@
         <activity android:name=".activities.WebViewSearchActivity" />
         <activity android:name=".activities.DisplayNotificationsActivity" />
         <activity android:name=".activities.NotificationsActivity" />
+        <activity android:name=".activities.WebViewNotificationsActivity" />
     </application>
 
 </manifest>

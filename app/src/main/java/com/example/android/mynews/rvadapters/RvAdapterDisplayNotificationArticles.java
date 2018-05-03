@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.mynews.R;
+import com.example.android.mynews.activities.WebViewNotificationsActivity;
 import com.example.android.mynews.activities.WebViewSearchActivity;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
@@ -119,7 +120,7 @@ public class RvAdapterDisplayNotificationArticles extends RecyclerView.Adapter<R
                 /** We pass the webUrl that the next activity has to load and show
                  * in the webView
                  * */
-                Intent intent = new Intent(context, WebViewSearchActivity.class);
+                Intent intent = new Intent(context, WebViewNotificationsActivity.class);
                 intent.putExtra(Keys.PutExtras.ARTICLE_URL_SENT, listOfArticlesSearchAPIObjects.get(position).getWebUrl());
                 context.startActivity(intent);
 

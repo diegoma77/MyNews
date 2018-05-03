@@ -189,6 +189,7 @@ public class NotificationDailyJob extends DailyJob {
 
                 }
 
+
                 /******************************************************
                  ** 3. MATCH THE ARTICLES TO SEE IF THEY WERE READ ****
                  *****************************************************/
@@ -206,8 +207,18 @@ public class NotificationDailyJob extends DailyJob {
                     }
                 }
 
+
                 /******************************************************
-                 ** 3. INSERT THE REMAINING LIST IN THE DATABASE ******
+                 ** 4. CLEAR THE TABLE ********************************
+                 *****************************************************/
+
+                if (!dbH.isTableEmpty(DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME)) {
+                    dbH.deleteAllRowsFromTableName(DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME);
+                }
+
+
+                /******************************************************
+                 ** 5. INSERT THE REMAINING LIST IN THE DATABASE ******
                  *****************************************************/
 
                 for (int i = 0; i < listOfObjects.size(); i++) {
@@ -238,9 +249,8 @@ public class NotificationDailyJob extends DailyJob {
     public static int scheduleNotificationJob () {
 
         return DailyJob.schedule(new JobRequest.Builder(TAG),
-                TimeUnit.HOURS.toMillis(9),
-                TimeUnit.HOURS.toMillis(10));
-
+                TimeUnit.HOURS.toMillis(10),
+                TimeUnit.HOURS.toMillis(11));
     }
 
 
