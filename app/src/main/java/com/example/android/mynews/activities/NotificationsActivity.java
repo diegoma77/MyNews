@@ -44,10 +44,10 @@ public class NotificationsActivity extends AppCompatActivity {
     private static final String TAG = "NotificationsActivity";
 
     //Loaders' IDs
-    private static final int LOADER_UPDATE_DATABASE_QUERY_AND_SECTIONS_ID = 1;
-    private static final int LOADER_UPDATE_LIST_ID = 2;
-    private static final int LOADER_UPDATE_DATABASE_SWITCH_ID = 3;
-    private static final int LOADER_UPDATE_SWITCH_ID = 4;
+    private static final int LOADER_UPDATE_DATABASE_QUERY_AND_SECTIONS_ID = 12;
+    private static final int LOADER_UPDATE_LIST_ID = 13;
+    private static final int LOADER_UPDATE_DATABASE_SWITCH_ID = 14;
+    private static final int LOADER_UPDATE_SWITCH_ID = 15;
 
     //Context
     private Context context;

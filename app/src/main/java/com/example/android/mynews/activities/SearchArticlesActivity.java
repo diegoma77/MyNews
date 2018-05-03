@@ -48,7 +48,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
     private static final String TAG = "SearchArticlesActivityT";
 
     //Loader ID
-    private static final int LOADER_ARTICLES_SEARCH_API_REQUEST = 33;
+    private static final int LOADER_ARTICLES_SEARCH_API_REQUEST = 11;
 
     //List for sections
     private List<String> listOfSections;

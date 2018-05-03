@@ -35,7 +35,7 @@ public class WebViewSearchActivity extends AppCompatActivity {
     private static final String TAG = "WebViewSearchActivityTr";
 
     //Loader ID
-    private static final int LOADER_INSERT_URL_DATABASE = 20;
+    private static final int LOADER_INSERT_URL_DATABASE = 21;
 
     //WebView
     private WebView mWebView;

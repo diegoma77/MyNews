@@ -40,8 +40,8 @@ public class PageFragmentBusiness extends android.support.v4.app.Fragment {
     private static final String TAG = "PageFragmentBusiness";
 
     //IDs to identify the Loaders
-    private static final int LOADER_TOP_STORIES_API_REQUEST = 50;
-    private static final int LOADER_READ_ARTICLES_DATABASE = 51;
+    private static final int LOADER_TOP_STORIES_API_REQUEST = 7;
+    private static final int LOADER_READ_ARTICLES_DATABASE = 8;
 
     //Flag to specify the request to APITopStoriesRequester
     private static final int FLAG_BUSINESS = 2;

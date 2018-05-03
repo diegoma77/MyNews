@@ -40,8 +40,8 @@ public class PageFragmentSports extends android.support.v4.app.Fragment {
     private static final String TAG = "PageFragmentSports";
 
     //IDs to identify the Loaders
-    private static final int LOADER_TOP_STORIES_API_REQUEST = 60;
-    private static final int LOADER_READ_ARTICLES_DATABASE = 61;
+    private static final int LOADER_TOP_STORIES_API_REQUEST = 9;
+    private static final int LOADER_READ_ARTICLES_DATABASE = 10;
 
     //Flag to specify the request to APITopStoriesRequester
     private static final int FLAG_SPORTS = 3;

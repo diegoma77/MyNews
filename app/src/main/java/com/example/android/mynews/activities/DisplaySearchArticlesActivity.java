@@ -38,8 +38,8 @@ public class DisplaySearchArticlesActivity extends AppCompatActivity {
     private static final String TAG = "DisplaySearchArticlesAc";
 
     //Loaders' IDs
-    private static final int LOADER_GET_LIST_IN_BACKGROUND = 71;
-    private static final int LOADER_READ_ARTICLES_DATABASE = 73;
+    private static final int LOADER_GET_LIST_IN_BACKGROUND = 16;
+    private static final int LOADER_READ_ARTICLES_DATABASE = 17;
 
     //List that will store the JSON Response objects
     private List<ArticlesSearchAPIObject> listOfArticlesSearchAPIObjects;

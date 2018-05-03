@@ -32,8 +32,8 @@ public class DisplayNotificationsActivity extends AppCompatActivity {
     private static final String TAG = "DisplayNotificationsAct";
 
     // TODO: 24/04/2018 Define
-    private static final int LOADER_GET_LIST_IN_BACKGROUND = 41;
-    private static final int LOADER_READ_ARTICLES_DATABASE = 43;
+    private static final int LOADER_GET_LIST_IN_BACKGROUND = 18;
+    private static final int LOADER_READ_ARTICLES_DATABASE = 19;
 
     //List that will store the JSON Response objects
     private List<ArticlesSearchAPIObject> articlesSearchAPIObjectList;

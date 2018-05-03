@@ -40,8 +40,8 @@ public class PageFragmentMostPopular extends android.support.v4.app.Fragment {
     private static final String TAG = "PageFragmentMostPopular";
 
     //IDs to identify the Loaders
-    private static final int LOADER_MOST_POPULAR_API_REQUEST = 55;
-    private static final int LOADER_READ_ARTICLES_DATABASE = 15;
+    private static final int LOADER_MOST_POPULAR_API_REQUEST = 5;
+    private static final int LOADER_READ_ARTICLES_DATABASE = 6;
 
     //Array that will store the TopStoriesObject object to display in the RecyclerView
     private List<MostPopularAPIObject> mostPopularObjectsList;
