@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.evernote.android.job.DailyJob;
 import com.evernote.android.job.JobRequest;
@@ -18,7 +19,14 @@ import com.example.android.mynews.apirequesters.APISearchArticlesRequester;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
 import com.example.android.mynews.activities.DisplayNotificationsActivity;
+import com.example.android.mynews.extras.helperclasses.UrlConverter;
+import com.example.android.mynews.extras.interfaceswithconstants.Url;
+import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -33,7 +41,12 @@ import java.util.concurrent.TimeUnit;
 public class NotificationDailyJob extends DailyJob {
 
     private DatabaseHelper dbH;
-    private Cursor mCursor;
+    private Cursor cursorQueryOfSections;
+    private Cursor cursorReadArticles;
+
+    private List<String> listOfUrls;
+    private List <ArticlesSearchAPIObject> listOfObjects;
+    private List<String> listOfUrlsOfReadArticles;
 
     private static final int PENDING_INTENT_ID = 3147;
 
@@ -46,52 +59,169 @@ public class NotificationDailyJob extends DailyJob {
     protected DailyJobResult onRunDailyJob(@NonNull Params params) {
 
         dbH = new DatabaseHelper(getContext());
-        mCursor = dbH.getAllDataFromTableName(DatabaseContract.Database.URLS_FOR_NOTIFICATIONS_TABLE_NAME);
+        cursorQueryOfSections = dbH.getAllDataFromTableName(DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME);
+        cursorReadArticles = dbH.getAllDataFromTableName(DatabaseContract.Database.ALREADY_READ_ARTICLES_TABLE_NAME);
+
+        listOfUrls = new ArrayList<>();
+        listOfObjects = new ArrayList<>();
+        listOfUrlsOfReadArticles = new ArrayList<>();
 
         new Thread() {
             @Override
             public void run() {
 
+
+                /********************************************************************************
+                 ** 1. CREATE URLS WITH THE INFORMATION FROM SEARCH QUERY AND SECTIONS TABLE ****
+                 *******************************************************************************/
+
+                cursorQueryOfSections.moveToFirst();
+
+                //We store the query value in a variable
+                String query = cursorQueryOfSections.getString(cursorQueryOfSections.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION));
+
+                //We create a list to store the Sections
+                List<String> listOfSections = new ArrayList<>();
+
+                //We fill the list with the info from the database
+                cursorQueryOfSections.moveToNext();
+                for (int i = 1; i < cursorQueryOfSections.getCount(); i++) {
+
+                    listOfSections.add(cursorQueryOfSections.getString(cursorQueryOfSections.getColumnIndex(DatabaseContract.Database.QUERY_OR_SECTION)));
+
+                    if (i != cursorQueryOfSections.getCount()) {
+                        cursorQueryOfSections.moveToNext();
+                    }
+
+                }
+
+                Log.e(TAG, "loadInBackground: THIS IS REACHED(1)");
+
+                //We create the dates
+                Calendar calendarBeginDate = Calendar.getInstance();
+                calendarBeginDate.add(Calendar.DATE, -3);
+                Calendar calendarEndDate = Calendar.getInstance();
+
+                String beginDate;
+                String endDate;
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                beginDate = sdf.format(calendarBeginDate.getTime());
+                endDate = sdf.format(calendarEndDate.getTime());
+
+                Log.e(TAG, "loadInBackground: THIS IS REACHED(2)");
+
+                //We store the sections (newDesk) value in a variable
+                String sections = UrlConverter.getSectionsAndAdaptForUrl(listOfSections);
+
+                Log.e(TAG, "loadInBackground: THIS IS REACHED(3)");
+
+                //We create the Urls
+                String url1 = UrlConverter.getSearchArticlesUrl(
+                        query,
+                        sections,
+                        beginDate,
+                        endDate,
+                        Url.ArticleSearchUrl.PAGE_ONE);
+
+                String url2 = UrlConverter.getSearchArticlesUrl(
+                        query,
+                        sections,
+                        beginDate,
+                        endDate,
+                        Url.ArticleSearchUrl.PAGE_TWO);
+
+                String url3 = UrlConverter.getSearchArticlesUrl(
+                        query,
+                        sections,
+                        beginDate,
+                        endDate,
+                        Url.ArticleSearchUrl.PAGE_THREE);
+
+                Log.i(TAG, "loadInBackground: " + url1);
+                Log.i(TAG, "loadInBackground: " + url2);
+                Log.i(TAG, "loadInBackground: " + url3);
+
+                Log.e(TAG, "loadInBackground: THIS IS REACHED(4)");
+
+                listOfUrls.add(url1);
+                listOfUrls.add(url2);
+                listOfUrls.add(url3);
+
+
+                /***************************************************************
+                 ** 2. DO THE REQUEST TO ARTICLES SEARCH API. GET A LIST ****
+                 **************************************************************/
+
+                /** We do a Request to Articles Search API
+                 * */
+
                 APISearchArticlesRequester requester = new APISearchArticlesRequester(getContext());
 
-                /** The requests has two lists as fields:
-                 * 1. A list of strings: listOfUrls
-                 * 2. A list of SearchArticlesAPIObjects: listOfArticlesSearchObjects */
-
-                /** We add the urls to the requester so it can do the requests to those urls */
-                mCursor.moveToFirst();
-                for (int i = 0; i < mCursor.getCount(); i++) {
-
-                    requester.addUrl(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.Database.URL)));
-
-                    if (i != mCursor.getCount()) {
-                        mCursor.moveToNext();
+                for (int i = 0; i < listOfUrls.size(); i++) {
+                    try {
+                        requester.startJSONRequestArticlesSearchAPI(listOfUrls.get(i));
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
 
-                /** We do the requests. Each one fills one list of the request
-                 * with ArticlesSearchAPIObjects */
-                for (int i = 0; i < requester.getlistOfUrlsSize(); i++) {
-                    requester.startJSONRequestArticlesSearchAPI(requester.getUrl(i));
+                listOfObjects = requester.getListOfArticlesSearchObjects();
+
+                /** We get the information from Already Read Articles
+                 * */
+
+                if (cursorReadArticles != null) {
+                    cursorReadArticles.moveToFirst();
+
+                    for (int i = 0; i < cursorReadArticles.getCount(); i++) {
+
+                        listOfUrlsOfReadArticles.add
+                                (cursorReadArticles.getString(
+                                        cursorReadArticles.getColumnIndex(DatabaseContract.Database.ARTICLE_URL)));
+
+                        if(i != cursorReadArticles.getCount()){
+                            cursorReadArticles.moveToNext();
+                        }
+
+                    }
+
                 }
 
-                /** We insert data that will be afterwards displayed in
-                 * DisplayNotificationsActivity.
-                 * If there are objects in the list after the API Request, we insert them in
-                 * the database. If there aren't we do nothing */
-                if (requester.getListOfArticlesSearchObjects() != null) {
+                /******************************************************
+                 ** 3. MATCH THE ARTICLES TO SEE IF THEY WERE READ ****
+                 *****************************************************/
 
-                    for (int i = 0; i < requester.getListOfArticlesSearchObjects().size(); i++) {
-                        dbH.insertDataToArticlesForNotificationsTable(
-                                requester.getListOfArticlesSearchObjects().get(i));
+                /** We remove from the list of Objects those articles that has been read
+                 * */
+
+                for (int i = 0; i < listOfObjects.size() ; i++) {
+
+                    for (int j = 0; j < listOfUrlsOfReadArticles.size(); j++) {
+
+                        if (listOfObjects.get(i).getWebUrl().equals(listOfUrlsOfReadArticles.get(j))){
+                            listOfObjects.remove(i);
+                        }
                     }
+                }
+
+                /******************************************************
+                 ** 3. INSERT THE REMAINING LIST IN THE DATABASE ******
+                 *****************************************************/
+
+                for (int i = 0; i < listOfObjects.size(); i++) {
+                    dbH.insertDataToArticlesForNotificationsTable(listOfObjects.get(i));
+                }
+
+                if (listOfObjects.size() > 0) {
 
                     /** We create
                      * the notification */
                     createNotification();
 
                 } else {
-                    return; //do nothing because list is null }
+                    return; //do nothing because list size is 0 }
                 }
             }
         }.start();
@@ -105,11 +235,12 @@ public class NotificationDailyJob extends DailyJob {
      * THE NOTIFICATION ************
      * ****************************/
 
-    public static void scheduleNotificationJob (int id) {
+    public static int scheduleNotificationJob () {
 
-        DailyJob.schedule(new JobRequest.Builder(TAG),
+        return DailyJob.schedule(new JobRequest.Builder(TAG),
                 TimeUnit.HOURS.toMillis(9),
                 TimeUnit.HOURS.toMillis(10));
+
     }
 
 
@@ -177,4 +308,3 @@ public class NotificationDailyJob extends DailyJob {
         }
     }
 }
-

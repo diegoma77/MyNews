@@ -167,11 +167,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseContract.Database.SA_WEB_URL, object.getWebUrl());
-        contentValues.put(DatabaseContract.Database.SA_SNIPPET, object.getSnippet());
-        contentValues.put(DatabaseContract.Database.SA_IMAGE_URL, object.getImageUrl());
-        contentValues.put(DatabaseContract.Database.SA_NEW_DESK, object.getNewDesk());
-        contentValues.put(DatabaseContract.Database.SA_PUB_DATE, object.getPubDate());
+        contentValues.put(DatabaseContract.Database.NOTIF_WEB_URL, object.getWebUrl());
+        contentValues.put(DatabaseContract.Database.NOTIF_SNIPPET, object.getSnippet());
+        contentValues.put(DatabaseContract.Database.NOTIF_IMAGE_URL, object.getImageUrl());
+        contentValues.put(DatabaseContract.Database.NOTIF_NEW_DESK, object.getNewDesk());
+        contentValues.put(DatabaseContract.Database.NOTIF_PUB_DATE, object.getPubDate());
 
         long result = db.insert(
                 DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME,

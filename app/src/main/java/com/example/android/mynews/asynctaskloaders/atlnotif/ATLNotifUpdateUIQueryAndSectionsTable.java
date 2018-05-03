@@ -1,4 +1,4 @@
-package com.example.android.mynews.asynctaskloaders.atl.atlnotif;
+package com.example.android.mynews.asynctaskloaders.atlnotif;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -16,13 +16,13 @@ import java.util.List;
 
 /** This ATL is called when the user reaches the Notifications Activity.
  * It returns a list to fill the listOfQueryAndSections with the information from the database */
-public class ATLGetListFromQueryAndSectionsTable extends android.support.v4.content.AsyncTaskLoader<List<String>> {
+public class ATLNotifUpdateUIQueryAndSectionsTable extends android.support.v4.content.AsyncTaskLoader<List<String>> {
 
     private static final String TAG = "ATLNotifUpdateListOfQue";
 
     private DatabaseHelper dbH;
 
-    public ATLGetListFromQueryAndSectionsTable(Context context) {
+    public ATLNotifUpdateUIQueryAndSectionsTable(Context context) {
         super(context);
         dbH = new DatabaseHelper(context);
     }

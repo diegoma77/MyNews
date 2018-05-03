@@ -1,4 +1,4 @@
-package com.example.android.mynews.asynctaskloaders.atl.atlnotif;
+package com.example.android.mynews.asynctaskloaders.atlnotif;
 
 import android.content.Context;
 

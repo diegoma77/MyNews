@@ -65,7 +65,7 @@ public class APISearchArticlesRequester {
     }
 
     /** Method to get the list
-     * of TopStoriesAPI Objects*/
+     * of ArticlesSearchAPI Objects*/
     public List<ArticlesSearchAPIObject> getListOfArticlesSearchObjects() {
         if (listOfArticlesSearchObjects != null){ return listOfArticlesSearchObjects;
         } else { return null; }
@@ -208,7 +208,7 @@ public class APISearchArticlesRequester {
 
             //Loop for logs
             for (int i = 0; i < listOfArticlesSearchObjects.size() ; i++) {
-                Log.i("TS_ARRAY_SUMM_TITLES # ", "" + i + " :" + listOfArticlesSearchObjects.get(i).getNewDesk());
+                Log.i("SA_ARRAY_SUM_TITLES # ", "" + i + " :" + listOfArticlesSearchObjects.get(i).getNewDesk());
             }
 
         } catch(JSONException e) {

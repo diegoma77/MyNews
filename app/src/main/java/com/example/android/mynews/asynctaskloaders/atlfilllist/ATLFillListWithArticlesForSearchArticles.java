@@ -1,9 +1,8 @@
-package com.example.android.mynews.asynctaskloaders.atl.atlfilllist;
+package com.example.android.mynews.asynctaskloaders.atlfilllist;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;

@@ -14,7 +14,7 @@ import java.util.Date;
 /** This class contains helper methods that
  * allow to create toasts in an easier way
  * */
-abstract public class ToastHelper {
+public class ToastHelper {
 
     public static void toastShort(Context context, String string){
         Toast.makeText(context, string, Toast.LENGTH_SHORT).show();

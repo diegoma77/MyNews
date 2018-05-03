@@ -1,13 +1,10 @@
-package com.example.android.mynews.asynctaskloaders.atl.atlnotif;
+package com.example.android.mynews.asynctaskloaders.atlnotif;
 
 import android.content.Context;
 import android.database.Cursor;
 
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Diego Fajardo on 21/04/2018.
@@ -16,11 +13,11 @@ import java.util.List;
 /** This ATL is called when the user reaches the Notifications Activity.
  * It returns a boolean variable to update the mSwitch variable
  * with the information from the database */
-public class ATLNotifUpdateSwitchVariable extends android.support.v4.content.AsyncTaskLoader<Boolean> {
+public class ATLNotifUpdateUISwitch extends android.support.v4.content.AsyncTaskLoader<Boolean> {
 
     private DatabaseHelper dbH;
 
-    public ATLNotifUpdateSwitchVariable(Context context) {
+    public ATLNotifUpdateUISwitch(Context context) {
         super(context);
         dbH = new DatabaseHelper(context);
     }

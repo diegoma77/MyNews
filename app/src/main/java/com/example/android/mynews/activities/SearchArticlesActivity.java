@@ -20,8 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
-import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLSearchArticlesAPIRequestAndFillArticlesForSearchArticlesTable;
+import com.example.android.mynews.asynctaskloaders.atlrequest.ATLSearchArticlesAPIRequestAndFillArticlesForSearchArticlesTable;
 import com.example.android.mynews.extras.helperclasses.ToastHelper;
+import com.example.android.mynews.extras.helperclasses.UrlConverter;
 import com.example.android.mynews.extras.interfaceswithconstants.Keys;
 import com.example.android.mynews.extras.interfaceswithconstants.Url;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
@@ -392,6 +393,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
      * This method builds the Url used to send the JSON request
      * using the strings created (modified) by other methods
      */
+    // TODO: 02/05/2018 Delete (in test)
     public String getSearchArticlesUrl(String searchQuery, String newsSearchQuery, String beginDate, String endDate, String page) {
 
         /** Seems that there are faster ways than += to append Strings, like StringBuffer */
@@ -440,6 +442,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
      * needed from the user.
      * Changes spaces for + symbols.
      */
+    // TODO: 02/05/2018 Delete (in test)
     public String getSearchQueryAndAdaptForUrl() {
 
         String searchQueryAdaptedForUrl = mTextInputEditText.getText().toString();
@@ -457,6 +460,7 @@ public class SearchArticlesActivity extends AppCompatActivity {
      * The news_desk part is related to the checkboxes and allows to filter the
      * searches according to the category
      */
+    // TODO: 02/05/2018 Delete (in test)
     public String getNewDeskValuesAndAdaptForUrl(List<String> listOfSections) {
 
         String temporary_query;
@@ -482,6 +486,8 @@ public class SearchArticlesActivity extends AppCompatActivity {
      */
     private List<String> createListOfUrls() {
 
+        /** Firstly, we change the format of the dates
+         * */
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         if (calendarBeginDate != null){
             beginDate = sdf.format(calendarBeginDate.getTime());
@@ -493,26 +499,29 @@ public class SearchArticlesActivity extends AppCompatActivity {
 
         List <String> listOfUrls = new ArrayList<>();
 
-        listOfUrls.add(getSearchArticlesUrl(
-                getSearchQueryAndAdaptForUrl(),
-                getNewDeskValuesAndAdaptForUrl(listOfSections),
-                beginDate,
-                endDate,
-                Url.ArticleSearchUrl.PAGE_ONE));
+        listOfUrls.add(
+                getSearchArticlesUrl(
+                        UrlConverter.getSearchQueryAndAdaptForUrl(mTextInputEditText),
+                        UrlConverter.getSectionsAndAdaptForUrl(listOfSections),
+                        beginDate,
+                        endDate,
+                        Url.ArticleSearchUrl.PAGE_ONE));
 
-        listOfUrls.add(getSearchArticlesUrl(
-                getSearchQueryAndAdaptForUrl(),
-                getNewDeskValuesAndAdaptForUrl(listOfSections),
-                beginDate,
-                endDate,
-                Url.ArticleSearchUrl.PAGE_TWO));
+        listOfUrls.add(
+                getSearchArticlesUrl(
+                        UrlConverter.getSearchQueryAndAdaptForUrl(mTextInputEditText),
+                        UrlConverter.getSectionsAndAdaptForUrl(listOfSections),
+                        beginDate,
+                        endDate,
+                        Url.ArticleSearchUrl.PAGE_TWO));
 
-        listOfUrls.add(getSearchArticlesUrl(
-                getSearchQueryAndAdaptForUrl(),
-                getNewDeskValuesAndAdaptForUrl(listOfSections),
-                beginDate,
-                endDate,
-                Url.ArticleSearchUrl.PAGE_THREE));
+        listOfUrls.add(
+                getSearchArticlesUrl(
+                        UrlConverter.getSearchQueryAndAdaptForUrl(mTextInputEditText),
+                        UrlConverter.getSectionsAndAdaptForUrl(listOfSections),
+                        beginDate,
+                        endDate,
+                        Url.ArticleSearchUrl.PAGE_THREE));
 
         Log.i(TAG, "createListOfUrls: " + listOfUrls.get(0));
         Log.i(TAG, "createListOfUrls: " + listOfUrls.get(1));

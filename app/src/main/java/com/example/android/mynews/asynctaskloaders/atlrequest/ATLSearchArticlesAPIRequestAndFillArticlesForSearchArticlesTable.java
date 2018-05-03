@@ -1,16 +1,12 @@
-package com.example.android.mynews.asynctaskloaders.atl.atlrequest;
+package com.example.android.mynews.asynctaskloaders.atlrequest;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.v4.content.AsyncTaskLoader;
 
-import com.example.android.mynews.apirequesters.APIMostPopularRequester;
 import com.example.android.mynews.apirequesters.APISearchArticlesRequester;
 import com.example.android.mynews.data.DatabaseContract;
 import com.example.android.mynews.data.DatabaseHelper;
-import com.example.android.mynews.extras.interfaceswithconstants.Url;
 import com.example.android.mynews.pojo.ArticlesSearchAPIObject;
-import com.example.android.mynews.pojo.MostPopularAPIObject;
 
 import java.util.ArrayList;
 import java.util.List;

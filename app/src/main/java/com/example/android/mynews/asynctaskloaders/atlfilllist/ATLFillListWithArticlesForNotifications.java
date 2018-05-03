@@ -1,4 +1,4 @@
-package com.example.android.mynews.asynctaskloaders.atl.atlfilllist;
+package com.example.android.mynews.asynctaskloaders.atlfilllist;
 
 import android.content.Context;
 import android.database.Cursor;

@@ -1,9 +1,13 @@
 package com.example.android.mynews;
 
+import android.util.Log;
+
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -14,32 +18,86 @@ import static org.junit.Assert.*;
  */
 public class ExampleUnitTest {
 
+    private static final String TAG = "ExampleUnitTest";
+
     @Test
-    public void checkIfDateIsAfterToday() throws Exception {
+    public void testStringCreationForUrl() throws Exception {
 
-        LocalDate date = LocalDate.of(2014, 3, 18);
-        LocalDate today = LocalDate.now( );
+        List<String> listOfStrings = new ArrayList<>();
+        listOfStrings.add("Alfa");
+        listOfStrings.add("Beta");
+        listOfStrings.add("Charlie");
+        listOfStrings.add("Delta");
+        listOfStrings.add("Echo");
+        listOfStrings.add("Foxtrot");
 
-        Boolean isToday = date.isBefore(today);
+        for (int i = 0; i < listOfStrings.size(); i++) {
 
-        assertTrue(isToday);
-        assertFalse(!isToday);
-        assertTrue(date.toString().equals("2014-03-18"));
+            if (listOfStrings.get(i).equals("")){
+                listOfStrings.remove(listOfStrings.get(i));
+            }
+
+        }
+
+        for (int i = 0; i < listOfStrings.size() ; i++) {
+            System.out.println(listOfStrings.get(i));
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < listOfStrings.size(); i++) {
+
+            if (!listOfStrings.get(i).equals("")) {
+
+                stringBuilder.append("+" + listOfStrings.get(i));
+
+            }
+        }
+
+        String string = stringBuilder.substring(1);
+
+        System.out.println(string);
+
+        assertTrue(string.equals("Alfa+Beta+Charlie+Delta+Echo+Foxtrot"));
 
     }
 
     @Test
-    public void checkCalendarComparison() throws Exception {
+    public void testAnElementIsInTheList() throws Exception {
 
-        Calendar calendarA = Calendar.getInstance();
-        Calendar calendarNow = Calendar.getInstance();
+        List <String> listOne = new ArrayList<>();
+        List <String> listTwo = new ArrayList<>();
 
-        calendarA.set(2014,3,12);
+        listOne.add("Alfa");
+        listOne.add("Beta");
+        listOne.add("Charlie");
+        listOne.add("Delta");
+        listOne.add("Echo");
+        listOne.add("Foxtrot");
 
-        long a = calendarA.getTimeInMillis();
-        long nowMillis = calendarNow.getTimeInMillis();
+        listTwo.add("Beta");
+        listTwo.add("Delta");
+        listTwo.add("Echo");
 
-        assertTrue(nowMillis > a);
+        for (int i = 0; i < listOne.size() ; i++) {
+
+            for (int j = 0; j < listTwo.size(); j++) {
+
+                if (listOne.get(i).equals(listTwo.get(j))){
+                    listOne.remove(i);
+                }
+
+            }
+        }
+
+        for (int i = 0; i < listOne.size(); i++) {
+            System.out.println(listOne.get(i));
+        }
+
+        assertTrue(2==2);
     }
+
+
+
 
 }

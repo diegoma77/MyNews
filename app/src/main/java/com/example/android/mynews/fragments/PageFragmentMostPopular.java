@@ -14,8 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.mynews.R;
-import com.example.android.mynews.asynctaskloaders.atl.atlfilllist.ATLFillListWithReadArticles;
-import com.example.android.mynews.asynctaskloaders.atl.atlrequest.ATLRequestMostPopularAPI;
+import com.example.android.mynews.asynctaskloaders.atlfilllist.ATLFillListWithReadArticles;
+import com.example.android.mynews.asynctaskloaders.atlrequest.ATLRequestMostPopularAPI;
 import com.example.android.mynews.extras.helperclasses.ShowHelper;
 import com.example.android.mynews.pojo.MostPopularAPIObject;
 import com.example.android.mynews.rvadapters.RvAdapterMostPopular;

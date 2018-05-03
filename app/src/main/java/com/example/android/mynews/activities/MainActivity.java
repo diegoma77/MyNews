@@ -18,7 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.android.mynews.asynctaskloaders.atl.atldatabase.ATLMainActCreateDatabase;
+import com.example.android.mynews.asynctaskloaders.atldatabase.ATLMainActCreateDatabase;
 import com.example.android.mynews.fragments.PageFragmentBusiness;
 import com.example.android.mynews.fragments.PageFragmentSports;
 import com.example.android.mynews.fragments.PageFragmentTopStories;
