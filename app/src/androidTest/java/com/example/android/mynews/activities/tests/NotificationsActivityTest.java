@@ -29,12 +29,14 @@ import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -87,6 +89,7 @@ public class NotificationsActivityTest {
     DatabaseHelper dbH;
     Cursor mCursorQueryOrSection;
     Cursor mCursorSwitch;
+    Cursor mCursorArticles;
 
     @Before
     public void setUp() throws Exception {
@@ -117,6 +120,8 @@ public class NotificationsActivityTest {
                 DatabaseContract.Database.QUERY_AND_SECTIONS_TABLE_NAME);
         mCursorSwitch = dbH.getAllDataFromTableName(
                 DatabaseContract.Database.NOTIFICATIONS_SWITCH_TABLE_NAME);
+        mCursorArticles = dbH.getAllDataFromTableName(
+                DatabaseContract.Database.ARTICLES_FOR_NOTIFICATION_TABLE_NAME);
 
     }
 
@@ -127,6 +132,26 @@ public class NotificationsActivityTest {
         Activity searchArticlesActivity = getInstrumentation().waitForMonitorWithTimeout(mainActivityMonitor, 5000);
         assertNotNull(searchArticlesActivity);
         searchArticlesActivity.finish();
+
+    }
+
+    @Test
+    public void testNotificationsArticlesButton () {
+
+        if (mCursorArticles.getCount() != 0){
+
+            onView(withId(R.id.menu_notifications_button)).perform(click());
+            Activity displayNotificationsActivity = getInstrumentation().waitForMonitorWithTimeout(displayNotificationsActivityMonitor, 5000);
+            assertNotNull(displayNotificationsActivity);
+            displayNotificationsActivity.finish();
+
+        } else {
+
+            onView(withText(R.string.notification_no_available_articles))
+                    .inRoot(withDecorView(not(mActivity.getWindow().getDecorView())))
+                    .check(matches(isDisplayed()));
+
+        }
 
     }
 
