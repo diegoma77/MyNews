@@ -4,7 +4,11 @@ An easy to use app that uses the news published by the New York Times and displa
 
 You can choose between different sections (Top Rated, Most Popular, Business and Sports) and enable notifications so you don't miss any important articles. 
 
+## Screenshots
 
+<img src="./screenshots/main.png" width="30%" height="30%">&ensp;<img src="./screenshots/spin.png" width="30%" height="30%">&ensp;<img src="./screenshots/article.png" width="30%" height="30%">
+
+<img src="./screenshots/search.png" width="30%" height="30%">&ensp;<img src="./screenshots/notifications.png" width="30%" height="30%">
 
 ## Libraries
 
