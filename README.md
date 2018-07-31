@@ -4,7 +4,9 @@ An easy to use app that uses the news published by the New York Times and displa
 
 You can choose between different sections (Top Rated, Most Popular, Business and Sports) and enable notifications so you don't miss any important articles. 
 
-## Libraries Used
+
+
+## Libraries
 
 * [Android Support Library](https://developer.android.com/topic/libraries/support-library/)
 * [Glide](https://github.com/bumptech/glide/)
